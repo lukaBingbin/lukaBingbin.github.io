@@ -1,0 +1,735 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="lukazhang">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="RecyclerView事件处理、拦截机制源码分析 要分析事件处理和拦截，我们第一个要看的应该是onInterceptTouchEvent()去看，而不是onTouchEvent()去看。 onInterceptTouchEvent 一点一点的分析吧 12345if (mLayoutSuppressed) &amp;#123;    &#x2F;&#x2F; When layout is suppressed,  RV do">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RecyclerView事件处理、拦截机制源码分析">
+<meta property="og:url" content="http://example.com/2021/11/10/Android/RecyclerView%E4%BA%8B%E4%BB%B6%E5%A4%84%E7%90%86%E3%80%81%E6%8B%A6%E6%88%AA%E6%9C%BA%E5%88%B6%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/index.html">
+<meta property="og:site_name" content="YOLO">
+<meta property="og:description" content="RecyclerView事件处理、拦截机制源码分析 要分析事件处理和拦截，我们第一个要看的应该是onInterceptTouchEvent()去看，而不是onTouchEvent()去看。 onInterceptTouchEvent 一点一点的分析吧 12345if (mLayoutSuppressed) &amp;#123;    &#x2F;&#x2F; When layout is suppressed,  RV do">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-11-10T08:00:00.000Z">
+<meta property="article:modified_time" content="2024-03-02T08:16:36.046Z">
+<meta property="article:author" content="lukazhang">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>RecyclerView事件处理、拦截机制源码分析 - YOLO</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="RecyclerView事件处理、拦截机制源码分析"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2021-11-10 16:00" pubdate>
+          2021年11月10日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.9k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          17 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">RecyclerView事件处理、拦截机制源码分析</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1>RecyclerView事件处理、拦截机制源码分析</h1>
+<p>要分析事件处理和拦截，我们第一个要看的应该是onInterceptTouchEvent()去看，而不是<code>onTouchEvent()</code>去看。</p>
+<h2 id="onInterceptTouchEvent">onInterceptTouchEvent</h2>
+<p>一点一点的分析吧</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">if</span> (mLayoutSuppressed) &#123;<br>    <span class="hljs-comment">// When layout is suppressed,  RV does not intercept the motion event.</span><br>    <span class="hljs-comment">// A child view e.g. a button may still get the click.</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>这里会有一个变量判断，但是这个变量还不太清楚是什么意思。</p>
+<p>但是注释里给了我一个很重要的信息，当layout被suppress的时候，RV不会去拦截这次事件，以保证子View可以得到click事件。直接return false了。</p>
+<p>那么对于这个变量，翻译过来是布局是否被抑制。这里应该不是指按压，因为如果是按压，这里直接返回false了，那move事件也无从拦截了。</p>
+<p>既然这样，那我们应该是去看看这个变量的含义，它何时会被赋值会true呢？</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Override</span><br>   <span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">suppressLayout</span><span class="hljs-params">(<span class="hljs-type">boolean</span> suppress)</span> &#123;<br>       <span class="hljs-keyword">if</span> (suppress != mLayoutSuppressed) &#123;<br>           assertNotInLayoutOrScroll(<span class="hljs-string">&quot;Do not suppressLayout in layout or scroll&quot;</span>);<br>           <span class="hljs-keyword">if</span> (!suppress) &#123;<br>               mLayoutSuppressed = <span class="hljs-literal">false</span>;<br>               <span class="hljs-keyword">if</span> (mLayoutWasDefered &amp;&amp; mLayout != <span class="hljs-literal">null</span> &amp;&amp; mAdapter != <span class="hljs-literal">null</span>) &#123;<br>                   requestLayout();<br>               &#125;<br>               mLayoutWasDefered = <span class="hljs-literal">false</span>;<br>           &#125; <span class="hljs-keyword">else</span> &#123;<br>               <span class="hljs-keyword">final</span> <span class="hljs-type">long</span> <span class="hljs-variable">now</span> <span class="hljs-operator">=</span> SystemClock.uptimeMillis();<br>               <span class="hljs-type">MotionEvent</span> <span class="hljs-variable">cancelEvent</span> <span class="hljs-operator">=</span> MotionEvent.obtain(now, now,<br>                       MotionEvent.ACTION_CANCEL, <span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>, <span class="hljs-number">0</span>);<br>               onTouchEvent(cancelEvent);<br>               mLayoutSuppressed = <span class="hljs-literal">true</span>;<br>               mIgnoreMotionEventTillDown = <span class="hljs-literal">true</span>;<br>               stopScroll();<br>           &#125;<br>       &#125;<br>   &#125;<br></code></pre></td></tr></table></figure>
+<p>在这个函数里。这个函数通过官方注释可以得知，如果传入的参数是true，那么就会抑制布局和滚动。</p>
+<p>！那我明白了！这个方法会抑制整个布局，也无法滚动。但是！抑制之后用户可能还是会去点击ItemView，所以就有了上面的判断，以至ItemView还是可以接收到事件。</p>
+<p>好那我们接着分析</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// Clear the active onInterceptTouchListener.  None should be set at this time, and if one</span><br>        <span class="hljs-comment">// is, it&#x27;s because some other code didn&#x27;t follow the standard contract.</span><br>        mInterceptingOnItemTouchListener = <span class="hljs-literal">null</span>;<br>        <span class="hljs-keyword">if</span> (findInterceptingOnItemTouchListener(e)) &#123;<br>            cancelScroll();<br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>        &#125;<br></code></pre></td></tr></table></figure>
+<p>这里先把mInterceptingOnItemTouchListener设置为空了。从注释可以看到google说这里应该为空，如果不为空是因为没有遵守规范。</p>
+<p>那mInterceptingOnItemTouchListener这又是个什么东西呢？</p>
+<p>这是RecyclerView类里定义的接口</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">OnItemTouchListener</span> &#123;<br><br>    <span class="hljs-type">boolean</span> <span class="hljs-title function_">onInterceptTouchEvent</span><span class="hljs-params">(<span class="hljs-meta">@NonNull</span> RecyclerView rv, <span class="hljs-meta">@NonNull</span> MotionEvent e)</span>;<br><br> <br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">onTouchEvent</span><span class="hljs-params">(<span class="hljs-meta">@NonNull</span> RecyclerView rv, <span class="hljs-meta">@NonNull</span> MotionEvent e)</span>;<br><br><br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">onRequestDisallowInterceptTouchEvent</span><span class="hljs-params">(<span class="hljs-type">boolean</span> disallowIntercept)</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>从注释来看呢，这是应该是用来判断子View会不会要求拦截某一事件。这有利于用户想自定义手势的时候，不会触发RV的滚动吧。</p>
+<p>那我们进入到findInterceptingOnItemTouchListener方法去看一下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">findInterceptingOnItemTouchListener</span><span class="hljs-params">(MotionEvent e)</span> &#123;<br>        <span class="hljs-type">int</span> <span class="hljs-variable">action</span> <span class="hljs-operator">=</span> e.getAction();<br>        <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> <span class="hljs-variable">listenerCount</span> <span class="hljs-operator">=</span> mOnItemTouchListeners.size();<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; listenerCount; i++) &#123;<br>            <span class="hljs-keyword">final</span> <span class="hljs-type">OnItemTouchListener</span> <span class="hljs-variable">listener</span> <span class="hljs-operator">=</span> mOnItemTouchListeners.get(i);<br>            <span class="hljs-keyword">if</span> (listener.onInterceptTouchEvent(<span class="hljs-built_in">this</span>, e) &amp;&amp; action != MotionEvent.ACTION_CANCEL) &#123;<br>                mInterceptingOnItemTouchListener = listener;<br>                <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>    &#125;<br></code></pre></td></tr></table></figure>
+<p>这个方法的逻辑其实并不难。我们这里先提一下mOnItemTouchListeners这个变量，他是一个ArrayList</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> ArrayList&lt;OnItemTouchListener&gt; mOnItemTouchListeners =<br>            <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>&lt;&gt;();<br></code></pre></td></tr></table></figure>
+<p>用来存放上面提到的监听。也就是说子View的监听会存放到这里面。</p>
+<p>然后呢就会去遍历，如果发现其中有一个listener要求了要拦截这次事件，并且这次事件不是<code>ACTION_CANCEL</code>的话，那么就会设置<code>mInterceptingOnItemTouchListener</code>会这个监听。返回true。</p>
+<p>那这个函数就是说有没有一个子View想要拦截这次事件？</p>
+<p>看到这里我思路有点清晰了嗷。之前学习的事件分发里，只有ViewGroup可以拦截事件不发给View，而RecyclerView竟然支持view去拦截自己的事件。这就不得不感叹RecyclerView的强大了。这也解决了我一部分的疑惑，要实现贴纸和弹射也就是可以实现的了。</p>
+<p>好啦我们继续分析。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">if</span> (mLayout == <span class="hljs-literal">null</span>) &#123;<br>           <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>       &#125;<br><br>       <span class="hljs-keyword">final</span> <span class="hljs-type">boolean</span> <span class="hljs-variable">canScrollHorizontally</span> <span class="hljs-operator">=</span> mLayout.canScrollHorizontally();<br>       <span class="hljs-keyword">final</span> <span class="hljs-type">boolean</span> <span class="hljs-variable">canScrollVertically</span> <span class="hljs-operator">=</span> mLayout.canScrollVertically();<br><br>       <span class="hljs-keyword">if</span> (mVelocityTracker == <span class="hljs-literal">null</span>) &#123;<br>           mVelocityTracker = VelocityTracker.obtain();<br>       &#125;<br>       mVelocityTracker.addMovement(e);<br><br>       <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> <span class="hljs-variable">action</span> <span class="hljs-operator">=</span> e.getActionMasked();<br>       <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> <span class="hljs-variable">actionIndex</span> <span class="hljs-operator">=</span> e.getActionIndex();<br><br></code></pre></td></tr></table></figure>
+<p>这里的mLayout是LayoutManager。然后会判断一下应该是垂直滚动还是横向滚动。</p>
+<p>接着又遇到了一个没见过的东西。那就去官网查，查到这是计算指针的速度的一个东西。然后呢把事件给了它。这里不是我们分析的重点，知道大概意思就行。</p>
+<p>然后获取了当前的事件，getActionMasked就是获取事件类型，跟getAction的区别就是getAction获取的是类型和触点。</p>
+<p>前面呢都是一些特殊情况的判断，我们的实现也不太一样，所以我们重点要看一下接下来的switch部分了。</p>
+<p>这里我希望先把最后的返回值提一下。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">return</span> mScrollState == SCROLL_STATE_DRAGGING;<br></code></pre></td></tr></table></figure>
+<p>这个函数最后的返回值是判断mScrollState的状态。而他有下面三个状态：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//停止滚动</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> <span class="hljs-variable">SCROLL_STATE_IDLE</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br><br><span class="hljs-comment">//正在被外部拖拽,一般为用户正在用手指滚动</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> <span class="hljs-variable">SCROLL_STATE_DRAGGING</span> <span class="hljs-operator">=</span> <span class="hljs-number">1</span>;<br><br><span class="hljs-comment">//自动滚动开始</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> <span class="hljs-variable">SCROLL_STATE_SETTLING</span> <span class="hljs-operator">=</span> <span class="hljs-number">2</span>;<br></code></pre></td></tr></table></figure>
+<p>那就是说，最后是否拦截这次事件，完全就取决于最后的状态是否是正在用手指滑动列表咯。</p>
+<p>了解了这个我们再回头看</p>
+<p>首先是<code>ACTION_MOVE</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">case</span> MotionEvent.ACTION_DOWN:<br>              <span class="hljs-keyword">if</span> (mIgnoreMotionEventTillDown) &#123;<br>                  mIgnoreMotionEventTillDown = <span class="hljs-literal">false</span>;<br>              &#125;<br>              mScrollPointerId = e.getPointerId(<span class="hljs-number">0</span>);<br>              mInitialTouchX = mLastTouchX = (<span class="hljs-type">int</span>) (e.getX() + <span class="hljs-number">0.5f</span>);<br>              mInitialTouchY = mLastTouchY = (<span class="hljs-type">int</span>) (e.getY() + <span class="hljs-number">0.5f</span>);<br><br>              <span class="hljs-keyword">if</span> (mScrollState == SCROLL_STATE_SETTLING) &#123;<br>                  getParent().requestDisallowInterceptTouchEvent(<span class="hljs-literal">true</span>);<br>                  setScrollState(SCROLL_STATE_DRAGGING);<br>                  stopNestedScroll(TYPE_NON_TOUCH);<br>              &#125;<br><br>              <span class="hljs-comment">// Clear the nested offsets</span><br>              mNestedOffsets[<span class="hljs-number">0</span>] = mNestedOffsets[<span class="hljs-number">1</span>] = <span class="hljs-number">0</span>;<br><br>              <span class="hljs-type">int</span> <span class="hljs-variable">nestedScrollAxis</span> <span class="hljs-operator">=</span> ViewCompat.SCROLL_AXIS_NONE;<br>              <span class="hljs-keyword">if</span> (canScrollHorizontally) &#123;<br>                  nestedScrollAxis |= ViewCompat.SCROLL_AXIS_HORIZONTAL;<br>              &#125;<br>              <span class="hljs-keyword">if</span> (canScrollVertically) &#123;<br>                  nestedScrollAxis |= ViewCompat.SCROLL_AXIS_VERTICAL;<br>              &#125;<br>              startNestedScroll(nestedScrollAxis, TYPE_TOUCH);<br>              <span class="hljs-keyword">break</span>;<br></code></pre></td></tr></table></figure>
+<p>前面主要是记录当前的触点。后面部分主要是判断方向。</p>
+<p>中间部分才是最重要的，他判断mScrollState == SCROLL_STATE_SETTLING，如果有的话，里面我们可以看到调用了 setScrollState(SCROLL_STATE_DRAGGING);这个函数从名字上我们就能看出来是设置mScrollState 的。</p>
+<p>也就是说 当mScrollState == SCROLL_STATE_SETTLING的时候，设置一下状态，那么最终也就会返回true。</p>
+<p>原来ACITON_DOWN也是会被拦截的啊。</p>
+<p>那我们这里就要搞搞清楚什么情况下mScrollState 才会是SCROLL_STATE_SETTLING的状态。</p>
+<p>通过搜索我发现，只有在fling这个函数里 才会把mScrollState的状态置为SCROLL_STATE_SETTLING。</p>
+<p>fling这个函数我们就不在这里展开了，其实就是手指快速滑动造成RecyclerView自动滑动的处理。具体信息是RecyclerView的事件处理了，这里本文就不仔细展开了；感兴趣的小伙伴可以去看一下，这部分网上还是有很多分析的。</p>
+<p>然后像action_pointer_down这些事件我们这里不涉及，我们也暂时不分析，重点分析一下<code>ACITON_MOVE</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">case</span> MotionEvent.ACTION_MOVE: &#123;<br>    <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> <span class="hljs-variable">index</span> <span class="hljs-operator">=</span> e.findPointerIndex(mScrollPointerId);<br>    <span class="hljs-keyword">if</span> (index &lt; <span class="hljs-number">0</span>) &#123;<br>        Log.e(TAG, <span class="hljs-string">&quot;Error processing scroll; pointer index for id &quot;</span><br>                + mScrollPointerId + <span class="hljs-string">&quot; not found. Did any MotionEvents get skipped?&quot;</span>);<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>    &#125;<br><br>    <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> <span class="hljs-variable">x</span> <span class="hljs-operator">=</span> (<span class="hljs-type">int</span>) (e.getX(index) + <span class="hljs-number">0.5f</span>);<br>    <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> <span class="hljs-variable">y</span> <span class="hljs-operator">=</span> (<span class="hljs-type">int</span>) (e.getY(index) + <span class="hljs-number">0.5f</span>);<br>    <span class="hljs-keyword">if</span> (mScrollState != SCROLL_STATE_DRAGGING) &#123;<br>        <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> <span class="hljs-variable">dx</span> <span class="hljs-operator">=</span> x - mInitialTouchX;<br>        <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> <span class="hljs-variable">dy</span> <span class="hljs-operator">=</span> y - mInitialTouchY;<br>        <span class="hljs-type">boolean</span> <span class="hljs-variable">startScroll</span> <span class="hljs-operator">=</span> <span class="hljs-literal">false</span>;<br>        <span class="hljs-keyword">if</span> (canScrollHorizontally &amp;&amp; Math.abs(dx) &gt; mTouchSlop) &#123;<br>            mLastTouchX = x;<br>            startScroll = <span class="hljs-literal">true</span>;<br>        &#125;<br>        <span class="hljs-keyword">if</span> (canScrollVertically &amp;&amp; Math.abs(dy) &gt; mTouchSlop) &#123;<br>            mLastTouchY = y;<br>            startScroll = <span class="hljs-literal">true</span>;<br>        &#125;<br>        <span class="hljs-keyword">if</span> (startScroll) &#123;<br>            setScrollState(SCROLL_STATE_DRAGGING);<br>        &#125;<br>    &#125;<br>&#125; <span class="hljs-keyword">break</span>;<br></code></pre></td></tr></table></figure>
+<p>这里啊我们可以看到，如果mScrollState的状态本来就是SCROLL_STATE_DRAGGING，那么就什么都不会做，直接break。那么最终也会返回true，进行事件拦截。这很好理解，在滑动过程中你移动手指肯定是继续滑动。</p>
+<p>那如果原本mScrollState不是SCROLL_STATE_DRAGGING，那就会进行判断了。判断也内容也很简单，在对应的方向上如果手指移动的距离超过了一个值，这个值估计就是一个触发滑动的阈值，那么就会把mScrollState设置成SCROLL_STATE_DRAGGING了。那最终呢也就会把这个事件给拦截下来了。</p>
+<p>而在<code>ACTION_UP</code>里，并没有对mScrollState进行改变赋值的操作。所以呢我们的ItemView自然也就接受不到ACTION_UP啦。</p>
+<p>行，分析到这里其实就能证实我们的猜想了。也能解答我们的疑惑了。但是还有一个最重要的点！</p>
+<p>你<strong>RecyclerView</strong>不能拦截完我的事件就不管我了呀！这不是渣男行为吗？你拦截了我咋办啊我这还等着<code>ACTION_UP</code>呢。</p>
+<p>其实这个问题在ViewGroup的dispatchTouchEvent()里就已经解决啦。</p>
+<p>如果这个事件会被拦截，而之前又有一个targetView的话，在dispatchTouchEvent()里面就会给这个target发送一个<code>ACTION_CANCEL</code>，然后把targetView更换为自己。所以我们只需要在自己的项目里在<code>ACTION_CANCEL</code>里面再去处理一下就可以啦。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Android/" class="category-chain-item">Android</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>RecyclerView事件处理、拦截机制源码分析</div>
+      <div>http://example.com/2021/11/10/Android/RecyclerView事件处理、拦截机制源码分析/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>lukazhang</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2021年11月10日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/03/03/MechineLearning/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E4%BB%A5%E5%8F%8A%E7%AE%80%E5%8D%95%E7%9A%84%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" title="机器学习入门以及简单的线性回归模型">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">机器学习入门以及简单的线性回归模型</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/11/10/Android/GestureDetector%E4%BA%8B%E4%BB%B6%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" title="GestureDetector事件源码分析">
+                        <span class="hidden-mobile">GestureDetector事件源码分析</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

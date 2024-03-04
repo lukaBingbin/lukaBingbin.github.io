@@ -1,0 +1,853 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="lukazhang">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="RecyclerView到底比ListView好在哪里？ ListView的绘制流程 这里郭神有提到，所有的View其实都会执行两次onMeasure和onLayout。简单的View里，执行两次的逻辑几乎是一样的，但是在ListView里就不太一样了。 第一次Layout   ListView的onLayout的流程，是会先尝试从RecycleBin里去获取子View。但是第一次进行onLayo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RecyclerView到底比ListView好在哪里？">
+<meta property="og:url" content="http://example.com/2021/11/10/Android/RecyclerView%E5%88%B0%E5%BA%95%E6%AF%94ListView%E5%A5%BD%E5%9C%A8%E5%93%AA%E9%87%8C%EF%BC%9F/index.html">
+<meta property="og:site_name" content="YOLO">
+<meta property="og:description" content="RecyclerView到底比ListView好在哪里？ ListView的绘制流程 这里郭神有提到，所有的View其实都会执行两次onMeasure和onLayout。简单的View里，执行两次的逻辑几乎是一样的，但是在ListView里就不太一样了。 第一次Layout   ListView的onLayout的流程，是会先尝试从RecycleBin里去获取子View。但是第一次进行onLayo">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-11-10T08:00:00.000Z">
+<meta property="article:modified_time" content="2024-03-02T08:15:41.431Z">
+<meta property="article:author" content="lukazhang">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>RecyclerView到底比ListView好在哪里？ - YOLO</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="RecyclerView到底比ListView好在哪里？"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2021-11-10 16:00" pubdate>
+          2021年11月10日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          29 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">RecyclerView到底比ListView好在哪里？</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1>RecyclerView到底比ListView好在哪里？</h1>
+<h2 id="ListView的绘制流程">ListView的绘制流程</h2>
+<p>这里郭神有提到，所有的View其实都会执行两次onMeasure和onLayout。简单的View里，执行两次的逻辑几乎是一样的，但是在ListView里就不太一样了。</p>
+<h3 id="第一次Layout">第一次Layout</h3>
+<ul>
+<li>
+<p>ListView的onLayout的流程，是会先尝试从RecycleBin里去获取子View。但是第一次进行onLayout的时候，RecycleBin里还没有任何东西，所以会取到空。</p>
+</li>
+<li>
+<p>然后又会去废弃缓存里获取，此时也为空。</p>
+</li>
+<li>
+<p>都为空，所以最后只能去Adapter里获取数据来创建子View了。</p>
+</li>
+<li>
+<p>会进行一个循环，创建子View，如果子View填满了当前屏幕，那么就会停止创建。至此第一次Layout的绘制就完成了。</p>
+</li>
+</ul>
+<h3 id="第二次Layout">第二次Layout</h3>
+<ul>
+<li>第二次onLayout的开始阶段，就将之前创建的子View放到RecycleBin的mActiveViews数组中去作为缓存。这也是ListView的一级缓存，保存当前正在屏幕内的子View。</li>
+<li>然后会进行一个非常重要的操作。会把ListView中当前的子View全部清除掉，从而保证第二次Layout不会产生重复的数据。</li>
+<li>接下来就会去RecycleBin里获取数据了，此时的mActiveViews就不为空了，就能直接取到数据了。至此就是第二次Layout了</li>
+</ul>
+<p>需要注意的是，mActiveViews里的数据是不支持复用的，我们这里取完之后数组里就为null了。</p>
+<p>那为什么要这样呢？我想可能是因为view都要进行至少两次的Layout，而ListView的Layout又比较特殊，要去获取数据。如果进行两次就会获取到两份相同的数据，解决相同的数据倒是好解决，删掉一个即可。但是如果两次都要到Adapter里去取数据，那么就会变慢了，所以这里用mAcitiveViews去缓存了。</p>
+<h3 id="如何展示更多的数据？">如何展示更多的数据？</h3>
+<p>前面的两次Layout只是加载并显示了第一屏的数据。当我们滑动的时候，就需要更多的数据。</p>
+<p>ListView在滑动的时候，会检测子View有没有被移出屏幕外，如果移出屏幕外的子View，就会放到废弃缓存里，scrapViews。这就是ListView的第二级缓存。</p>
+<p>不管是Layout的时候，还是滑动屏幕的时候，都会通过调用makeAndAddView来获取子View来填充ListView。</p>
+<p>我们可以重点看一下这个方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs java"><br><span class="hljs-keyword">private</span> View <span class="hljs-title function_">makeAndAddView</span><span class="hljs-params">(<span class="hljs-type">int</span> position, <span class="hljs-type">int</span> y, <span class="hljs-type">boolean</span> flow, <span class="hljs-type">int</span> childrenLeft,</span><br><span class="hljs-params">        <span class="hljs-type">boolean</span> selected)</span> &#123;<br>    View child;<br>    <span class="hljs-keyword">if</span> (!mDataChanged) &#123;<br>        <span class="hljs-comment">// Try to use an exsiting view for this position</span><br>        child = mRecycler.getActiveView(position);<br>        <span class="hljs-keyword">if</span> (child != <span class="hljs-literal">null</span>) &#123;<br>            <span class="hljs-comment">// Found it -- we&#x27;re using an existing child</span><br>            <span class="hljs-comment">// This just needs to be positioned</span><br>            setupChild(child, position, y, flow, childrenLeft, selected, <span class="hljs-literal">true</span>);<br>            <span class="hljs-keyword">return</span> child;<br>        &#125;<br>    &#125;<br>    <span class="hljs-comment">// Make a new view for this position, or convert an unused view if possible</span><br>    child = obtainView(position, mIsScrap);<br>    <span class="hljs-comment">// This needs to be positioned and measured</span><br>    setupChild(child, position, y, flow, childrenLeft, selected, mIsScrap[<span class="hljs-number">0</span>]);<br>    <span class="hljs-keyword">return</span> child;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>这里的流程还是比较简单的，如果<strong>数据源</strong>没有改变就会先去mActiveViews里去获取。如果没有获取到或者<strong>数据源</strong>发生了改变，那么就去进入obtainView方法。这个方法的步骤就是先去ScrapViews里去获取，如果没有就调用adapter.getView来获取。</p>
+<p>看一下源码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs java">View <span class="hljs-title function_">obtainView</span><span class="hljs-params">(<span class="hljs-type">int</span> position, <span class="hljs-type">boolean</span>[] isScrap)</span> &#123;<br>	isScrap[<span class="hljs-number">0</span>] = <span class="hljs-literal">false</span>;<br>	View scrapView;<br>	scrapView = mRecycler.getScrapView(position);<br>	View child;<br>	<span class="hljs-keyword">if</span> (scrapView != <span class="hljs-literal">null</span>) &#123;<br>		child = mAdapter.getView(position, scrapView, <span class="hljs-built_in">this</span>);<br>		<span class="hljs-keyword">if</span> (child != scrapView) &#123;<br>			mRecycler.addScrapView(scrapView);<br>			<span class="hljs-keyword">if</span> (mCacheColorHint != <span class="hljs-number">0</span>) &#123;<br>				child.setDrawingCacheBackgroundColor(mCacheColorHint);<br>			&#125;<br>		&#125; <span class="hljs-keyword">else</span> &#123;<br>			isScrap[<span class="hljs-number">0</span>] = <span class="hljs-literal">true</span>;<br>			dispatchFinishTemporaryDetach(child);<br>		&#125;<br>	&#125; <span class="hljs-keyword">else</span> &#123;<br>		child = mAdapter.getView(position, <span class="hljs-literal">null</span>, <span class="hljs-built_in">this</span>);<br>		<span class="hljs-keyword">if</span> (mCacheColorHint != <span class="hljs-number">0</span>) &#123;<br>			child.setDrawingCacheBackgroundColor(mCacheColorHint);<br>		&#125;<br>	&#125;<br>	<span class="hljs-keyword">return</span> child;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>如果说在mRecycler.getSrapView里获取到了，也就是在废弃缓存里获取到了，那么也会调用mAdapter.getView，这里的第二个参数，就是我们写的代码里的convertView了，所以也就知道了这里的convertView其实就是去废弃缓存里获取的。而至于要不要用这个converView，就需要我们自己去优化了。</p>
+<h2 id="Recycler的绘制流程">Recycler的绘制流程</h2>
+<h3 id="onMeasure">onMeasure</h3>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">onMeasure</span><span class="hljs-params">(<span class="hljs-type">int</span> widthSpec, <span class="hljs-type">int</span> heightSpec)</span> &#123;<br>    <span class="hljs-keyword">if</span>(mLayout == <span class="hljs-literal">null</span>) &#123;<br>        defaultOnMeasure(widthSpec, heightSpec);<br>        <span class="hljs-keyword">return</span>;<br>    &#125;<br>    <span class="hljs-keyword">if</span> (mLayout.isAutoMeasureEnable())&#123;<br>        <span class="hljs-keyword">if</span> (mmState.mLayoutStep == State.STEP_START) &#123;<br>            dispatchLayoutStep1()；<br>        &#125;<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        ...<br>    &#125;<br>    <br>    <br>&#125;<br></code></pre></td></tr></table></figure>
+<p>如果layoutManager为空的话，就会显示不数据，defaultOnMeasure只是计算了一下宽高的值，然后设置了宽高。</p>
+<p>如果不为空，才会往下执行。</p>
+<p>在RecyclerView里一共有三个step函数</p>
+<ul>
+<li>dispatchLayoutStep1</li>
+<li>dispatchLayoutStep2</li>
+<li>dispatchLayoutStep3</li>
+</ul>
+<p>这三个函数对应的mState.mLayoutStep 分别是</p>
+<ul>
+<li>State.Step_Start</li>
+<li>State.Step_LAYOUT</li>
+<li>State.Step_ANIMATIONS</li>
+</ul>
+<p>在对应状态才会执行相应步骤，并在步骤里改变状态。</p>
+<p>所以上面会看到当状态为Step_START的时候，会执行 dispatchLayoutStep1()；</p>
+<p>这里列一下三大步骤的主要作用</p>
+<table>
+<thead>
+<tr>
+<th>Step1</th>
+<th>1、处理Adapter更新；2、决定知否执行ItemAnimator；3、保存ItemView的动画信息</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Step2</td>
+<td>进行children的测量和布局</td>
+</tr>
+<tr>
+<td>Step2</td>
+<td>执行在Step1里保存的动画信息</td>
+</tr>
+</tbody>
+</table>
+<p>这里笔记忘了写，现在总结一下关键点。</p>
+<ol>
+<li>RecyclerView是把绘制流程交给了LayoutManager去处理的，如果没有设置LayoutManager就不会进行子View的绘制，所以就会显示空白（但是不会报错）</li>
+<li>绘制是先确定锚点(就是开始点)，然后向上绘制，向下绘制，fill()会至少执行两次，如果还有剩余空间，会再执行fill</li>
+<li>LayoutManager获取View是从RecyclerView中的Recycler.next()中获取的，这是个很重要的函数，就设计到了RecyclerView的缓存机制。</li>
+<li>如果RecyclerView的宽高没有写死，那么会在onMeasure里就完成子View的measure和 layout；如果写死了宽高，就会延后到onLayout里去执行子View的mesure和layout。</li>
+</ol>
+<h3 id="Recycler的缓存机制">Recycler的缓存机制</h3>
+<p>前面提到了，LayoutManager会从Recycler.next()中去获取View，这个方法就是RecyclerView的缓存机制。所以来仔细分析一下。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java">View <span class="hljs-title function_">next</span><span class="hljs-params">(RecyclerView.Recycler recycler)</span> &#123;<br>            <span class="hljs-comment">//默认mScrapList=null，但是执行layoutForPredictiveAnimations方法的时候不会为空</span><br>            <span class="hljs-keyword">if</span> (mScrapList != <span class="hljs-literal">null</span>) &#123;<br>                <span class="hljs-keyword">return</span> nextViewFromScrapList();<br>            &#125;<br>            <span class="hljs-comment">//重要，从recycler获得View,mScrapList是被LayoutManager持有，recycler是被RecyclerView持有</span><br>            <span class="hljs-keyword">final</span> <span class="hljs-type">View</span> <span class="hljs-variable">view</span> <span class="hljs-operator">=</span> recycler.getViewForPosition(mCurrentPosition);<br>            mCurrentPosition += mItemDirection;<br>            <span class="hljs-keyword">return</span> view;<br>        &#125;<br></code></pre></td></tr></table></figure>
+<p>这里其实LayoutManager自己是有一层缓存的，即mScrapList，不过是用来缓存动画的，我们现暂时不分析。</p>
+<p>RecyclerView的缓存主要还是依赖Recycler的。Recycler的结构如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Recycler</span> &#123;<br>    <span class="hljs-keyword">final</span> ArrayList&lt;ViewHolder&gt; mAttachedScrap = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>&lt;&gt;();<br>    ArrayList&lt;ViewHolder&gt; mChangedScrap = <span class="hljs-literal">null</span>;<br><br>    <span class="hljs-keyword">final</span> ArrayList&lt;ViewHolder&gt; mCachedViews = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>&lt;ViewHolder&gt;();<br><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> List&lt;ViewHolder&gt;<br>            mUnmodifiableAttachedScrap = Collections.unmodifiableList(mAttachedScrap);<br><br>    <span class="hljs-keyword">private</span> <span class="hljs-type">int</span> <span class="hljs-variable">mRequestedCacheMax</span> <span class="hljs-operator">=</span> DEFAULT_CACHE_SIZE;<br>    <span class="hljs-type">int</span> <span class="hljs-variable">mViewCacheMax</span> <span class="hljs-operator">=</span> DEFAULT_CACHE_SIZE;<br><br>    RecycledViewPool mRecyclerPool;<br><br>    <span class="hljs-keyword">private</span> ViewCacheExtension mViewCacheExtension;<br><br>    <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> <span class="hljs-variable">DEFAULT_CACHE_SIZE</span> <span class="hljs-operator">=</span> <span class="hljs-number">2</span>;<br>    ...<br>    &#125;<br></code></pre></td></tr></table></figure>
+<p>从源码里可以很清晰地看到Recycler用来缓存的东西:</p>
+<ul>
+<li>mAttacgedScrap    一级</li>
+<li>nChangeScrap    一级</li>
+<li>mCacheedViews   二级</li>
+<li>mRecycerPool   四级</li>
+<li>mViewCacheExtension   三级</li>
+</ul>
+<p>然后我们进去Recycler.getViewForPostiton()看看，最后会进入到tryGetViewHolderForPositionByDeadline()方法里。</p>
+<p>这个方法，官方的注释是：</p>
+<blockquote>
+<p>Attempts to get the ViewHolder for the given position, either from the Recycler scrap,  cache, the RecycledViewPool, or creating it directly.</p>
+<p>从 scarp  cache RecyclerViewPool中获取ViewHoder</p>
+</blockquote>
+<p>官方并没有提自定义的缓存，但是源码里是有这一步的，可能是因为不安全？（下面会说）</p>
+<p>mAttacgedScarp和mChangeScrap我这里定义为同为一级缓存。他们都是最先去找的。</p>
+<p>那他们有哪些不同呢？</p>
+<ul>
+<li>mAttacgedScrap里保存的是那些滑出屏幕的ItemView</li>
+<li>mChangeScrap是在Adapter调用notifyItemChanged方法时，保存改变之前iIemView</li>
+</ul>
+<p>虽然说把他们定义为同一级缓存，但是他们的位置却不在一起。其实是先去mChangeScrap里面去找。贴一下源码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs java">ViewHolder <span class="hljs-title function_">tryGetViewHolderForPositionByDeadline</span><span class="hljs-params">(<span class="hljs-type">int</span> position,</span><br><span class="hljs-params">               <span class="hljs-type">boolean</span> dryRun, <span class="hljs-type">long</span> deadlineNs)</span> &#123;<br>           <span class="hljs-keyword">if</span> (position &lt; <span class="hljs-number">0</span> || position &gt;= mState.getItemCount()) &#123;<br>               <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">IndexOutOfBoundsException</span>(<span class="hljs-string">&quot;Invalid item position &quot;</span> + position<br>                       + <span class="hljs-string">&quot;(&quot;</span> + position + <span class="hljs-string">&quot;). Item count:&quot;</span> + mState.getItemCount()<br>                       + exceptionLabel());<br>           &#125;<br>           <span class="hljs-type">boolean</span> <span class="hljs-variable">fromScrapOrHiddenOrCache</span> <span class="hljs-operator">=</span> <span class="hljs-literal">false</span>;<br>           <span class="hljs-type">ViewHolder</span> <span class="hljs-variable">holder</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br>           <span class="hljs-comment">// 0) If there is a changed scrap, try to find from there</span><br>           <span class="hljs-keyword">if</span> (mState.isPreLayout()) &#123;<br>               holder = getChangedScrapViewForPosition(position);<br>               fromScrapOrHiddenOrCache = holder != <span class="hljs-literal">null</span>;<br>           &#125;<br>           <span class="hljs-comment">// 1) Find by position from scrap/hidden list/cache</span><br>           <span class="hljs-keyword">if</span> (holder == <span class="hljs-literal">null</span>) &#123;<br>               holder = getScrapOrHiddenOrCachedHolderForPosition(position, dryRun);<br></code></pre></td></tr></table></figure>
+<p>可以看到，先去getChangedScrapViewForPostion里去找，没找到的话，就会进入函数getChangedScrapViewForPosition.</p>
+<h4 id="通过position查找">通过position查找</h4>
+<p>这个函数的注释我们可以看一下</p>
+<blockquote>
+<p>Returns a view for the position either from attach scrap, hidden children, or cache.</p>
+</blockquote>
+<p>返回一个view从 attachScrap, hidden children or cache</p>
+<p>注释就说得很明显了，不过有一个hidden是我们没有提到过的。其实hiddenView是一个只存放动画的viewHolder.</p>
+<p>然后接着还是没找到的话，就会去cachedView里找了。</p>
+<p>这个函数里主要就是通过position去查找的，不管是在attachScrap还是 cacheViews，传入的参数都是position。如果这一次并没有获取到viewHolder的话，那么就会进入下一个方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java">holder = getScrapOrCachedViewForId(mAdapter.getItemId(offsetPosition),<br>                            type, dryRun);<br></code></pre></td></tr></table></figure>
+<h4 id="通过type查找">通过type查找</h4>
+<p>此时的流程跟上面差不多，但是少了HiddenChildren，多了对Id和Type的判断。这里的id我们暂时不管，可以看到Recycler会去找两次attachScrap和cacheViews。</p>
+<h4 id="通过Extension去查找">通过Extension去查找</h4>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">if</span> (holder == <span class="hljs-literal">null</span> &amp;&amp; mViewCacheExtension != <span class="hljs-literal">null</span>) &#123;<br>                    <span class="hljs-comment">// We are NOT sending the offsetPosition because LayoutManager does not</span><br>                    <span class="hljs-comment">// know it.</span><br>                    <span class="hljs-keyword">final</span> <span class="hljs-type">View</span> <span class="hljs-variable">view</span> <span class="hljs-operator">=</span> mViewCacheExtension<br>                            .getViewForPositionAndType(<span class="hljs-built_in">this</span>, position, type);<br>                    <span class="hljs-keyword">if</span> (view != <span class="hljs-literal">null</span>) &#123;<br>                        holder = getChildViewHolder(view);<br>                        <span class="hljs-keyword">if</span> (holder == <span class="hljs-literal">null</span>) &#123;<br>                            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">IllegalArgumentException</span>(<span class="hljs-string">&quot;getViewForPositionAndType returned&quot;</span><br>                                    + <span class="hljs-string">&quot; a view which does not have a ViewHolder&quot;</span><br>                                    + exceptionLabel());<br>                        &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (holder.shouldIgnore()) &#123;<br>                            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">IllegalArgumentException</span>(<span class="hljs-string">&quot;getViewForPositionAndType returned&quot;</span><br>                                    + <span class="hljs-string">&quot; a view that is ignored. You must call stopIgnoring before&quot;</span><br>                                    + <span class="hljs-string">&quot; returning this view.&quot;</span> + exceptionLabel());<br>                        &#125;<br>                    &#125;<br>                &#125;<br></code></pre></td></tr></table></figure>
+<p>如果mViewCacheExtension != null 这里就是我们自定义的缓存了，不过用的人很少，我们可以直接跳过。</p>
+<h4 id="通过RecycledViewPool">通过RecycledViewPool</h4>
+<p>最后一步就是通过RecycledViewPool里去找了，Recycler提供了一个视图池，可以供所有的RecyclerView使用，这也是ListView做不到的。</p>
+<p>那RecycledViewPool是怎么缓存的呢？他内部其实是用了SparesArray来保存要缓存的视图。SparesArray是Android专用的一个轻量级的数据结构，通过键值对存储数据。对于小数据来说，他比HashMap效率更高。内部其实就是两个Int数组，用下标来寻找对应的值。关于SparesArray在这里我们就不多细说了，回头有时间的话可以再整理一篇笔记。</p>
+<h4 id="通过Adapter">通过Adapter</h4>
+<p>如果这里都还是没有取到呢？池子里也没有呢？那么就没办法了，只能去调用adapter的createViewHolder了。</p>
+<p>总结一下吧：</p>
+<p>RecyclerView的缓存机制：</p>
+<p>首先要清楚缓存的容器有哪些？他们分别存放哪些ViewHolder？</p>
+<ul>
+<li>
+<p>mChangeScrap，RecyclerView第一层找的地方。当一个ViewHolder对应的item被改变（Adapter调用notifyItemChanged() 或者 notifyItemRangeChanged()方法） 并且ItemAnimator 被调用canReuseUpdatedViewHolder()时返回的是false，才会把这个ViewHolder放到这个容器里。这时就是要用一个视图替换另一个视图的更新动画，比如交叉淡入淡出。这时候就会放到这里面。<strong>所以这个容器的意义在于，如果两个视图之间有一些相同的View，那么就去这个容器里取缓存。<strong>然后在动画结束之后，这个容器里的所有</strong>viewHolder</strong>都会被放到<strong>RecycledViewPool</strong>中去。</p>
+</li>
+<li>
+<p>mAttachScarp，如果不是上面说的那种情况，那么就是在同一个视图里进行改变的。这时候viewHolder就会放到mAttachScrap里。这就是把item划出去的情况。此时的mAttachScrap会保存这些以便后续能继续取。</p>
+</li>
+<li>
+<p>Hidden Views   这个也是跟动画相关的。</p>
+<p>当动画要删除b的时候，会把abc都放入scrap中，然后取的时候就只取会a、c，然后取d。这时候b就会放入hiddenViews。为什么要这样呢？简而言之，就是如果有这么一个操作，用户想在a,b间插入c，同时如果成功插入c的话b就要被顶出屏幕了，但是当c的插入动画还没播放完毕，就立刻来了一个新操作要删除c。对于这么一个骚操作，如果没有Hidden Views，也就是说当接收到插入c通知，并且b没有完全从屏幕上消失的时候就直接把b抛弃，那么当遇到上述情况，Recycler就必须从缓存或者RecycledViewPool 中重新找个新的b对应的ViewHolder，这样就会造成上述情况下，那个被抛弃的ViewHolder在播放消失动画，同时新找来的ViewHolder播放显示动画，这就会造成两个b重叠的bug。这就是hidden Views的。</p>
+</li>
+<li>
+<p>View cache  当上面的情况 b 被顶出去之后，会先放到View Cache里，默认大小为2.</p>
+</li>
+<li>
+<p>ViewCacheExtension：不太安全 不管他</p>
+</li>
+<li>
+<p>RecyclerViewPool：会通过type去存，供所有的RecyclerView来取。这是最后一级的缓存。</p>
+</li>
+</ul>
+<h3 id="为什么RecyclerView需要那么多级缓存？">为什么RecyclerView需要那么多级缓存？</h3>
+<p>其实在刚开始觉得它的缓存层数有点太多了。但是仔细分析之后，每一层都有自己的作用。而且这么多层其实也是为了更好地支持动画。支持动态地插入和删除。</p>
+<p>好多文章在分析地时候，仅仅分析了RecyclerView去哪些缓存里取了，但是没有说清楚为什么需要这些缓存。有时候为什么才是最重要的，而不是怎么样。</p>
+<h2 id="整体对比">整体对比</h2>
+<p>为什么谷歌官方要推荐使用RecyclerView呢？我觉得主要的优点如下：</p>
+<ul>
+<li>RecyclerView的布局更灵活，这得益于RecyclerView把布局任务交给了<strong>LayoutManager</strong>去做，自己只用专心展示。而ListView只能自己做，所以局限性很大，只能支持垂直展示。</li>
+<li>RecyclerView的缓存机制更强大。很多人在对比ListView和RecyclerView的时候会把他们的缓存机制做对比。但是RecyclerView的缓存有很大一部分其实是为了更好地支持动画，让动画的性能更好，所以我觉得直接去对比他们的缓存机制的话是有一点本末倒置的。RecyclerView是自己很好地处理了缓存，一般不需要开发者去操心缓存的事，而ListView则需要开发者自己去调用缓存，我觉得这才是对比缓存层面的优点。</li>
+<li>RecyclerView支持动画。这应该是RecyclerView对比ListView最大的优点了吧。就凭这一点就能成为推荐的理由了。但是因为我还没有深入地了解动画地机制，所以这里就先不多说了。</li>
+<li>RecyclerView的模块化。RecyclerView的内部分工十分明确：
+<ul>
+<li>ViewHolder负责持有视图，这让事件绑定更加灵活。</li>
+<li>Adapter负责适配数据，然后传递给ViewHolder。</li>
+<li>LayoutManager负责布局。</li>
+<li>ItemAnimator负责动画，让实现存在更多可能。</li>
+<li>而RecyclerView本身，只负责把最后的视图展示出来。其他的事就交给他们去做吧。</li>
+</ul>
+</li>
+</ul>
+<p>所以说，在开发过程中，RecyclerView能够适应各种复杂需求，而ListView相对来说就有点力不从心了。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Android/" class="category-chain-item">Android</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>RecyclerView到底比ListView好在哪里？</div>
+      <div>http://example.com/2021/11/10/Android/RecyclerView到底比ListView好在哪里？/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>lukazhang</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2021年11月10日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/11/10/Android/GestureDetector%E4%BA%8B%E4%BB%B6%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" title="GestureDetector事件源码分析">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">GestureDetector事件源码分析</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/11/10/Android/%5B%E5%85%A5%E9%97%A8%E5%90%91%5D%E5%85%B3%E4%BA%8ERecyclerView%E7%9A%84%E4%BA%8B%E4%BB%B6%E6%8B%A6%E6%88%AA%E6%9C%BA%E5%88%B6/" title="关于RecyclerView的事件拦截机制">
+                        <span class="hidden-mobile">关于RecyclerView的事件拦截机制</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
