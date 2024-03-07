@@ -4,6 +4,25 @@
   
   
   <entry>
+    <title>过度拟合</title>
+    <link href="/2024/03/07/MechineLearning/%E8%BF%87%E5%BA%A6%E6%8B%9F%E5%90%88/"/>
+    <url>/2024/03/07/MechineLearning/%E8%BF%87%E5%BA%A6%E6%8B%9F%E5%90%88/</url>
+    
+    <content type="html"><![CDATA[<p>到现在我们已经学习完了线性回归和逻辑回归。<br>接下来我们看看在拟合这类模型中容易遇到的一个问题–过度拟合</p><h1>1.过度拟合问题</h1><p>我们回到房价预测的问题。目前的数据是这样的：</p><img src="/2024/03/07/MechineLearning/%E8%BF%87%E5%BA%A6%E6%8B%9F%E5%90%88/image-20240307224257924.png" class="" title="image-20240307224257924"><p>如果我们此时拟合一条直线，f(x) = wx+b,那效果不会很好。</p><img src="/2024/03/07/MechineLearning/%E8%BF%87%E5%BA%A6%E6%8B%9F%E5%90%88/image-20240307224518034.png" class="" title="image-20240307224518034"><p>因为随着尺寸变大，房子总价可能会增加的缓慢。 此时我们认为模型<strong>拟合不足(underfitting)</strong>。此时的预测结果会不符合预期。</p><p>而如果我们加上了n个多项式，使得模型完美的符合了每一个数据点，甚至成本为0的时候</p><img src="/2024/03/07/MechineLearning/%E8%BF%87%E5%BA%A6%E6%8B%9F%E5%90%88/image-20240307225402612.png" class="" title="image-20240307225402612"><p>此时的模型也不是一个很好的模型， 虽然完美符合每一个数据点，但是当要预测数据集以外的数据时，往往无法给出正确的预测。此时我们认为模型<strong>过度拟合(overfitting)。</strong></p><p>拟合不足和过度拟合都是不好的，我们应该是要找到一个刚刚好的模型，可能不那么完美符合数据集，但是刚刚好能做出更接近正确结果的预测。</p><p>在逻辑回归中也有这样的问题，假设目前有这样一组数据集</p><h1>2.解决过度拟合问题</h1>]]></content>
+    
+    
+    <categories>
+      
+      <category>Machine Learning</category>
+      
+    </categories>
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>逻辑回归</title>
     <link href="/2024/03/06/MechineLearning/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92/"/>
     <url>/2024/03/06/MechineLearning/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92/</url>
