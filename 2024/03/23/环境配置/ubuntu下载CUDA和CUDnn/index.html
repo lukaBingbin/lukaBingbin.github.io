@@ -16,21 +16,30 @@
   <meta name="author" content="lukazhang">
   <meta name="keywords" content="">
   
-    <meta name="description" content="第一章 影响力的武器 作者提到了几个实验和现象:  雌火鸡在听到小鸡的“唧唧”声后就会呵护小鸡，如果没有听到“唧唧”声就会置之不理。实验发现，当在火鸡的天敌臭鼬身上装上可以发出“唧唧”的装置后，雌火鸡竟然也会对臭鼬进行呵护，而“唧唧”声一旦停止，雌火鸡就会攻击臭鼬。 一个旅游景点商店的绿宝石卖不出去，店家破罐破摔本来想把价格改为原来的1&#x2F;2，雇员看错了直接把价格翻倍。结果绿宝石在接下来的一周直接售">
+    <meta name="description" content="刚入门机器学习，需要配置TensorFlow和PyTorch的环境。TensorFlow和PyTorch都可以通过docker直接拉去镜像，但是要用到GPU还需要安装CUDA和CUDnn，因为我宿主机是windows， 无法使用nvidia-docker统一配置。所以还需要在容器里自行下载。 1. 安装CUDA 首先进入到Nvida的CUDA下载官网 https:&#x2F;&#x2F;developer.nvidi">
 <meta property="og:type" content="article">
-<meta property="og:title" content="《影响力》读书笔记">
-<meta property="og:url" content="http://example.com/2024/03/21/reading%20notes/%E5%BD%B1%E5%93%8D%E5%8A%9B/index.html">
+<meta property="og:title" content="ubuntu下载CUDA和CUDnn">
+<meta property="og:url" content="http://example.com/2024/03/23/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/ubuntu%E4%B8%8B%E8%BD%BDCUDA%E5%92%8CCUDnn/index.html">
 <meta property="og:site_name" content="YOLO">
-<meta property="og:description" content="第一章 影响力的武器 作者提到了几个实验和现象:  雌火鸡在听到小鸡的“唧唧”声后就会呵护小鸡，如果没有听到“唧唧”声就会置之不理。实验发现，当在火鸡的天敌臭鼬身上装上可以发出“唧唧”的装置后，雌火鸡竟然也会对臭鼬进行呵护，而“唧唧”声一旦停止，雌火鸡就会攻击臭鼬。 一个旅游景点商店的绿宝石卖不出去，店家破罐破摔本来想把价格改为原来的1&#x2F;2，雇员看错了直接把价格翻倍。结果绿宝石在接下来的一周直接售">
+<meta property="og:description" content="刚入门机器学习，需要配置TensorFlow和PyTorch的环境。TensorFlow和PyTorch都可以通过docker直接拉去镜像，但是要用到GPU还需要安装CUDA和CUDnn，因为我宿主机是windows， 无法使用nvidia-docker统一配置。所以还需要在容器里自行下载。 1. 安装CUDA 首先进入到Nvida的CUDA下载官网 https:&#x2F;&#x2F;developer.nvidi">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2024-03-21T13:26:29.000Z">
-<meta property="article:modified_time" content="2024-03-21T14:26:18.629Z">
+<meta property="og:image" content="http://example.com/2024/03/23/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/ubuntu%E4%B8%8B%E8%BD%BDCUDA%E5%92%8CCUDnn/image-20240323213629703.png">
+<meta property="og:image" content="http://example.com/2024/03/23/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/ubuntu%E4%B8%8B%E8%BD%BDCUDA%E5%92%8CCUDnn/image-20240323214718830.png">
+<meta property="og:image" content="http://example.com/2024/03/23/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/ubuntu%E4%B8%8B%E8%BD%BDCUDA%E5%92%8CCUDnn/image-20240323214748473.png">
+<meta property="og:image" content="http://example.com/2024/03/23/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/ubuntu%E4%B8%8B%E8%BD%BDCUDA%E5%92%8CCUDnn/image-20240323214933803.png">
+<meta property="og:image" content="http://example.com/2024/03/23/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/ubuntu%E4%B8%8B%E8%BD%BDCUDA%E5%92%8CCUDnn/image-20240323215150407.png">
+<meta property="og:image" content="http://example.com/2024/03/23/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/ubuntu%E4%B8%8B%E8%BD%BDCUDA%E5%92%8CCUDnn/image-20240323215317933.png">
+<meta property="og:image" content="http://example.com/2024/03/23/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/ubuntu%E4%B8%8B%E8%BD%BDCUDA%E5%92%8CCUDnn/image-20240323215423363.png">
+<meta property="og:image" content="http://example.com/2024/03/23/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/ubuntu%E4%B8%8B%E8%BD%BDCUDA%E5%92%8CCUDnn/image-20240323215741662.png">
+<meta property="article:published_time" content="2024-03-23T13:31:13.000Z">
+<meta property="article:modified_time" content="2024-03-23T13:57:53.102Z">
 <meta property="article:author" content="lukazhang">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/2024/03/23/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/ubuntu%E4%B8%8B%E8%BD%BDCUDA%E5%92%8CCUDnn/image-20240323213629703.png">
   
   
   
-  <title>《影响力》读书笔记 - YOLO</title>
+  <title>ubuntu下载CUDA和CUDnn - YOLO</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -188,7 +197,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="《影响力》读书笔记"></span>
+            <span id="subtitle" data-typed-text="ubuntu下载CUDA和CUDnn"></span>
           
         </div>
 
@@ -199,8 +208,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-03-21 21:26" pubdate>
-          2024年3月21日 晚上
+        <time datetime="2024-03-23 21:31" pubdate>
+          2024年3月23日 晚上
         </time>
       </span>
     
@@ -211,7 +220,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          600 字
+          566 字
         
       </span>
     
@@ -222,7 +231,7 @@
         
         
         
-          6 分钟
+          5 分钟
         
       </span>
     
@@ -259,24 +268,60 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">《影响力》读书笔记</h1>
+            <h1 id="seo-header">ubuntu下载CUDA和CUDnn</h1>
             
             
               <div class="markdown-body">
                 
-                <h2 id="第一章-影响力的武器">第一章 影响力的武器</h2>
-<p>作者提到了几个实验和现象:</p>
-<ol>
-<li>雌火鸡在听到小鸡的“唧唧”声后就会呵护小鸡，如果没有听到“唧唧”声就会置之不理。实验发现，当在火鸡的天敌臭鼬身上装上可以发出“唧唧”的装置后，雌火鸡竟然也会对臭鼬进行呵护，而“唧唧”声一旦停止，雌火鸡就会攻击臭鼬。</li>
-<li>一个旅游景点商店的绿宝石卖不出去，店家破罐破摔本来想把价格改为原来的1/2，雇员看错了直接把价格翻倍。结果绿宝石在接下来的一周直接售空。</li>
-<li>一个实验招来一批志愿者试验一个声称能提高智力的饮品。其中一批志愿者花了1.98美元购买，而另一批志愿者花了0.98美元购买，然后完成智力测试题。试验发现，花1.98购买饮品的志愿者表现更好。</li>
-</ol>
-<p>随后作者提到，动物是由天性的，比如雌火鸡听到“唧唧”声就会母性大发。人类同样有，只是很多是后天养成的。</p>
-<p>**人们总是会想要走捷径。**当人们对一个事物不了解，也没有时间花时间去了解、分析的时候，总是会从思想上走捷径。</p>
-<ul>
-<li>典型的例子就是认为 <strong>价格贵=品质好</strong>， 也就是 <strong>贵=好</strong>。这一点很真实，包括我在买游泳耳机时，只是在简单了解了防水等级后就选择了一个更贵的。这是一场赌博，但是以往的经验告诉人们大概率会赌对。而上面的两个实验也说明了，当人们购买一个价格贵的东西的时候，自然会认为他是更好的。因为人实在很难有时间了解所有的事物， 所以总是会走捷径。</li>
-<li>其次就是听取其他人、权威的意见。比如评价，在网购和挑选饭店、酒店的时候，总是会倾向于评分5.0的而非4.7的。总是会看各种评价。因为无法提前自身体验。同时这时候就会有商人抓住这个弱点，进行刷单、刷好评、恶意评价等操作，就是抓住了人类的这一特点。</li>
-</ul>
+                <p>刚入门机器学习，需要配置TensorFlow和PyTorch的环境。TensorFlow和PyTorch都可以通过docker直接拉去镜像，但是要用到GPU还需要安装CUDA和CUDnn，因为我宿主机是windows， 无法使用nvidia-docker统一配置。所以还需要在容器里自行下载。</p>
+<h1>1. 安装CUDA</h1>
+<p>首先进入到Nvida的CUDA下载官网</p>
+<p><a target="_blank" rel="noopener" href="https://developer.nvidia.com/cuda-11-8-0-download-archive">https://developer.nvidia.com/cuda-11-8-0-download-archive</a></p>
+<p>根据系统选择后， 最后一个installer Type选择 runfile(local)</p>
+<img src="/2024/03/23/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/ubuntu%E4%B8%8B%E8%BD%BDCUDA%E5%92%8CCUDnn/image-20240323213629703.png" srcset="/img/loading.gif" lazyload class="" title="image-20240323213629703">
+<p>然后下载下面的.run文件， 可以直接wget下载，也可以在宿主机上下载后再传给docker容器。</p>
+<p>接着来到容器里运行</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo sh cuda_11.8.0_520.61.05_linux.run<br></code></pre></td></tr></table></figure>
+<p>稍等片刻就会出现这个页面</p>
+<img src="/2024/03/23/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/ubuntu%E4%B8%8B%E8%BD%BDCUDA%E5%92%8CCUDnn/image-20240323214718830.png" srcset="/img/loading.gif" lazyload class="" title="image-20240323214718830">
+<p>输入accept同意，来到下面这个页面。</p>
+<img src="/2024/03/23/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/ubuntu%E4%B8%8B%E8%BD%BDCUDA%E5%92%8CCUDnn/image-20240323214748473.png" srcset="/img/loading.gif" lazyload class="" title="image-20240323214748473">
+<p>移动到install按回车开始安装。</p>
+<p>稍等片刻就会安装完成，出现下面的提示。</p>
+<img src="/2024/03/23/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/ubuntu%E4%B8%8B%E8%BD%BDCUDA%E5%92%8CCUDnn/image-20240323214933803.png" srcset="/img/loading.gif" lazyload class="" title="image-20240323214933803">
+<p>这时候还没完，我们还需要去修改环境变量</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">vi ~/.bashrc<br></code></pre></td></tr></table></figure>
+<p>然后在文件最后加上</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">export PATH=$PATH:/usr/local/cuda-11.8/bin  <br>export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda-11.8/lib64  <br></code></pre></td></tr></table></figure>
+<p>注意这里cuda的路径在安装完成的提示里有。</p>
+<p>接着执行</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">source ~/.bashrc<br></code></pre></td></tr></table></figure>
+<p>使环境变量生效。现在我们可以用命令nvcc -V来查看是否安装成功。</p>
+<img src="/2024/03/23/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/ubuntu%E4%B8%8B%E8%BD%BDCUDA%E5%92%8CCUDnn/image-20240323215150407.png" srcset="/img/loading.gif" lazyload class="" title="image-20240323215150407">
+<p>出现这样的输出就表示已经安装成功了。</p>
+<h1>2.安装CUDnn</h1>
+<p>同样我们来到官网找到我们需要的CUDnn</p>
+<p><a target="_blank" rel="noopener" href="https://developer.nvidia.com/rdp/cudnn-archive#a-collapse890-118">https://developer.nvidia.com/rdp/cudnn-archive#a-collapse890-118</a></p>
+<p>在使用docker拉取PyTorch的时候，tag里是有CUDA和CUDnn的版本号的，找到对应的下载即可。</p>
+<img src="/2024/03/23/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/ubuntu%E4%B8%8B%E8%BD%BDCUDA%E5%92%8CCUDnn/image-20240323215317933.png" srcset="/img/loading.gif" lazyload class="" title="image-20240323215317933">
+<p>下载完成后，执行以下命令:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo dpkg -i cudnn-local-repo-ubuntu1804-8.9.0.131_1.0-1_amd64.deb<br></code></pre></td></tr></table></figure>
+<img src="/2024/03/23/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/ubuntu%E4%B8%8B%E8%BD%BDCUDA%E5%92%8CCUDnn/image-20240323215423363.png" srcset="/img/loading.gif" lazyload class="" title="image-20240323215423363">
+<p>能看到这样的输出，注意最后一行有说需要安装key，所以再执行</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo cp /var/cudnn-local-repo-ubuntu1804-8.9.0.131/cudnn-local-A18C0B21-keyring.gpg /usr/share/keyrings/<br></code></pre></td></tr></table></figure>
+<p>接下来执行</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo apt-get update<br></code></pre></td></tr></table></figure>
+<p>然后就要开始安装CUDnn了。命令为</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo apt-get install libcudnn8=8.9.0.131-1+cuda11.8<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>注意这里的版本号要和自己需要的一样， 可以通过命令apt-cache policy libcudnn8查看。</p>
+</blockquote>
+<p>还需要安装dev和sample</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo apt-get install libcudnn8-dev=8.9.0.131-1+cuda11.8<br>sudo apt-get install libcudnn8-sample=8.9.0.131-1+cuda11.8<br></code></pre></td></tr></table></figure>
+<p>全都下载完成后， 可以通过下面的命令进行测试</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs shell">cp -r /usr/src/cudnn_samples_v8/ $HOME<br>cd $HOME/cudnn_samples_v8/mnistCUDNN<br>make clean &amp;&amp; make<br>./mnistCUDNN<br></code></pre></td></tr></table></figure>
+<img src="/2024/03/23/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/ubuntu%E4%B8%8B%E8%BD%BDCUDA%E5%92%8CCUDnn/image-20240323215741662.png" srcset="/img/loading.gif" lazyload class="" title="image-20240323215741662">
+<p>出现Test passed即表示安装成功了。</p>
 
                 
               </div>
@@ -295,7 +340,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" class="category-chain-item">读书笔记</a>
+  <a href="/categories/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" class="category-chain-item">环境配置</a>
   
   
 
@@ -315,8 +360,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>《影响力》读书笔记</div>
-      <div>http://example.com/2024/03/21/reading notes/影响力/</div>
+      <div>ubuntu下载CUDA和CUDnn</div>
+      <div>http://example.com/2024/03/23/环境配置/ubuntu下载CUDA和CUDnn/</div>
     </div>
     <div class="license-meta">
       
@@ -328,7 +373,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2024年3月21日</div>
+          <div>2024年3月23日</div>
         </div>
       
       
@@ -360,18 +405,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/03/23/MechineLearning/%E5%A4%9A%E7%BA%A7%E5%88%86%E7%B1%BB/" title="多级分类">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">多级分类</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/03/10/MechineLearning/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%85%A5%E9%97%A8/" title="神经网络入门">
-                        <span class="hidden-mobile">神经网络入门</span>
+                      <a href="/2024/03/23/MechineLearning/%E5%A4%9A%E7%BA%A7%E5%88%86%E7%B1%BB/" title="多级分类">
+                        <span class="hidden-mobile">多级分类</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
