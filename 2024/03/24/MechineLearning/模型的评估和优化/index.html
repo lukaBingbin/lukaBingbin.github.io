@@ -34,8 +34,10 @@
 <meta property="og:image" content="http://example.com/2024/03/24/MechineLearning/%E6%A8%A1%E5%9E%8B%E7%9A%84%E8%AF%84%E4%BC%B0%E5%92%8C%E4%BC%98%E5%8C%96/image-20240324160254029.png">
 <meta property="og:image" content="http://example.com/2024/03/24/MechineLearning/%E6%A8%A1%E5%9E%8B%E7%9A%84%E8%AF%84%E4%BC%B0%E5%92%8C%E4%BC%98%E5%8C%96/image-20240324160649024.png">
 <meta property="og:image" content="http://example.com/2024/03/24/MechineLearning/%E6%A8%A1%E5%9E%8B%E7%9A%84%E8%AF%84%E4%BC%B0%E5%92%8C%E4%BC%98%E5%8C%96/image-20240324162302669.png">
+<meta property="og:image" content="http://example.com/2024/03/24/MechineLearning/%E6%A8%A1%E5%9E%8B%E7%9A%84%E8%AF%84%E4%BC%B0%E5%92%8C%E4%BC%98%E5%8C%96/image-20240325235200916.png">
+<meta property="og:image" content="http://example.com/2024/03/24/MechineLearning/%E6%A8%A1%E5%9E%8B%E7%9A%84%E8%AF%84%E4%BC%B0%E5%92%8C%E4%BC%98%E5%8C%96/image-20240325235239399.png">
 <meta property="article:published_time" content="2024-03-24T06:43:47.000Z">
-<meta property="article:modified_time" content="2024-03-24T13:53:08.412Z">
+<meta property="article:modified_time" content="2024-03-25T15:56:24.600Z">
 <meta property="article:author" content="lukazhang">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="http://example.com/2024/03/24/MechineLearning/%E6%A8%A1%E5%9E%8B%E7%9A%84%E8%AF%84%E4%BC%B0%E5%92%8C%E4%BC%98%E5%8C%96/image-20240324145823728.png">
@@ -223,7 +225,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.1k 字
+          4.1k 字
         
       </span>
     
@@ -234,7 +236,7 @@
         
         
         
-          26 分钟
+          35 分钟
         
       </span>
     
@@ -466,10 +468,61 @@ f(x) = w_1x + w_2x^2 +w_3x^3 + w_4x^4 +w_5x^5 + b \ \ \ high\ variance
 <p>高方差的模型往往是因为训练的特征值不足以进行拟合，所以我们可以适当增加几个特征值，如在房价预测中除了房屋的面积以外，房屋的地段、楼层可能都会有影响。</p>
 </li>
 <li>
-<p>适当增加λ</p>
-<p>适当</p>
+<p>多项式回归</p>
+<p>如果没有更多的特征值可以选，我们也可以在模型的多项式里通过组合、升次来修复高方差。比如x², x³…</p>
+</li>
+<li>
+<p>适当减小λ</p>
+<p>在正则化的时候，适当减小λ能够提高回归参数， 也就是能提高特征的比重。这时候也能帮助修复高方差。</p>
 </li>
 </ul>
+<h2 id="2、优化高偏差模型">2、优化高偏差模型</h2>
+<p>高偏差模型为过度拟合，我们可以通过下面的方式进行优化:</p>
+<ul>
+<li>
+<p>获取更多的训练数据</p>
+<p>在前面的学习曲线中我们已经提到过，获取更多数据能够帮助优化高偏差。</p>
+</li>
+<li>
+<p>尝试更少的特征值集合</p>
+<p>可以尝试去掉多项式里的一些项，比如x^5, x_1x_2… 过度拟合往往也是多项式过于复杂导致的。</p>
+</li>
+<li>
+<p>适当增大λ</p>
+<p>如果无法去掉特征值，那么可以尝试在正则化的时候增大λ。</p>
+</li>
+</ul>
+<h2 id="3、误差分析">3、误差分析</h2>
+<p>假设我们现在训练一个识别一封邮件是否是垃圾邮件的模型。</p>
+<p>一封垃圾邮件可能有以下特征:</p>
+<ul>
+<li>文中是否有”购买“，”优惠“，”信用卡“ 等词语</li>
+<li>文中是否有错别字</li>
+<li>文中是否有带跳转链接的图片</li>
+<li>…</li>
+</ul>
+<p>在经过训练和上面的优化之后，发现模型的效果依然不好， 接下来应该怎么办呢？</p>
+<p>我们可以从交叉验证数据集里取出那些验证错误的例子出来，并人工对他们进行分析。假设我们取了其中100个数据分析，分析结果如下:</p>
+<ul>
+<li>有72封文中有”购买“，”优惠“，”信用卡“ 等词语</li>
+<li>有20封文中是否有错别字</li>
+<li>有3封文中是否有带跳转链接的图片</li>
+<li>…</li>
+</ul>
+<p>我们发现，错误的数据中对于文中有”购买“，”优惠“，”信用卡“ 等词语的邮件识别不太好， 这就是我们模型的问题所在。</p>
+<p>而这个时候，我们可以做的就是增加<strong>这一类</strong>的训练数据集，让模型能更好的拟合这类情况。这比我们盲目地增加数据集要高效得多。</p>
+<p>这个过程我们就称作误差分析。</p>
+<h2 id="4、数据增强">4、数据增强</h2>
+<p>在模型遇到高偏差的时候，我们会通过增加训练数据的方式来优化模型。但有时候我们已经没有办法获取更多的数据了，这时候应该怎么办呢？</p>
+<p>例如， 我们在实现语音识别的模型时，我们有着一段原始音频。这时候，我们可以在原始音频里加上火车的轰鸣声、人群的嘈杂声、汽车的引擎声… 通过这样的方式，我们就能扩大我们的数据集。 并且，如果你在误差分析中发现，你的模型在人群嘈杂的情况下识别效果很差， 那你就可以通过合成多段有不同人群嘈杂声的训练音频。 这就叫做数据增强。</p>
+<p>又或者，你在实现一个识别手写26个字母的模型。对于”A“， 你可以手动画出一个放大版的、缩小版的、稍微有点倾斜的A的图片，又或者你可以对原图片添加一些噪声。通过这样的方式，你就能得到更多的训练数据。</p>
+<img src="/2024/03/24/MechineLearning/%E6%A8%A1%E5%9E%8B%E7%9A%84%E8%AF%84%E4%BC%B0%E5%92%8C%E4%BC%98%E5%8C%96/image-20240325235200916.png" srcset="/img/loading.gif" lazyload class="" title="image-20240325235200916">
+<p>你还可以把A放在一个网格中， 通过变化网格来得到不同形状的A</p>
+<p><strong><img src="/2024/03/24/MechineLearning/%E6%A8%A1%E5%9E%8B%E7%9A%84%E8%AF%84%E4%BC%B0%E5%92%8C%E4%BC%98%E5%8C%96/image-20240325235239399.png" srcset="/img/loading.gif" lazyload class="" title="image-20240325235239399"></strong></p>
+<p>甚至你可以在PPT里使用不同的艺术字来画A， 然后添加到训练数据里。</p>
+<p>数据增强配合上误差分析，能够让你在只添加了少部分数据的情况下大大优化模型的效果。</p>
+<p>在机器学习刚兴起的时候，研究人员们需要优化算法(Code)和获取数据(Data)，侧重在代码实现上； 而到现在很多算法已经很优秀了， 使得研究人员可以把重心放到获取数据(Data)上去。</p>
+<p>所以，数据增强也能够对我们的模型进行优化。</p>
 
                 
               </div>
