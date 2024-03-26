@@ -1,0 +1,1132 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="lukazhang">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="前面我们已经学习了线性回归、逻辑回归和多级分类，本文我们再来学习一种监督型的机器学习模型——决策树模型。  一、 决策树模型 我们现在手上有10张卡通动物的图片，根据图片可以总结出每个动物的耳朵形状，脸型和是否有胡子，也可以判断出这个动物是否是猫。     EarShape Face Shape Whiskers Is Cat      Pointy Round Present 1    Flo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="决策树">
+<meta property="og:url" content="http://example.com/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/index.html">
+<meta property="og:site_name" content="YOLO">
+<meta property="og:description" content="前面我们已经学习了线性回归、逻辑回归和多级分类，本文我们再来学习一种监督型的机器学习模型——决策树模型。  一、 决策树模型 我们现在手上有10张卡通动物的图片，根据图片可以总结出每个动物的耳朵形状，脸型和是否有胡子，也可以判断出这个动物是否是猫。     EarShape Face Shape Whiskers Is Cat      Pointy Round Present 1    Flo">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161536795.png">
+<meta property="og:image" content="http://example.com/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161547968.png">
+<meta property="og:image" content="http://example.com/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161606812.png">
+<meta property="og:image" content="http://example.com/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161627338.png">
+<meta property="og:image" content="http://example.com/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161737852.png">
+<meta property="og:image" content="http://example.com/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161658105.png">
+<meta property="og:image" content="http://example.com/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161747122.png">
+<meta property="og:image" content="http://example.com/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161800517.png">
+<meta property="og:image" content="http://example.com/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161814848.png">
+<meta property="og:image" content="http://example.com/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161827729.png">
+<meta property="og:image" content="http://example.com/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326163710835.png">
+<meta property="og:image" content="http://example.com/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326164457814.png">
+<meta property="og:image" content="http://example.com/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326164551810.png">
+<meta property="og:image" content="http://example.com/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326165738503.png">
+<meta property="og:image" content="http://example.com/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326170518074.png">
+<meta property="og:image" content="http://example.com/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326171150223.png">
+<meta property="og:image" content="http://example.com/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326165738503.png">
+<meta property="og:image" content="http://example.com/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326170518074.png">
+<meta property="og:image" content="http://example.com/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161536795.png">
+<meta property="og:image" content="http://example.com/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161547968.png">
+<meta property="og:image" content="http://example.com/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161606812.png">
+<meta property="og:image" content="http://example.com/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161627338.png">
+<meta property="og:image" content="http://example.com/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161737852.png">
+<meta property="og:image" content="http://example.com/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161658105.png">
+<meta property="og:image" content="http://example.com/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161747122.png">
+<meta property="og:image" content="http://example.com/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161800517.png">
+<meta property="og:image" content="http://example.com/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161814848.png">
+<meta property="og:image" content="http://example.com/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161827729.png">
+<meta property="og:image" content="http://example.com/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161536795.png">
+<meta property="og:image" content="http://example.com/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161547968.png">
+<meta property="og:image" content="http://example.com/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161606812.png">
+<meta property="og:image" content="http://example.com/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161627338.png">
+<meta property="og:image" content="http://example.com/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161737852.png">
+<meta property="og:image" content="http://example.com/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161658105.png">
+<meta property="og:image" content="http://example.com/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161747122.png">
+<meta property="og:image" content="http://example.com/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161800517.png">
+<meta property="og:image" content="http://example.com/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161814848.png">
+<meta property="og:image" content="http://example.com/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161827729.png">
+<meta property="og:image" content="http://example.com/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326214832702.png">
+<meta property="og:image" content="http://example.com/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326215429371.png">
+<meta property="og:image" content="http://example.com/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326221849090.png">
+<meta property="article:published_time" content="2024-03-26T06:00:00.000Z">
+<meta property="article:modified_time" content="2024-03-26T14:23:03.243Z">
+<meta property="article:author" content="lukazhang">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161536795.png">
+  
+  
+  
+  <title>决策树 - YOLO</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="决策树"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-03-26 14:00" pubdate>
+          2024年3月26日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          26 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">决策树</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <blockquote>
+<p>前面我们已经学习了线性回归、逻辑回归和多级分类，本文我们再来学习一种监督型的机器学习模型——决策树模型。</p>
+</blockquote>
+<h2 id="一、-决策树模型">一、 决策树模型</h2>
+<p>我们现在手上有10张卡通动物的图片，根据图片可以总结出每个动物的耳朵形状，脸型和是否有胡子，也可以判断出这个动物是否是猫。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>EarShape</th>
+<th>Face Shape</th>
+<th>Whiskers</th>
+<th>Is Cat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img src="/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161536795.png" srcset="/img/loading.gif" lazyload class="" title="image-20240326161536795"></td>
+<td>Pointy</td>
+<td>Round</td>
+<td>Present</td>
+<td>1</td>
+</tr>
+<tr>
+<td><img src="/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161547968.png" srcset="/img/loading.gif" lazyload class="" title="image-20240326161547968"></td>
+<td>Floopy</td>
+<td>Not Round</td>
+<td>Present</td>
+<td>1</td>
+</tr>
+<tr>
+<td><img src="/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161606812.png" srcset="/img/loading.gif" lazyload class="" title="image-20240326161606812"></td>
+<td>Floopy</td>
+<td>Round</td>
+<td>Absent</td>
+<td>0</td>
+</tr>
+<tr>
+<td><img src="/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161627338.png" srcset="/img/loading.gif" lazyload class="" title="image-20240326161627338"></td>
+<td>Pointy</td>
+<td>Not Round</td>
+<td>Present</td>
+<td>0</td>
+</tr>
+<tr>
+<td><img src="/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161737852.png" srcset="/img/loading.gif" lazyload class="" title="image-20240326161737852"></td>
+<td>Pointy</td>
+<td>Round</td>
+<td>Present</td>
+<td>1</td>
+</tr>
+<tr>
+<td><img src="/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161658105.png" srcset="/img/loading.gif" lazyload class="" title="image-20240326161658105"></td>
+<td>Pointy</td>
+<td>Round</td>
+<td>Absent</td>
+<td>1</td>
+</tr>
+<tr>
+<td><img src="/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161747122.png" srcset="/img/loading.gif" lazyload class="" title="image-20240326161747122"></td>
+<td>Floopy</td>
+<td>Not Round</td>
+<td>Absent</td>
+<td>0</td>
+</tr>
+<tr>
+<td><img src="/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161800517.png" srcset="/img/loading.gif" lazyload class="" title="image-20240326161800517"></td>
+<td>Pointy</td>
+<td>Round</td>
+<td>Absent</td>
+<td>1</td>
+</tr>
+<tr>
+<td><img src="/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161814848.png" srcset="/img/loading.gif" lazyload class="" title="image-20240326161814848"></td>
+<td>Floopy</td>
+<td>Round</td>
+<td>Absent</td>
+<td>0</td>
+</tr>
+<tr>
+<td><img src="/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161827729.png" srcset="/img/loading.gif" lazyload class="" title="image-20240326161827729"></td>
+<td>Floopy</td>
+<td>Round</td>
+<td>Absent</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>现在，你要教会计算机根据这三个特征值判断一个动物是否是猫，应该怎么做？</p>
+<p>从表格中的数据我们可以总结出</p>
+<ul>
+<li>如果有尖尖耳朵和圆脸的都是小猫</li>
+<li>如果有软软耳朵和有胡子的都是小猫</li>
+<li>其他的都不是小猫</li>
+</ul>
+<p>所以你用代码就可能写出来是:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">if</span> earShape == <span class="hljs-string">&quot;Pointy&quot;</span>:<br>  <span class="hljs-keyword">if</span> faceShape == <span class="hljs-string">&quot;Round&quot;</span>:<br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">True</span><br>  <span class="hljs-keyword">else</span>:<br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">False</span><br><span class="hljs-keyword">else</span>:<br>  <span class="hljs-keyword">if</span> whisker == <span class="hljs-string">&quot;present&quot;</span>:<br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">True</span><br>  <span class="hljs-keyword">else</span>:<br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">False</span><br></code></pre></td></tr></table></figure>
+<p>现在，如果我们把这段代码用一个二叉树画出来，就能得到:</p>
+<img src="/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326163710835.png" srcset="/img/loading.gif" lazyload class="" title="image-20240326163710835">
+<p>判断的顺序就是:</p>
+<ol>
+<li>先判断耳朵的形状， 如果是尖尖的就走到左子树， 如果是软软的就走到右子树</li>
+<li>如果是尖尖耳朵，那就再判断脸型，如果是圆脸就得出结论是猫。如果不是圆脸就得出结论不是猫。</li>
+<li>如果是软软耳朵，那就再判断胡子，如果有胡子就得出结论是猫，如果没有胡子就得出结论不是猫。</li>
+</ol>
+<p>这样，我们从树的根节点开始，一直走到叶子节点得出结论，就能够判断。<strong>这就是决策树模型</strong></p>
+<p>决策树模型能够通过简单的判断决策来进行预测。</p>
+<p>当然，如果我们改变了判断条件的顺序，对应的决策树也会相应发生改变。</p>
+<img src="/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326164457814.png" srcset="/img/loading.gif" lazyload class="" title="image-20240326164457814">
+<img src="/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326164551810.png" srcset="/img/loading.gif" lazyload class="" title="image-20240326164551810">
+<p>这些都是决策树。</p>
+<h2 id="二、-构建决策树">二、 构建决策树</h2>
+<p>知道了什么是决策树模型，下一步就应该开始构建了。如何构建出来一个预测效果好的决策树，我们有两个问题:</p>
+<ol>
+<li>从上面我们可以看到，同一个问题可以构建出来的决策树不止一个。如何选择每一个节点的特征值？</li>
+<li>决策树在什么时候应该停止决策，也就是什么时候应该定义叶子节点。</li>
+</ol>
+<p>我们带着这两个问题继续往下走。</p>
+<h3 id="1、-计算纯度、熵和信息增益">1、 计算纯度、熵和信息增益</h3>
+<p>每当我们从一个特征值开始决策的时候，数据都会被分为两部分。</p>
+<p>比如，我们选择耳朵的形状就会得到</p>
+<img src="/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326165738503.png" srcset="/img/loading.gif" lazyload class="" title="image-20240326165738503">
+<p>左边有5个小动物，其中4只是猫；右边也有五个小动物，其中1只是猫。</p>
+<p><strong>我们定义P1 为 数据里是猫的占比， 也可以说是数据里猫的纯度。</strong></p>
+<ul>
+<li>在左边，P1 = 4/5 = 80%</li>
+<li>在右边，P1 = 1/5 = 20%</li>
+</ul>
+<p>而如果我们以是否有胡子进行决策</p>
+<img src="/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326170518074.png" srcset="/img/loading.gif" lazyload class="" title="image-20240326170518074">
+<p>那么会得到</p>
+<ul>
+<li>左边P1 = 4/7 = 57%</li>
+<li>右边P1 = 1/3 = 33%</li>
+</ul>
+<p>纯度有什么用呢？<strong>当纯度越高或越低的时候， 说明这个特征越能很好地区别。比如P1=100%的时候就可以直接作出判断是猫， 而P1=0%的时候也可以直接作出判断不是猫。</strong></p>
+<p>所以，我们在选择特征值的时候，<strong>要尽量优先选择那些决策后纯度较高或较低的特征值。</strong></p>
+<p>为了更好地描述，我们引入了熵的概念用来衡量数据的纯度， 熵的函数如下:</p>
+<p class="katex-block "><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>h</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mo>−</mo><mi>x</mi><mi>l</mi><mi>o</mi><msub><mi>g</mi><mn>2</mn></msub><mi>x</mi><mo>−</mo><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>x</mi><mo stretchy="false">)</mo><mi>l</mi><mi>o</mi><msub><mi>g</mi><mn>2</mn></msub><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">h(x) = -xlog_2x - (1-x)log_2(1-x)
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">h</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord">−</span><span class="mord mathnormal">x</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">o</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">o</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">x</span><span class="mclose">)</span></span></span></span></span></p>
+<p>熵的函数图像如下:</p>
+<img src="/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326171150223.png" srcset="/img/loading.gif" lazyload class="" title="image-20240326171150223">
+<p>从图像我们可以发现，<strong>纯度越高和越低, 熵就越小。在纯度=0.5时，熵最大，H(0,5)=1</strong></p>
+<p>这样我们就可以用熵来描述一个特征值决策后的效果。</p>
+<p>因为决策后数据被分为两部分，所以我们用加权平均来表示，例如在用耳朵区分的例子中</p>
+<img src="/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326165738503.png" srcset="/img/loading.gif" lazyload class="" title="image-20240326165738503">
+<p>10个数据被一分为二，左边一共有5个数据，其中4个是猫;右边一共5个数据, 其中1个是猫。</p>
+<p>那加权平均熵就是:</p>
+<p class="katex-block "><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mfrac><mn>5</mn><mn>10</mn></mfrac><mi>H</mi><mo stretchy="false">(</mo><mfrac><mn>4</mn><mn>5</mn></mfrac><mo stretchy="false">)</mo><mo>+</mo><mfrac><mn>5</mn><mn>10</mn></mfrac><mi>H</mi><mo stretchy="false">(</mo><mfrac><mn>1</mn><mn>5</mn></mfrac><mo stretchy="false">)</mo><mo>=</mo><mn>0.729</mn></mrow><annotation encoding="application/x-tex">\frac{5}{10}H(\frac{4}{5}) + \frac{5}{10}H(\frac{1}{5})=0.729
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:2.0074em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">10</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">5</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="mopen">(</span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">5</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">4</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:2.0074em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">10</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">5</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="mopen">(</span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">5</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0.729</span></span></span></span></span></p>
+<p>而如果选择的是脸型</p>
+<img src="/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326170518074.png" srcset="/img/loading.gif" lazyload class="" title="image-20240326170518074">
+<p>那么加权平均熵就是</p>
+<p class="katex-block "><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mfrac><mn>7</mn><mn>10</mn></mfrac><mi>H</mi><mo stretchy="false">(</mo><mfrac><mn>4</mn><mn>7</mn></mfrac><mo stretchy="false">)</mo><mo>+</mo><mfrac><mn>3</mn><mn>10</mn></mfrac><mi>H</mi><mo stretchy="false">(</mo><mfrac><mn>1</mn><mn>3</mn></mfrac><mo stretchy="false">)</mo><mo>=</mo><mn>0.9651</mn></mrow><annotation encoding="application/x-tex">\frac{7}{10}H(\frac{4}{7}) + \frac{3}{10}H(\frac{1}{3}) =0.9651
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:2.0074em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">10</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">7</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="mopen">(</span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">7</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">4</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:2.0074em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">10</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="mopen">(</span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">3</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0.9651</span></span></span></span></span></p>
+<p>能比较出“耳朵形状”的加权平均熵比“脸型”的胶圈平均熵要小， 所以我们应该优先选择“耳朵形状<br>
+”作为节点的特征值。</p>
+<p>接着，注意在根节点的中，十只小动物里有五只猫，所以我们也可以计算出根节点的熵:</p>
+<p class="katex-block "><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>P</mi><mn>1</mn></msub><mo>=</mo><mn>5</mn><mi mathvariant="normal">/</mi><mn>10</mn><mspace linebreak="newline"></mspace><mi>H</mi><mo stretchy="false">(</mo><mn>5</mn><mi mathvariant="normal">/</mi><mn>10</mn><mo stretchy="false">)</mo><mo>=</mo><mn>1.0</mn></mrow><annotation encoding="application/x-tex">P_1=5/10\\
+H(5/10) = 1.0
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">5/10</span></span><span class="mspace newline"></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="mopen">(</span><span class="mord">5/10</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1.0</span></span></span></span></span></p>
+<p>接着我们用根节点的熵 减去 分支的加权平均熵， 比如选择的是“耳朵形状”，那么有</p>
+<p class="katex-block "><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>H</mi><mo stretchy="false">(</mo><mn>5</mn><mi mathvariant="normal">/</mi><mn>10</mn><mo stretchy="false">)</mo><mo>−</mo><mtext>（</mtext><mfrac><mn>5</mn><mn>10</mn></mfrac><mi>H</mi><mo stretchy="false">(</mo><mfrac><mn>4</mn><mn>5</mn></mfrac><mo stretchy="false">)</mo><mo>+</mo><mfrac><mn>5</mn><mn>10</mn></mfrac><mi>H</mi><mo stretchy="false">(</mo><mfrac><mn>1</mn><mn>5</mn></mfrac><mo stretchy="false">)</mo><mtext>）</mtext><mo>=</mo><mn>0.28</mn></mrow><annotation encoding="application/x-tex">H(5/10) - （\frac{5}{10}H(\frac{4}{5}) + \frac{5}{10}H(\frac{1}{5})） = 0.28
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="mopen">(</span><span class="mord">5/10</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:2.0074em;vertical-align:-0.686em;"></span><span class="mord cjk_fallback">（</span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">10</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">5</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="mopen">(</span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">5</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">4</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:2.0074em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">10</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">5</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="mopen">(</span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">5</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mclose">)</span><span class="mord cjk_fallback">）</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0.28</span></span></span></span></span></p>
+<p>这里表示经过特征分类后，熵减少了多少，我们称之为信息增益(Information gain)。</p>
+<p>总结一下</p>
+<ul>
+<li>
+<p>用P1表示数据的纯度，也就是目标类型在总数据集里的占比。</p>
+</li>
+<li>
+<p>用H(P1)表示一个节点的熵， 用于衡量数据的纯度。公示为</p>
+<p class="katex-block "><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>H</mi><mo stretchy="false">(</mo><mi>p</mi><mo stretchy="false">)</mo><mo>=</mo><mo>−</mo><mi>p</mi><mi>l</mi><mi>o</mi><msub><mi>g</mi><mn>2</mn></msub><mi>p</mi><mo>−</mo><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>p</mi><mo stretchy="false">)</mo><mi>l</mi><mi>o</mi><msub><mi>g</mi><mn>2</mn></msub><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>p</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">H(p) = -plog_2p - (1-p)log_2(1-p)
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="mopen">(</span><span class="mord mathnormal">p</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord">−</span><span class="mord mathnormal" style="margin-right:0.01968em;">pl</span><span class="mord mathnormal">o</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathnormal">p</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">p</span><span class="mclose">)</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">o</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">p</span><span class="mclose">)</span></span></span></span></span></p>
+</li>
+<li>
+<p>用根节点的熵减去子节点的加权平均熵，得到信息增益。</p>
+</li>
+</ul>
+<p>能够计算这些之后， 我们提出的第一个问题就可以解决了。</p>
+<p>我们应该计算所有特征值的<strong>信息增益，然后选择信息增益最大的特征值作为当前节点</strong>。</p>
+<h3 id="2、-构建决策树的步骤">2、 构建决策树的步骤</h3>
+<p>知道了如何通过计算纯度、熵和信息增益之后，我们就知道如何选择特征值作为节点了。而构造决策树也就是每一次选择特征值的过程， 所以我们可以用递归的方式来构建，步骤：</p>
+<ol>
+<li>从剩余的特征值中分别信息增益</li>
+<li>检查是否需要停止决策， 如果需要则停止并构造叶子节点</li>
+<li>如果不需要，则选择信息增益最大的特征值作为该节点的特征值</li>
+<li>数据分类后对子节点继续进行该操作。</li>
+</ol>
+<h3 id="3、何时停止分裂">3、何时停止分裂</h3>
+<p>在构造决策树的时候，何时停止分裂很重要，他是跳出递归的出口，也能防止模型过度拟合。</p>
+<p>我们的例子里只有3个特征值，而实际问题中特征值可能会很多，并且就算分到最后也得不到数据纯度为100%或0%的数据， 那我们就需要决定何时停止分裂，也就是何时添加叶子节点。</p>
+<ol>
+<li>在数据纯度为100%或0%时。这是容易理解的，在训练过程中经过决策后已经能够完成分出目标种类了，那么就可以直接给出结论了。</li>
+<li>在决策树的深度超过设定的最大深度时。决策树的深度是指从根节点到叶子节点的距离。你可以设置最大深度为特征值的数量， 不过这样的话往往会导致决策树过于复杂从而导致过度拟合。所以需要选择一个合适的最大深度。其中一种方法就是通过交叉验证来选择。</li>
+<li>当数据增益已经小到小于阈值的时候。这时候说明再继续分裂也不会有改善了。</li>
+<li>当分裂后的子节点中样本数量太少，达不到最小样本阈值数。 当样本数过小也无法对模型继续进行改善。</li>
+</ol>
+<h3 id="4、连续的特征值">4、连续的特征值</h3>
+<p>前面我们例子中的特征值都是离散的，所以我们可以通过离散值来分裂决策树。那如果特征值是连续的呢？</p>
+<p>比如我们现在增加一列特征值，为体重。体重是一个连续的值，他没有固定的选项，那应该如何进行分类呢？</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>EarShape</th>
+<th>Face Shape</th>
+<th>Whiskers</th>
+<th>Weight</th>
+<th>Is Cat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img src="/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161536795.png" srcset="/img/loading.gif" lazyload class="" title="image-20240326161536795"></td>
+<td>Pointy</td>
+<td>Round</td>
+<td>Present</td>
+<td>7.2</td>
+<td>1</td>
+</tr>
+<tr>
+<td><img src="/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161547968.png" srcset="/img/loading.gif" lazyload class="" title="image-20240326161547968"></td>
+<td>Floopy</td>
+<td>Not Round</td>
+<td>Present</td>
+<td>8.8</td>
+<td>1</td>
+</tr>
+<tr>
+<td><img src="/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161606812.png" srcset="/img/loading.gif" lazyload class="" title="image-20240326161606812"></td>
+<td>Floopy</td>
+<td>Round</td>
+<td>Absent</td>
+<td>15</td>
+<td>0</td>
+</tr>
+<tr>
+<td><img src="/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161627338.png" srcset="/img/loading.gif" lazyload class="" title="image-20240326161627338"></td>
+<td>Pointy</td>
+<td>Not Round</td>
+<td>Present</td>
+<td>9.2</td>
+<td>0</td>
+</tr>
+<tr>
+<td><img src="/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161737852.png" srcset="/img/loading.gif" lazyload class="" title="image-20240326161737852"></td>
+<td>Pointy</td>
+<td>Round</td>
+<td>Present</td>
+<td>8.4</td>
+<td>1</td>
+</tr>
+<tr>
+<td><img src="/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161658105.png" srcset="/img/loading.gif" lazyload class="" title="image-20240326161658105"></td>
+<td>Pointy</td>
+<td>Round</td>
+<td>Absent</td>
+<td>7.6</td>
+<td>1</td>
+</tr>
+<tr>
+<td><img src="/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161747122.png" srcset="/img/loading.gif" lazyload class="" title="image-20240326161747122"></td>
+<td>Floopy</td>
+<td>Not Round</td>
+<td>Absent</td>
+<td>11</td>
+<td>0</td>
+</tr>
+<tr>
+<td><img src="/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161800517.png" srcset="/img/loading.gif" lazyload class="" title="image-20240326161800517"></td>
+<td>Pointy</td>
+<td>Round</td>
+<td>Absent</td>
+<td>10.2</td>
+<td>1</td>
+</tr>
+<tr>
+<td><img src="/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161814848.png" srcset="/img/loading.gif" lazyload class="" title="image-20240326161814848"></td>
+<td>Floopy</td>
+<td>Round</td>
+<td>Absent</td>
+<td>18</td>
+<td>0</td>
+</tr>
+<tr>
+<td><img src="/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161827729.png" srcset="/img/loading.gif" lazyload class="" title="image-20240326161827729"></td>
+<td>Floopy</td>
+<td>Round</td>
+<td>Absent</td>
+<td>20</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>这时候我们可以选择一个值， 比如9，然后将数据分为&lt;9和 &gt;9的两部分， 这时候数据增益为</p>
+<p class="katex-block "><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>H</mi><mo stretchy="false">(</mo><mn>0.5</mn><mo stretchy="false">)</mo><mo>−</mo><mo stretchy="false">(</mo><mfrac><mn>4</mn><mn>10</mn></mfrac><mi>H</mi><mo stretchy="false">(</mo><mfrac><mn>4</mn><mn>4</mn></mfrac><mo stretchy="false">)</mo><mo>+</mo><mfrac><mn>6</mn><mn>10</mn></mfrac><mi>H</mi><mo stretchy="false">(</mo><mfrac><mn>1</mn><mn>6</mn></mfrac><mo stretchy="false">)</mo><mo stretchy="false">)</mo><mo>=</mo><mn>0.61</mn></mrow><annotation encoding="application/x-tex">H(0.5)-(\frac{4}{10}H(\frac{4}{4})+\frac{6}{10}H(\frac{1}{6}))=0.61
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="mopen">(</span><span class="mord">0.5</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:2.0074em;vertical-align:-0.686em;"></span><span class="mopen">(</span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">10</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">4</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="mopen">(</span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">4</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">4</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:2.0074em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">10</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">6</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="mopen">(</span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">6</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mclose">))</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0.61</span></span></span></span></span></p>
+<p>也就是说，对于连续的特征值我们可以选取一个<strong>数据增益最大的值作为分割线将数据分为两部分。</strong></p>
+<p>而寻找数据增益最大的值的方法，我们可以把训练数据按特征值从小到大进行排列，然后选取中间的那个值进行测试。</p>
+<h2 id="三、回归树">三、回归树</h2>
+<p>决策树是用来做分类的，它通过对特征值的判断，最后预测出一个结果， 这个结果是离散的。类似于逻辑回归和多级分类。 如果我们想要用树来预测连续的值，像线性回归一样， 那我们可以使用回归树。</p>
+<p>回归树和决策树的结构上并没有什么区别。我们还是拿上面的例子来说明</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>EarShape</th>
+<th>Face Shape</th>
+<th>Whiskers</th>
+<th>Weight</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img src="/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161536795.png" srcset="/img/loading.gif" lazyload class="" title="image-20240326161536795"></td>
+<td>Pointy</td>
+<td>Round</td>
+<td>Present</td>
+<td>7.2</td>
+</tr>
+<tr>
+<td><img src="/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161547968.png" srcset="/img/loading.gif" lazyload class="" title="image-20240326161547968"></td>
+<td>Floopy</td>
+<td>Not Round</td>
+<td>Present</td>
+<td>8.8</td>
+</tr>
+<tr>
+<td><img src="/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161606812.png" srcset="/img/loading.gif" lazyload class="" title="image-20240326161606812"></td>
+<td>Floopy</td>
+<td>Round</td>
+<td>Absent</td>
+<td>15</td>
+</tr>
+<tr>
+<td><img src="/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161627338.png" srcset="/img/loading.gif" lazyload class="" title="image-20240326161627338"></td>
+<td>Pointy</td>
+<td>Not Round</td>
+<td>Present</td>
+<td>9.2</td>
+</tr>
+<tr>
+<td><img src="/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161737852.png" srcset="/img/loading.gif" lazyload class="" title="image-20240326161737852"></td>
+<td>Pointy</td>
+<td>Round</td>
+<td>Present</td>
+<td>8.4</td>
+</tr>
+<tr>
+<td><img src="/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161658105.png" srcset="/img/loading.gif" lazyload class="" title="image-20240326161658105"></td>
+<td>Pointy</td>
+<td>Round</td>
+<td>Absent</td>
+<td>7.6</td>
+</tr>
+<tr>
+<td><img src="/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161747122.png" srcset="/img/loading.gif" lazyload class="" title="image-20240326161747122"></td>
+<td>Floopy</td>
+<td>Not Round</td>
+<td>Absent</td>
+<td>11</td>
+</tr>
+<tr>
+<td><img src="/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161800517.png" srcset="/img/loading.gif" lazyload class="" title="image-20240326161800517"></td>
+<td>Pointy</td>
+<td>Round</td>
+<td>Absent</td>
+<td>10.2</td>
+</tr>
+<tr>
+<td><img src="/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161814848.png" srcset="/img/loading.gif" lazyload class="" title="image-20240326161814848"></td>
+<td>Floopy</td>
+<td>Round</td>
+<td>Absent</td>
+<td>18</td>
+</tr>
+<tr>
+<td><img src="/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326161827729.png" srcset="/img/loading.gif" lazyload class="" title="image-20240326161827729"></td>
+<td>Floopy</td>
+<td>Round</td>
+<td>Absent</td>
+<td>20</td>
+</tr>
+</tbody>
+</table>
+<p>现在重量Weight是输出值，我们要根据耳朵形状，脸型和是否有胡子来预测一个动物的体重。</p>
+<p>在构造回归树的时候也是选择数据增强最大的特征值，但是这里的数据增强计算有一点不同，假设我们选择了耳朵形状作为特征值</p>
+<img src="/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326214832702.png" srcset="/img/loading.gif" lazyload class="" title="image-20240326214832702">
+<p>对于连续的值，我们可以用方差来衡量数据的波动，求出每个子节点的方差</p>
+<img src="/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326215429371.png" srcset="/img/loading.gif" lazyload class="" title="image-20240326215429371">
+<p>接着我们用根节点的方差减去子节点方差的加权平均数:</p>
+<p class="katex-block "><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mn>20.51</mn><mo>−</mo><mo stretchy="false">(</mo><mfrac><mn>5</mn><mn>10</mn></mfrac><mo>∗</mo><mn>1.47</mn><mo>+</mo><mfrac><mn>5</mn><mn>10</mn></mfrac><mo>∗</mo><mn>21.87</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">20.51 - (\frac{5}{10}*1.47 + \frac{5}{10}*21.87)
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">20.51</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:2.0074em;vertical-align:-0.686em;"></span><span class="mopen">(</span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">10</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">5</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">1.47</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:2.0074em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">10</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">5</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">21.87</span><span class="mclose">)</span></span></span></span></span></p>
+<p>用方差减小的量来衡量数据增益。</p>
+<p><strong>现在我们就可以构建回归树了，而最后做出预测的叶子节点的值，就是节点上数据的平均值。</strong></p>
+<h2 id="四、为什么要用树？">四、为什么要用树？</h2>
+<p>有了线性回归和逻辑回归之后，为什么决策树和回归树的优势在哪里呢？</p>
+<p>我们可以发现，决策树和回归树的特点在于，他们善于从离散的特征值中学习规律，做出预测。而离散的值，倘若换成0，1，2，3带入到线性回归里或逻辑回归里， 模型可能会认为他们之间有大小关系，导致预测不准。</p>
+<p>所以，如果你的特征值大多是离散的，可分类的， 那么选择决策树或回归树的效果会更好一些。</p>
+<h2 id="五、代码实现">五、代码实现</h2>
+<p>接下来我们可以用代码实现一下熵、数据增益的计算</p>
+<p>首先实现一下计算熵</p>
+<p class="katex-block "><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>h</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mo>−</mo><mi>x</mi><mi>l</mi><mi>o</mi><msub><mi>g</mi><mn>2</mn></msub><mi>x</mi><mo>−</mo><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>x</mi><mo stretchy="false">)</mo><mi>l</mi><mi>o</mi><msub><mi>g</mi><mn>2</mn></msub><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">h(x) = -xlog_2x - (1-x)log_2(1-x)
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">h</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord">−</span><span class="mord mathnormal">x</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">o</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">o</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">x</span><span class="mclose">)</span></span></span></span></span></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> math<br><span class="hljs-comment"># 计算熵</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">H</span>(<span class="hljs-params">p</span>):<br>    <span class="hljs-keyword">if</span> p == <span class="hljs-number">0</span> <span class="hljs-keyword">or</span> p ==<span class="hljs-number">1</span>:<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span><br>    <span class="hljs-keyword">return</span> -p*math.log2(p) - (<span class="hljs-number">1</span>-p)*math.log2(<span class="hljs-number">1</span>-p)<br></code></pre></td></tr></table></figure>
+<p>然后计算一下熵的加权平均值</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">weighted_entropy</span>(<span class="hljs-params">X, y, left_indices, right_indices</span>):<br>    w_left = <span class="hljs-built_in">len</span>(left_indices) / <span class="hljs-built_in">len</span>(X)<br>    w_right = <span class="hljs-built_in">len</span>(right_indices) / <span class="hljs-built_in">len</span>(X)<br>    p_left = <span class="hljs-built_in">sum</span>(y[left_indices]) / <span class="hljs-built_in">len</span>(left_indices)<br>    p_right = <span class="hljs-built_in">sum</span>(y[right_indices]) / <span class="hljs-built_in">len</span>(right_indices)<br>    <br>    <span class="hljs-keyword">return</span> w_left*H(p_left) + w_right*H(p_right)<br></code></pre></td></tr></table></figure>
+<p>接着可以实现计算信息增益</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">information_gain</span>(<span class="hljs-params">X, y, left_indices, right_indices</span>):<br>    p_node = <span class="hljs-built_in">sum</span>(y) / <span class="hljs-built_in">len</span>(X)<br>    h_node = H(p_node)<br>    <span class="hljs-keyword">return</span> h_node - weighted_entropy(X, y, left_indices, right_indices)<br></code></pre></td></tr></table></figure>
+<p>接下来我们把例子中的数据定义一下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs python">X_train = np.array([[<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>],<br>                    [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],<br>                    [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>],<br>                    [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],<br>                    [<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>],<br>                    [<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>],<br>                    [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>],<br>                    [<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>],<br>                    [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>],<br>                    [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>]])<br><br>y_train = np.array([<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>])<br><br></code></pre></td></tr></table></figure>
+<p>其中我们把每一个特征值的分类都用0和1代替了。</p>
+<p>再实现一个函数来分割数据</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">split_indices</span>(<span class="hljs-params">X, index_feature</span>):<br>    left_indices = []<br>    right_indices = []<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(X)):<br>        <span class="hljs-keyword">if</span> X[i][index_feature] == <span class="hljs-number">1</span>:<br>            left_indices.append(i)<br>        <span class="hljs-keyword">else</span>:<br>            right_indices.append(i)<br>    <span class="hljs-keyword">return</span> left_indices, right_indices<br></code></pre></td></tr></table></figure>
+<p>现在我们可以尝试计算一下第0个特征值的数据增益</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">left, right = split_indices(X_train, <span class="hljs-number">0</span>)<br><span class="hljs-built_in">print</span>(information_gain(X_train, y_train, left, right))<br></code></pre></td></tr></table></figure>
+<img src="/2024/03/26/MechineLearning/%E5%86%B3%E7%AD%96%E6%A0%91/image-20240326221849090.png" srcset="/img/loading.gif" lazyload class="" title="image-20240326221849090">
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Machine-Learning/" class="category-chain-item">Machine Learning</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>决策树</div>
+      <div>http://example.com/2024/03/26/MechineLearning/决策树/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>lukazhang</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年3月26日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/03/24/MechineLearning/%E6%A8%A1%E5%9E%8B%E7%9A%84%E8%AF%84%E4%BC%B0%E5%92%8C%E4%BC%98%E5%8C%96/" title="模型的评估和优化">
+                        <span class="hidden-mobile">模型的评估和优化</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
