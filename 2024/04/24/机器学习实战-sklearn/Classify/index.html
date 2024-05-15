@@ -1,0 +1,938 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="lukazhang">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="分类 3.1 MNIST 1234from sklearn.datasets import fetch_openmlmnist &#x3D; fetch_openml(&quot;mnist_784&quot;, version&#x3D;1)print(mnist.keys()) dict_keys([&#39;data&#39;, &#39;target&#39;, &#39;frame&#39;, &#39;categories&#39;, &#39;feature_names&#39;,">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第三章-分类">
+<meta property="og:url" content="http://example.com/2024/04/24/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98-sklearn/Classify/index.html">
+<meta property="og:site_name" content="YOLO">
+<meta property="og:description" content="分类 3.1 MNIST 1234from sklearn.datasets import fetch_openmlmnist &#x3D; fetch_openml(&quot;mnist_784&quot;, version&#x3D;1)print(mnist.keys()) dict_keys([&#39;data&#39;, &#39;target&#39;, &#39;frame&#39;, &#39;categories&#39;, &#39;feature_names&#39;,">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2024/04/24/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98-sklearn/Classify/Untitled1_3_1.png">
+<meta property="og:image" content="http://example.com/2024/04/24/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98-sklearn/Classify/Untitled1_28_0.png">
+<meta property="og:image" content="http://example.com/2024/04/24/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98-sklearn/Classify/Untitled1_30_0.png">
+<meta property="og:image" content="http://example.com/2024/04/24/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98-sklearn/Classify/Untitled1_33_0.png">
+<meta property="og:image" content="http://example.com/2024/04/24/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98-sklearn/Classify/Untitled1_38_0.png">
+<meta property="og:image" content="http://example.com/2024/04/24/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98-sklearn/Classify/Untitled1_52_0.png">
+<meta property="og:image" content="http://example.com/2024/04/24/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98-sklearn/Classify/Untitled1_55_0.png">
+<meta property="og:image" content="http://example.com/2024/04/24/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98-sklearn/Classify/Untitled1_62_0.png">
+<meta property="og:image" content="http://example.com/2024/04/24/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98-sklearn/Classify/Untitled1_63_1.png">
+<meta property="og:image" content="http://example.com/2024/04/24/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98-sklearn/Classify/Untitled1_64_2.png">
+<meta property="article:published_time" content="2024-04-24T14:56:12.000Z">
+<meta property="article:modified_time" content="2024-05-15T15:06:07.173Z">
+<meta property="article:author" content="lukazhang">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/2024/04/24/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98-sklearn/Classify/Untitled1_3_1.png">
+  
+  
+  
+  <title>第三章-分类 - YOLO</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="第三章-分类"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-04-24 22:56" pubdate>
+          2024年4月24日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          23 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">第三章-分类</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1>分类</h1>
+<h2 id="3-1-MNIST">3.1 MNIST</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.datasets <span class="hljs-keyword">import</span> fetch_openml<br><br>mnist = fetch_openml(<span class="hljs-string">&quot;mnist_784&quot;</span>, version=<span class="hljs-number">1</span>)<br><span class="hljs-built_in">print</span>(mnist.keys())<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">dict_keys(['data', 'target', 'frame', 'categories', 'feature_names', 'target_names', 'DESCR', 'details', 'url'])
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python">X, y = mnist[<span class="hljs-string">&#x27;data&#x27;</span>], mnist[<span class="hljs-string">&#x27;target&#x27;</span>]<br><span class="hljs-built_in">print</span>(X.shape)<br><span class="hljs-built_in">print</span>(y.shape)<br><span class="hljs-built_in">print</span>(<span class="hljs-built_in">type</span>(X))<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">(70000, 784)
+(70000,)
+&lt;class 'pandas.core.frame.DataFrame'&gt;
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> matplotlib <span class="hljs-keyword">as</span> mpl<br><span class="hljs-keyword">import</span> matplotlib.pyplot <span class="hljs-keyword">as</span> plt<br><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><br>some_digit = X.iloc[<span class="hljs-number">0</span>].to_numpy()<br>some_target = y[<span class="hljs-number">0</span>]<br><span class="hljs-built_in">print</span>(some_target)<br><br>some_digit_image = some_digit.reshape(<span class="hljs-number">28</span>, <span class="hljs-number">28</span>)<br><br>plt.imshow(some_digit_image, cmap=<span class="hljs-string">&quot;binary&quot;</span>)<br>plt.axis(<span class="hljs-string">&quot;off&quot;</span>)<br>plt.show()<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">5
+</code></pre>
+<img src="/2024/04/24/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98-sklearn/Classify/Untitled1_3_1.png" srcset="/img/loading.gif" lazyload class="" title="png">
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">y = y.astype(np.uint8)<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">x_train, y_train, x_test, y_test = X[: <span class="hljs-number">60000</span>], y[: <span class="hljs-number">60000</span>], X[<span class="hljs-number">60000</span>:], y[<span class="hljs-number">60000</span>:]<br></code></pre></td></tr></table></figure>
+<h2 id="3-2-训练一个二元分类器">3.2 训练一个二元分类器</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">y_train_5 = (y_train==<span class="hljs-number">5</span>)<br>y_test_5 = (y_test==<span class="hljs-number">5</span>)<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.linear_model <span class="hljs-keyword">import</span> SGDClassifier<br><br>sgd_clf = SGDClassifier(random_state=<span class="hljs-number">42</span>)<br>sgd_clf.fit(x_train, y_train_5)<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">sgd_clf.predict(some_digit.reshape(<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>))<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">/home/lukarzhang/anaconda3/envs/ml2/lib/python3.10/site-packages/sklearn/base.py:493: UserWarning: X does not have valid feature names, but SGDClassifier was fitted with feature names
+  warnings.warn(
+
+array([ True])
+</code></pre>
+<h2 id="3-3-性能测量">3.3 性能测量</h2>
+<h3 id="3-3-1-使用交叉验证测量准确率">3.3.1 使用交叉验证测量准确率</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.model_selection <span class="hljs-keyword">import</span> StratifiedKFold<br><span class="hljs-keyword">from</span> sklearn.base <span class="hljs-keyword">import</span> clone<br><br>skfolds = StratifiedKFold(n_splits=<span class="hljs-number">3</span>, random_state=<span class="hljs-number">42</span>, shuffle=<span class="hljs-literal">True</span>)<br><br><span class="hljs-comment"># 实现K-折交叉验证</span><br><span class="hljs-keyword">for</span> train_index, test_index <span class="hljs-keyword">in</span> skfolds.split(x_train, y_train_5):<br>    clone_clf = clone(sgd_clf)<br>    x_train_folds = x_train.iloc[train_index].to_numpy()<br>    y_train_folds = y_train_5.iloc[train_index].to_numpy()<br><br>    x_test_folds = x_train.iloc[test_index].to_numpy()<br>    y_test_folds = y_train_5.iloc[test_index].to_numpy()<br>    clone_clf.fit(x_train_folds, y_train_folds)<br>    y_pred = clone_clf.predict(x_test_folds)<br>    n_correct = <span class="hljs-built_in">sum</span>(y_pred == y_test_folds)<br>    <span class="hljs-built_in">print</span>(n_correct / <span class="hljs-built_in">len</span>(y_test_folds))<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">0.9669
+0.91625
+0.96785
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 上面的代码等同于</span><br><span class="hljs-keyword">from</span> sklearn.model_selection <span class="hljs-keyword">import</span> cross_val_score<br>scores = cross_val_score(sgd_clf, x_train, y_train_5, cv=<span class="hljs-number">3</span>, scoring=<span class="hljs-string">&quot;accuracy&quot;</span>)<br><span class="hljs-built_in">print</span>(scores)<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">[0.95035 0.96035 0.9604 ]
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment">## 虽然上面看上去准确率还可以， 但是我们写一个很蠢的分类器</span><br><span class="hljs-keyword">from</span> sklearn.base <span class="hljs-keyword">import</span> BaseEstimator<br><br><span class="hljs-comment"># 这个分类器会把所有的图片都归为非5</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Never5Classifier</span>(<span class="hljs-title class_ inherited__">BaseEstimator</span>):<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">fit</span>(<span class="hljs-params">self, X, y=<span class="hljs-literal">None</span></span>):<br>        <span class="hljs-keyword">return</span> self<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">predict</span>(<span class="hljs-params">self, X</span>):<br>        <span class="hljs-keyword">return</span> np.zeros((<span class="hljs-built_in">len</span>(X), <span class="hljs-number">1</span>), dtype=<span class="hljs-built_in">bool</span>)<br><br><span class="hljs-comment"># 看一看准确率</span><br>never_5_ckassufier = Never5Classifier()<br>scores = cross_val_score(never_5_ckassufier, x_train, y_train_5, cv=<span class="hljs-number">3</span>, scoring=<span class="hljs-string">&quot;accuracy&quot;</span>)<br><span class="hljs-built_in">print</span>(scores)<br><br><span class="hljs-comment"># 可以看到准确率依然很高， 因为图片里5只占了10%左右。</span><br><span class="hljs-comment"># 所有有时候准确率不是分类器的首要性能指标。</span><br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">[0.91125 0.90855 0.90915]
+</code></pre>
+<h3 id="3-3-2-混淆矩阵">3.3.2 混淆矩阵</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.model_selection <span class="hljs-keyword">import</span> cross_val_predict<br><br><span class="hljs-comment"># 用cross_val_predict采用k-折交叉验证， 返回的是验证集预测结果</span><br>y_train_pred = cross_val_predict(sgd_clf, x_train, y_train_5, cv=<span class="hljs-number">3</span>)<br><span class="hljs-built_in">print</span>(y_train_pred.shape)<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">(60000,)
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 接着可以用confusion_matrix来获取混淆矩阵</span><br><span class="hljs-keyword">from</span> sklearn.metrics <span class="hljs-keyword">import</span> confusion_matrix<br><span class="hljs-built_in">print</span>(confusion_matrix(y_train_5, y_train_pred))<br><br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">[[53892   687]
+ [ 1891  3530]]
+</code></pre>
+<p>在这个例子中，第一行表示所有的非5图片， 其中有53892个图片被正确识别为非5(真负类)，  687张图片被错误识别为5(假正类)<br>
+第二行表示所有5的图片， 其中有1891个图片被错误识别成了非5(假负类)，  3530张图片被正确识别为5(真正类)<br>
+一个完美的分类器，混淆矩阵应该是这样的:<br>
+[[54579   0]<br>
+[ 0  5421]]</p>
+<p>分类器的精度</p>
+<p class="katex-block "><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>精度</mtext><mo>=</mo><mfrac><mrow><mi>T</mi><mi>P</mi></mrow><mrow><mi>T</mi><mi>P</mi><mo>+</mo><mi>F</mi><mi>P</mi></mrow></mfrac></mrow><annotation encoding="application/x-tex">精度=\frac{TP}{TP+FP}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord cjk_fallback">精度</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.1297em;vertical-align:-0.7693em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3603em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">TP</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">FP</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">TP</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.7693em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></p>
+<p>其中 TF是真正类的数量， FP是假正类的数量，在本例中， 精度=3530 / (3530+687) = 0.83</p>
+<p>精度只在乎正类， 会忽略其他信息。 还有一个指标是召回率</p>
+<p class="katex-block "><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>召回率</mtext><mo>=</mo><mfrac><mrow><mi>T</mi><mi>P</mi></mrow><mrow><mi>T</mi><mi>P</mi><mo>+</mo><mi>F</mi><mi>N</mi></mrow></mfrac></mrow><annotation encoding="application/x-tex">召回率=\frac{TP}{TP+FN}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord cjk_fallback">召回率</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.1297em;vertical-align:-0.7693em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3603em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">TP</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">FN</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">TP</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.7693em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></p>
+<p>FN是假负类的数量<br>
+在本例中， 召回率 = 3530 / (3530+1891) = 0.65</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.metrics <span class="hljs-keyword">import</span> precision_score, recall_score<br><span class="hljs-built_in">print</span>(precision_score(y_train_5, y_train_pred))<br><span class="hljs-built_in">print</span>(recall_score(y_train_5, y_train_pred))<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">0.8370879772350012
+0.6511713705958311
+</code></pre>
+<p>上面的结果表示， 这个检测器，当他说一张图片是5时， 只有83%的准确率， 并且只检测出了65%的数字5.</p>
+<p>我们可以把精度和召唤率合并成一个单一指标F1</p>
+<p class="katex-block "><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>F</mi><mn>1</mn></msub><mo>=</mo><mfrac><mn>2</mn><mrow><mfrac><mn>1</mn><mtext>精度</mtext></mfrac><mo>+</mo><mfrac><mn>1</mn><mtext>召回率</mtext></mfrac></mrow></mfrac><mo>=</mo><mn>2</mn><mo>∗</mo><mfrac><mrow><mtext>精度</mtext><mo>∗</mo><mtext>召回率</mtext></mrow><mrow><mtext>精度</mtext><mo>+</mo><mtext>召回率</mtext></mrow></mfrac><mo>=</mo><mfrac><mrow><mi>T</mi><mi>P</mi></mrow><mrow><mi>T</mi><mi>P</mi><mo>+</mo><mfrac><mrow><mi>F</mi><mi>N</mi><mo>+</mo><mi>F</mi><mi>P</mi></mrow><mn>2</mn></mfrac></mrow></mfrac></mrow><annotation encoding="application/x-tex">F_1 = \frac{2}{\frac{1}{精度} + \frac{1}{召回率}} = 2*\frac{精度*召回率}{精度+召回率} = \frac{TP}{TP+\frac{FN+FP}{2}}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">F</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.4015em;vertical-align:-1.0801em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.2649em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8451em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord cjk_fallback mtight">精度</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8451em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord cjk_fallback mtight">召回率</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.0801em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">2</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:2.1297em;vertical-align:-0.7693em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3603em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord cjk_fallback">精度</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord cjk_fallback">召回率</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord cjk_fallback">精度</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord cjk_fallback">召回率</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.7693em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.4677em;vertical-align:-1.1073em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3603em;"><span style="top:-2.2377em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">TP</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8723em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.10903em;">FN</span><span class="mbin mtight">+</span><span class="mord mathnormal mtight" style="margin-right:0.13889em;">FP</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">TP</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.1073em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.metrics <span class="hljs-keyword">import</span> f1_score<br><br><span class="hljs-built_in">print</span>(f1_score(y_train_5, y_train_pred))<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">0.7325171197343847
+</code></pre>
+<p>不过，具体的场景下对精度和召回率的要求不同。<br>
+比如在青少年模式下的视频推送，需要训练一个分类器来检测是否适合青少年观看。这时候你宁愿拦截掉了一些好视频， 也要保证放出来的全是适合青少年观看的。即需要高精度， 可以接受低回归率。</p>
+<p>而在识别小偷的系统上，宁愿放弃一些精度， 也要保证能识别到所有的小偷。 即低精度， 高回归率。<br>
+当然你没办法同时提高精度和回归率。</p>
+<h3 id="3-3-4-精度-召回率权衡">3.3.4 精度/召回率权衡</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python"><br>y_scores = sgd_clf.decision_function(some_digit.reshape(<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>))<br><br><span class="hljs-built_in">print</span>(y_scores)<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">[2164.22030239]
+
+
+/home/lukarzhang/anaconda3/envs/ml2/lib/python3.10/site-packages/sklearn/base.py:493: UserWarning: X does not have valid feature names, but SGDClassifier was fitted with feature names
+  warnings.warn(
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">threshhold = <span class="hljs-number">0</span><br>y_some_digit_pred = y_scores &gt;= threshhold<br><span class="hljs-built_in">print</span>(y_some_digit_pred)<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">[ True]
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 调整阈值</span><br>threshhold = <span class="hljs-number">3000</span><br>y_some_digit_pred = y_scores &gt;= threshhold<br><span class="hljs-built_in">print</span>(y_some_digit_pred)<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">[False]
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 返回所有预测的得分而不是预测结果</span><br>y_scores = cross_val_predict(sgd_clf, x_train, y_train_5, cv=<span class="hljs-number">3</span>, method=<span class="hljs-string">&quot;decision_function&quot;</span>)<br><br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.metrics <span class="hljs-keyword">import</span> precision_recall_curve<br><br>precisions, recalls, thresholds = precision_recall_curve(y_train_5, y_scores)<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">plot_precision_recall_vs_thresholds</span>(<span class="hljs-params">precisions, recalls, thresholds</span>):<br>    plt.plot(thresholds, precisions[:-<span class="hljs-number">1</span>], <span class="hljs-string">&quot;b--&quot;</span>, label=<span class="hljs-string">&quot;Precision&quot;</span>)<br>    plt.plot(thresholds, recalls[:-<span class="hljs-number">1</span>], <span class="hljs-string">&quot;g-&quot;</span>, label=<span class="hljs-string">&quot;Recall&quot;</span>)<br><br>plot_precision_recall_vs_thresholds(precisions, recalls, thresholds)<br>plt.show()<br></code></pre></td></tr></table></figure>
+<p>​</p>
+<img src="/2024/04/24/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98-sklearn/Classify/Untitled1_28_0.png" srcset="/img/loading.gif" lazyload class="" title="png">
+<p>​</p>
+<p>从图中可以看出，随着阈值的增加， 回归率不断下降。 精度虽然整体是增加的， 但是也可能出现局部下降的情况。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">plt.plot(recalls, precisions)<br>plt.show()<br></code></pre></td></tr></table></figure>
+<p>​</p>
+<img src="/2024/04/24/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98-sklearn/Classify/Untitled1_30_0.png" srcset="/img/loading.gif" lazyload class="" title="png">
+<p>​</p>
+<h3 id="3-3-5-ROC曲线">3.3.5 ROC曲线</h3>
+<p>对于二元分类器， 还可以用ROC曲线来评估。ROC曲线，叫受试者工作特征曲线<br>
+ROC曲线绘制的是真正类率 和 假正类率 之间的关系。<br>
+有点绕，慢慢解释。<br>
+真正类率 TPR， 是召回的另一个名称。 指被正确分为正类的比例。</p>
+<p class="katex-block "><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>T</mi><mi>P</mi><mi>R</mi><mo>=</mo><mfrac><mrow><mi>T</mi><mi>P</mi></mrow><mrow><mi>T</mi><mi>P</mi><mo>+</mo><mi>F</mi><mi>N</mi></mrow></mfrac></mrow><annotation encoding="application/x-tex">TPR = \frac{TP}{TP+FN}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">TPR</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.1297em;vertical-align:-0.7693em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3603em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">TP</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">FN</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">TP</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.7693em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></p>
+<p>假正类率 FPR，指被错误分为正类的比例。 在本例子中， 也就是不是5却被识别成了5的比例。</p>
+<p class="katex-block "><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>F</mi><mi>P</mi><mi>R</mi><mo>=</mo><mfrac><mrow><mi>F</mi><mi>P</mi></mrow><mrow><mi>F</mi><mi>P</mi><mo>+</mo><mi>T</mi><mi>N</mi></mrow></mfrac></mrow><annotation encoding="application/x-tex">FPR = \frac{FP}{FP+TN}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">FPR</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.1297em;vertical-align:-0.7693em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3603em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">FP</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">TN</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">FP</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.7693em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></p>
+<p>假正类率也等于 1-特异度， 特异度就是 被正确识别为负类的比例</p>
+<p class="katex-block "><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>特异度</mtext><mo>=</mo><mfrac><mrow><mi>T</mi><mi>N</mi></mrow><mrow><mi>F</mi><mi>P</mi><mo>+</mo><mi>T</mi><mi>N</mi></mrow></mfrac></mrow><annotation encoding="application/x-tex">特异度 = \frac{TN}{FP+TN}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord cjk_fallback">特异度</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.1297em;vertical-align:-0.7693em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3603em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">FP</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">TN</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">TN</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.7693em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.metrics <span class="hljs-keyword">import</span> roc_curve<br><br>fpr, tpr, thresholds = roc_curve(y_train_5, y_scores)<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">plot_roc_curve</span>(<span class="hljs-params">fpr, tpr, label=<span class="hljs-literal">None</span></span>):<br>    plt.plot(fpr, tpr, linewidth=<span class="hljs-number">2</span>, label=label)<br>    plt.plot([<span class="hljs-number">0</span>,<span class="hljs-number">1</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>], <span class="hljs-string">&#x27;k--&#x27;</span>)<br>    plt.axi<br>plot_roc_curve(fpr, tpr)<br>plt.show()<br></code></pre></td></tr></table></figure>
+<p>​</p>
+<img src="/2024/04/24/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98-sklearn/Classify/Untitled1_33_0.png" srcset="/img/loading.gif" lazyload class="" title="png">
+<p>​</p>
+<p>从图中我们可以看出来， 召回率越高， 会导致假正率也变大。</p>
+<p>有一种评估分类器的方法是计算ROC曲线下的面积（AUC）。 完美的分类器ROC AUC = 1， 而纯随机分类器的ROC AUC = 0.5</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.metrics <span class="hljs-keyword">import</span> roc_auc_score<br><br><span class="hljs-built_in">print</span>(roc_auc_score(y_train_5, y_scores))<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">0.9604938554008616
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.ensemble <span class="hljs-keyword">import</span> RandomForestClassifier<br><br>forest_clf = RandomForestClassifier(random_state=<span class="hljs-number">42</span>)<br>y_probas_forest = cross_val_predict(forest_clf, x_train, y_train_5, cv=<span class="hljs-number">3</span>, method=<span class="hljs-string">&quot;predict_proba&quot;</span>)<br><span class="hljs-built_in">print</span>(y_probas_forest.shape)<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">(60000, 2)
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-built_in">print</span>(y_probas_forest[<span class="hljs-number">0</span>])<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">[0.11 0.89]
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python">y_scores_forest = y_probas_forest[:, <span class="hljs-number">1</span>]<br>fpr_forest, tpr_forest, thresholds_forest = roc_curve(y_train_5, y_scores_forest)<br><br>plot_roc_curve(fpr_forest, tpr_forest)<br>plt.show()<br></code></pre></td></tr></table></figure>
+<p>​</p>
+<img src="/2024/04/24/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98-sklearn/Classify/Untitled1_38_0.png" srcset="/img/loading.gif" lazyload class="" title="png">
+<p>​</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-built_in">print</span>(roc_auc_score(y_train_5, y_scores_forest))<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">0.9983436731328145
+</code></pre>
+<h2 id="3-4-用多个二元分类实现多类分类器">3.4 用多个二元分类实现多类分类器</h2>
+<p>我们最终是要检测一张图片是0-9的某一个数字，而并非检测是否是其中一个数字。 我们这里尝试用多个二元分类器来实现。</p>
+<p>一种方法是对于n类问题， 我们可以实现n个二元分类器， 分别判断每一个类的概率。在本例子中即0-检测器， 1-检测器， 2-检测器…<br>
+哪一个检测器检给的正类分数最高， 就将图片归为哪个类。 这是一种一对多的策略OvR(one versus all)</p>
+<p>另一种方法是，为每一对数字训练一个分类器。即一个用于区别0和1，一个用于区别0和2… 这样我们就需要N*(N-1)/2个分类器。<br>
+当对一个图片进行分类的时候，看哪一个数字胜出最多，就归为哪个类。 这是一种一对一的策略OvO。<br>
+OvO的优点在于，每个分类器只需要用到部分训练集(即需要分类的两个类别)对其训练即可。</p>
+<p>使用sklearn的svc可以自动选择OvO或OvR</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.svm <span class="hljs-keyword">import</span> SVC<br><br>svm_clf = SVC()<br>svm_clf.fit(x_train, y_train)<br>pred = svm_clf.predict(some_digit.reshape(<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>))<br><span class="hljs-built_in">print</span>(pred)<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">[5]
+
+
+/home/lukarzhang/anaconda3/envs/ml2/lib/python3.10/site-packages/sklearn/base.py:493: UserWarning: X does not have valid feature names, but SVC was fitted with feature names
+  warnings.warn(
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">some_digit_scores = svm_clf.decision_function(some_digit.reshape(<span class="hljs-number">1</span>,-<span class="hljs-number">1</span>))<br><span class="hljs-built_in">print</span>(some_digit_scores)<br><span class="hljs-built_in">print</span>(np.argmax(some_digit_scores))<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">[[ 1.72501977  2.72809088  7.2510018   8.3076379  -0.31087254  9.3132482
+   1.70975103  2.76765202  6.23049537  4.84771048]]
+5
+
+
+/home/lukarzhang/anaconda3/envs/ml2/lib/python3.10/site-packages/sklearn/base.py:493: UserWarning: X does not have valid feature names, but SVC was fitted with feature names
+  warnings.warn(
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-built_in">print</span>(svm_clf.classes_)<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">[0 1 2 3 4 5 6 7 8 9]
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 你也可以通过强制用OneVsOneClassifier 或者 OneVsRestClassifier类</span><br><span class="hljs-keyword">from</span> sklearn.multiclass <span class="hljs-keyword">import</span> OneVsRestClassifier<br>ovr_clf = OneVsRestClassifier(SVC())<br>ovr_clf.fit(x_train, y_train)<br>pred = ovr_clf.predict(some_digit.reshape(<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>))<br><span class="hljs-built_in">print</span>(pred)<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.linear_model <span class="hljs-keyword">import</span> SGDClassifier<br><span class="hljs-comment"># 或者直接用SGD分类器训练</span><br>sgd_clf = SGDClassifier(random_state=<span class="hljs-number">42</span>)<br>sgd_clf.fit(x_train, y_train)<br>pred = sgd_clf.predict(some_digit.reshape(<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>))<br><span class="hljs-built_in">print</span>(pred)<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">[3]
+
+
+/home/lukarzhang/anaconda3/envs/ml2/lib/python3.10/site-packages/sklearn/base.py:493: UserWarning: X does not have valid feature names, but SGDClassifier was fitted with feature names
+  warnings.warn(
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">some_digit_scores = sgd_clf.decision_function(some_digit.reshape(<span class="hljs-number">1</span>,-<span class="hljs-number">1</span>))<br><span class="hljs-built_in">print</span>(some_digit_scores)<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">[[-31893.03095419 -34419.69069632  -9530.63950739   1823.73154031
+  -22320.14822878  -1385.80478895 -26188.91070951 -16147.51323997
+   -4604.35491274 -12050.767298  ]]
+
+
+/home/lukarzhang/anaconda3/envs/ml2/lib/python3.10/site-packages/sklearn/base.py:493: UserWarning: X does not have valid feature names, but SGDClassifier was fitted with feature names
+  warnings.warn(
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.model_selection <span class="hljs-keyword">import</span> cross_val_score<br><span class="hljs-built_in">print</span>(cross_val_score(sgd_clf, x_train, y_train, cv=<span class="hljs-number">3</span>, scoring=<span class="hljs-string">&quot;accuracy&quot;</span>))<br><br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">[0.87365 0.85835 0.8689 ]
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.preprocessing <span class="hljs-keyword">import</span> StandardScaler<br>scaler = StandardScaler()<br>X_train_scaled = scaler.fit_transform(x_train.astype(np.float64))<br><span class="hljs-built_in">print</span>(cross_val_score(sgd_clf, X_train_scaled, y_train, cv=<span class="hljs-number">3</span>, scoring=<span class="hljs-string">&quot;accuracy&quot;</span>))<br><br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">[0.8983 0.891  0.9018]
+</code></pre>
+<h2 id="3-5-误差分析">3.5 误差分析</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.model_selection <span class="hljs-keyword">import</span> cross_val_predict<br><span class="hljs-keyword">from</span> sklearn.metrics <span class="hljs-keyword">import</span> confusion_matrix<br><br><span class="hljs-comment"># 输出稀疏矩阵</span><br>y_train_pred = cross_val_predict(sgd_clf, X_train_scaled, y_train, cv=<span class="hljs-number">3</span>)<br>conf_mx = confusion_matrix(y_train, y_train_pred)<br><span class="hljs-built_in">print</span>(conf_mx)<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">[[5577    0   22    5    8   43   36    6  225    1]
+ [   0 6400   37   24    4   44    4    7  212   10]
+ [  27   27 5220   92   73   27   67   36  378   11]
+ [  22   17  117 5227    2  203   27   40  403   73]
+ [  12   14   41    9 5182   12   34   27  347  164]
+ [  27   15   30  168   53 4444   75   14  535   60]
+ [  30   15   42    3   44   97 5552    3  131    1]
+ [  21   10   51   30   49   12    3 5684  195  210]
+ [  17   63   48   86    3  126   25   10 5429   44]
+ [  25   18   30   64  118   36    1  179  371 5107]]
+</code></pre>
+<p>上面的稀疏矩阵， 第i行第j列表示第i个种类被识别为第j个种类的数量。<br>
+例如[0,1]就表示图片是0的，被识别成了1的数量。<br>
+所以[x,x]就是识别正确的数量， 其他都是识别错误的。<br>
+我们可以用matplot画出来看看</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">plt.matshow(conf_mx, cmap=plt.cm.gray)<br>plt.show()<br></code></pre></td></tr></table></figure>
+<p>​</p>
+<img src="/2024/04/24/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98-sklearn/Classify/Untitled1_52_0.png" srcset="/img/loading.gif" lazyload class="" title="png">
+<p>​</p>
+<p>从图中可以看出来，结果还不错。但是数字5的颜色有点暗，表示正确的比较少。</p>
+<p>我们现在把重点放在错误上。<br>
+我们先计算出错误率， 然后用0填充对角线， 就能看出来哪些情况错误比较多了</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">row_sums = conf_mx.<span class="hljs-built_in">sum</span>(axis=<span class="hljs-number">1</span>, keepdims=<span class="hljs-literal">True</span>)<br>norm_conf_mx = conf_mx / row_sums<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">np.fill_diagonal(norm_conf_mx, <span class="hljs-number">0</span>)<br>plt.matshow(norm_conf_mx, cmap=plt.cm.gray)<br>plt.show()<br></code></pre></td></tr></table></figure>
+<p>​</p>
+<img src="/2024/04/24/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98-sklearn/Classify/Untitled1_55_0.png" srcset="/img/loading.gif" lazyload class="" title="png">
+<p>​</p>
+<p>从图中可以看出来，数字8那一列比较亮， 说明很多数字都被错误识别成了8.<br>
+也能看到数字3和数字5的[3,5]和[5,3]比较量, 表示这两个数字互相识别误差较大。</p>
+<h2 id="3-6多标签分类">3.6多标签分类</h2>
+<p>目前我们的分类，实例都只会被分到一个实例里。 但在某些情况下，你可以希望分类器可以输出多个类。<br>
+举个简单的例子，你希望在识别数字的时候，输出的是这个数字是否是一个大于6的数字 和 这个数字是否是奇数</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.neighbors <span class="hljs-keyword">import</span> KNeighborsClassifier<br><br>y_train_large = (y_train &gt; <span class="hljs-number">6</span>)<br>y_train_odd = (y_train % <span class="hljs-number">2</span> == <span class="hljs-number">1</span>)<br>y_mutilabel = np.c_[y_train_large, y_train_odd]<br><br>knn_clf = KNeighborsClassifier()<br>knn_clf.fit(x_train, y_mutilabel)<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-built_in">print</span>(knn_clf.predict(some_digit.reshape(<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>)))<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">[[False  True]]
+
+
+/home/lukarzhang/anaconda3/envs/ml2/lib/python3.10/site-packages/sklearn/base.py:493: UserWarning: X does not have valid feature names, but KNeighborsClassifier was fitted with feature names
+  warnings.warn(
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment">## 3.7 多输出分类</span><br>多输出分类是多标签分类的泛化。<br>例如我们构建一个系统来消除图片里的噪声。 输入是一张有噪声的图片， 而输出是一个去噪后的图片<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs python">noise = np.random.randint(<span class="hljs-number">0</span>, <span class="hljs-number">100</span>, (<span class="hljs-built_in">len</span>(x_train), <span class="hljs-number">784</span>))<br>x_train_mod = x_train + noise<br>noise = np.random.randint(<span class="hljs-number">0</span>, <span class="hljs-number">100</span>, (<span class="hljs-built_in">len</span>(x_test), <span class="hljs-number">784</span>))<br>x_test_mod = x_test + noise<br><br>y_train_mod = x_train<br>y_test_mode = x_test<br><span class="hljs-built_in">print</span>(y_train_mod.shape)<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">(60000, 784)
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python">some_digit_mod = x_train_mod.iloc[<span class="hljs-number">7</span>].to_numpy()<br>some_digit_mod_iamge = some_digit_mod.reshape(<span class="hljs-number">28</span>, <span class="hljs-number">28</span>)<br>plt.imshow(some_digit_mod_iamge, cmap=<span class="hljs-string">&quot;binary&quot;</span>)<br>plt.axis(<span class="hljs-string">&quot;off&quot;</span>)<br>plt.show()<br></code></pre></td></tr></table></figure>
+<img src="/2024/04/24/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98-sklearn/Classify/Untitled1_62_0.png" srcset="/img/loading.gif" lazyload class="" title="png">
+<p>​</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">knn_clf.fit(x_train_mod, y_train_mod)<br><br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">/home/lukarzhang/anaconda3/envs/ml2/lib/python3.10/site-packages/sklearn/base.py:493: UserWarning: X does not have valid feature names, but KNeighborsClassifier was fitted with feature names
+  warnings.warn(
+</code></pre>
+<img src="/2024/04/24/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98-sklearn/Classify/Untitled1_63_1.png" srcset="/img/loading.gif" lazyload class="" title="png">
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python">pred = knn_clf.predict(some_digit_mod.reshape(<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>))<br><span class="hljs-built_in">print</span>(pred.shape)<br>plt.imshow(pred.reshape(<span class="hljs-number">28</span>, <span class="hljs-number">28</span>), cmap=<span class="hljs-string">&quot;binary&quot;</span>)<br>plt.axis(<span class="hljs-string">&quot;off&quot;</span>)<br>plt.show()<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">/home/lukarzhang/anaconda3/envs/ml2/lib/python3.10/site-packages/sklearn/base.py:493: UserWarning: X does not have valid feature names, but KNeighborsClassifier was fitted with feature names
+  warnings.warn(
+
+
+(1, 784)
+</code></pre>
+<img src="/2024/04/24/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98-sklearn/Classify/Untitled1_64_2.png" srcset="/img/loading.gif" lazyload class="" title="png">
+<p>去噪效果还不错</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98-Scikit-Learn-Keras-TensorFlow/" class="category-chain-item">机器学习实战(Scikit-Learn, Keras,TensorFlow)</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>第三章-分类</div>
+      <div>http://example.com/2024/04/24/机器学习实战-sklearn/Classify/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>lukazhang</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年4月24日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/04/25/PyTorch/PyTorch/" title="PyTorch快速入门">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">PyTorch快速入门</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/04/08/MechineLearning/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/" title="强化学习">
+                        <span class="hidden-mobile">强化学习</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

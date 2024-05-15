@@ -1,0 +1,897 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="lukazhang">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="1. 投票分类器 如果你以及训练好了几个分类器(SVC, 决策树， 逻辑回归分类器), 想要得到一个更好的分类器, 通常的做法是把这些分类器组合在一起, 然后让他们投票。 投票多的那个类就是投票分类器的预测结果。 这是因为大数定理: 如果有一个修改过的硬币, 抛一次有51%的概率是正面朝上，49%的概率是背面朝上。那么，你如果投1000次，大概会有510次正面和490次背面， 也就是大多数都是正面">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第七章-集成学习和随机森林">
+<meta property="og:url" content="http://example.com/2024/05/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98-sklearn/RandomForest/index.html">
+<meta property="og:site_name" content="YOLO">
+<meta property="og:description" content="1. 投票分类器 如果你以及训练好了几个分类器(SVC, 决策树， 逻辑回归分类器), 想要得到一个更好的分类器, 通常的做法是把这些分类器组合在一起, 然后让他们投票。 投票多的那个类就是投票分类器的预测结果。 这是因为大数定理: 如果有一个修改过的硬币, 抛一次有51%的概率是正面朝上，49%的概率是背面朝上。那么，你如果投1000次，大概会有510次正面和490次背面， 也就是大多数都是正面">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-05-12T14:56:12.000Z">
+<meta property="article:modified_time" content="2024-05-15T15:17:05.267Z">
+<meta property="article:author" content="lukazhang">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>第七章-集成学习和随机森林 - YOLO</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="第七章-集成学习和随机森林"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-05-12 22:56" pubdate>
+          2024年5月12日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.9k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          33 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">第七章-集成学习和随机森林</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1>1. 投票分类器</h1>
+<p>如果你以及训练好了几个分类器(SVC, 决策树， 逻辑回归分类器), 想要得到一个更好的分类器, 通常的做法是把这些分类器组合在一起, 然后让他们投票。 投票多的那个类就是投票分类器的预测结果。</p>
+<p>这是因为大数定理: 如果有一个修改过的硬币, 抛一次有51%的概率是正面朝上，49%的概率是背面朝上。那么，你如果投1000次，大概会有510次正面和490次背面， 也就是大多数都是正面。</p>
+<p>大多数都是正面的概率，会随着你投掷硬币的次数增加而增加。 当你投掷1000次时， 大部分是正面朝上的概率是75%， 如果增加到10000次，那么这个概率是97%。</p>
+<p>所以根据大树定律，如果你的每个分类器都有还可以的准确率， 那么让他们进行投票后通常得到的正确率会更高。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.ensemble <span class="hljs-keyword">import</span> RandomForestClassifier<br><span class="hljs-keyword">from</span> sklearn.ensemble <span class="hljs-keyword">import</span> VotingClassifier<br><span class="hljs-keyword">from</span> sklearn.linear_model <span class="hljs-keyword">import</span> LogisticRegression<br><span class="hljs-keyword">from</span> sklearn.svm <span class="hljs-keyword">import</span> SVC<br><span class="hljs-keyword">from</span> sklearn.datasets <span class="hljs-keyword">import</span> make_moons<br><span class="hljs-keyword">from</span> sklearn.model_selection <span class="hljs-keyword">import</span> train_test_split<br><br>log_clf = LogisticRegression()<br>svc_clf = SVC()<br>rnd_clf = RandomForestClassifier()<br><br>voting_clf = VotingClassifier(estimators=[(<span class="hljs-string">&quot;log_clf&quot;</span>, log_clf), (<span class="hljs-string">&quot;svc_clf&quot;</span>, svc_clf), (<span class="hljs-string">&quot;rnd_clf&quot;</span>, rnd_clf)], voting=<span class="hljs-string">&#x27;hard&#x27;</span>)<br><br>X, y = make_moons(n_samples=<span class="hljs-number">10000</span>, random_state=<span class="hljs-number">42</span>, noise=<span class="hljs-number">0.4</span>)<br>X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="hljs-number">0.3</span>, random_state=<span class="hljs-number">42</span>)<br><br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.metrics <span class="hljs-keyword">import</span> accuracy_score<br><br><span class="hljs-keyword">for</span> clf <span class="hljs-keyword">in</span> (log_clf, svc_clf, rnd_clf, voting_clf):<br>    clf.fit(X_train, y_train)<br>    y_pred = clf.predict(X_test)<br>    <span class="hljs-built_in">print</span>(clf.__class__.__name__, accuracy_score(y_test, y_pred))<br>    <br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">LogisticRegression 0.8286666666666667
+SVC 0.8643333333333333
+RandomForestClassifier 0.8446666666666667
+VotingClassifier 0.8586666666666667
+</code></pre>
+<p>我们可以从上面的结果看到， 投票分类器是要比随机森林和逻辑回归分类器的正确率高的，但是比支持向量机的正确率低。</p>
+<p>这是因为我们在训练的时候用了同一组训练数据。 要使用投票分类器，最好每一个子分类器都是相互独立的，训练数据最好也不同。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.model_selection <span class="hljs-keyword">import</span> KFold<br><br>X, y = make_moons(n_samples=<span class="hljs-number">40000</span>, random_state=<span class="hljs-number">42</span>, noise=<span class="hljs-number">0.4</span>)<br>X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="hljs-number">0.2</span>, random_state=<span class="hljs-number">42</span>)<br><br><br>kf = KFold(n_splits=<span class="hljs-number">4</span>, shuffle=<span class="hljs-literal">True</span>, random_state=<span class="hljs-number">42</span>)<br><br>X_train_folds = []<br>y_train_folds = []<br><br><span class="hljs-comment"># 分割数据</span><br><span class="hljs-keyword">for</span> train_index, _ <span class="hljs-keyword">in</span> kf.split(X_train):<br>    X_train_folds.append(X_train[train_index])<br>    y_train_folds.append(y_train[train_index])<br><br>log_clf.fit(X_train_folds[<span class="hljs-number">0</span>], y_train_folds[<span class="hljs-number">0</span>])<br>y_pred = log_clf.predict(X_test)<br><span class="hljs-built_in">print</span>(log_clf.__class__.__name__, accuracy_score(y_test, y_pred))<br><br>svc_clf.fit(X_train_folds[<span class="hljs-number">1</span>], y_train_folds[<span class="hljs-number">1</span>])<br>y_pred = svc_clf.predict(X_test)<br><span class="hljs-built_in">print</span>(svc_clf.__class__.__name__, accuracy_score(y_test, y_pred))<br><br>rnd_clf.fit(X_train_folds[<span class="hljs-number">2</span>], y_train_folds[<span class="hljs-number">2</span>])<br>y_pred = rnd_clf.predict(X_test)<br><span class="hljs-built_in">print</span>(rnd_clf.__class__.__name__, accuracy_score(y_test, y_pred))<br><br>voting_clf.fit(X_train_folds[<span class="hljs-number">3</span>], y_train_folds[<span class="hljs-number">3</span>])<br>y_pred = voting_clf.predict(X_test)<br><span class="hljs-built_in">print</span>(voting_clf.__class__.__name__, accuracy_score(y_test, y_pred))<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">LogisticRegression 0.835375
+SVC 0.865125
+RandomForestClassifier 0.84575
+VotingClassifier 0.86025
+</code></pre>
+<p>在定义投票分类器的时候，我们设置了voting=‘hard’， 表示这是一个硬投票分类器。他的原理是让每一个子分类器都进行投票，然后选出投票最多的那个类别。</p>
+<p>如果设置了voting=‘soft’，那么就是一个软分类器。软分类器是让每个子分类器都输出概率(即predict_prob), 然后算出每个类别的平均概率，最后取概率最高的类。</p>
+<p>通常软分类器的表现要比硬投票器更好, 但是支持向量机不能直接输出预测的概率, 需要给SVC设置probability=True才行，不过这样会减缓SVC的训练速度。</p>
+<h1>2. bagging 和 pasting</h1>
+<p>另外一个集成方法就是,相同的分类器算法，在随机的训练集子集上训练，得到多个分类器，再进行投票。</p>
+<p>而在采样过程中，如果每次采样前将样本放回， 就称为bagging；如果不放回样本，就成为pasting。</p>
+<p>所以，bagging算法训练的时候，可能会出现同一个实例在一个算法中出现多次的情况， pasting则不会。</p>
+<p>虽然每个子分类器采用部分数据训练，效果没有在整个训练集上训练的模型好，每个子分类器的偏差都比在原始训练集上的偏差高。 但是通过聚合，同时降低了偏差和方差。</p>
+<p>与在原始数据上训练出来的模型相比， 聚合出来的模型有着相似的偏差和更低的方差。</p>
+<p>这样训练出来的多个分类器再进行投票效果会被单个分类器在整个训练集上训练的效果更好。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs python"><br><span class="hljs-keyword">from</span> sklearn.ensemble <span class="hljs-keyword">import</span> BaggingClassifier<br><span class="hljs-keyword">from</span> sklearn.tree <span class="hljs-keyword">import</span> DecisionTreeClassifier<br><br>bag_clf = BaggingClassifier(DecisionTreeClassifier(), n_estimators=<span class="hljs-number">500</span>, max_samples=<span class="hljs-number">100</span>, bootstrap=<span class="hljs-literal">True</span>, n_jobs=<span class="hljs-number">1</span>)  <span class="hljs-comment"># bootstrap 表示放回样本</span><br>bag_clf.fit(X_train, y_train)<br>y_pred = bag_clf.predict(X_test)<br><br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;badding classifier score = &quot;</span>, accuracy_score(y_test, y_pred))<br><br>tree_clf = DecisionTreeClassifier()<br>tree_clf.fit(X_train, y_train)<br>y_pred = tree_clf.predict(X_test)<br><br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;dicision tree classifier score = &quot;</span>, accuracy_score(y_test, y_pred))<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">badding classifier score =  0.8645
+dicision tree classifier score =  0.806875
+</code></pre>
+<p>如果子分类器有predict_prob()函数， 那么baggingClassifier就采用软投票。否则就是硬投票。</p>
+<h2 id="2-2-包外评估">2.2 包外评估</h2>
+<p>使用BaggingClassifier的时候， 由于要放回样本，所以有可能在训练过程中，有一些实例从来没被选中。</p>
+<p>这些实例称为包外实例， 由于这些实例没有被模型见过， 所以也可以用这些包外实例对模型进行评估</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python">bag_clf = BaggingClassifier(DecisionTreeClassifier(), n_estimators=<span class="hljs-number">500</span>, max_samples=<span class="hljs-number">100</span>, bootstrap=<span class="hljs-literal">True</span>, n_jobs=<span class="hljs-number">1</span>, oob_score=<span class="hljs-literal">True</span>)  <span class="hljs-comment"># 设置oob_score=True</span><br>bag_clf.fit(X_train, y_train)<br><span class="hljs-built_in">print</span>(bag_clf.oob_score_)<br><span class="hljs-built_in">print</span>(bag_clf.oob_decision_function_)<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">0.8641875
+[[0.01207243 0.98792757]
+ [0.03420523 0.96579477]
+ [0.63253012 0.36746988]
+ ...
+ [0.06626506 0.93373494]
+ [0.67878788 0.32121212]
+ [0.72144289 0.27855711]]
+</code></pre>
+<h2 id="2-3-随机补丁和随机子空间">2.3 随机补丁和随机子空间</h2>
+<p>baggingClaasifier还可以对特征进行随机采样。超参数为max_features 和 bootstrap_features.</p>
+<p>这在一些高维输入的时候很有用。</p>
+<p>如果训练实例和特征都随机， 那么就是随机补丁方法。</p>
+<p>如果训练实例不随机， 特征随机， 那么就是随机子空间方法。</p>
+<h1>3. 随机森林</h1>
+<p>当我们在决策树上采用bagging或pasting聚合得到的多颗决策树， 就组成了随机森林。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.ensemble <span class="hljs-keyword">import</span> RandomForestClassifier<br><br>rnd_clf = RandomForestClassifier(n_estimators=<span class="hljs-number">500</span>, max_leaf_nodes=<span class="hljs-number">16</span>, n_jobs=-<span class="hljs-number">1</span>)<br>rnd_clf.fit(X_train, y_train)<br><br>y_pred = rnd_clf.predict(X_test)<br><br>score = accuracy_score(y_pred, y_test)<br><span class="hljs-built_in">print</span>(score)<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">0.86025
+</code></pre>
+<p>随机森林在树的生长上引入了更多的随机性: 分裂节点时不再是搜索最好的特征， 而是从随机特征子集中搜索最好的特征。</p>
+<p>这让随机森林有了更多的随机性。</p>
+<p>RandomForesetClassifier实际上就是DecisionTreeClassifier和BaggingClassifier的结合， 所以RandomForestClassifier有着他们两个都有的超参数。</p>
+<p>下面的代码和RandomForesetClassifier相同</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs python">bag_clf = BaggingClassifier(<br>    DecisionTreeClassifier(splitter=<span class="hljs-string">&quot;random&quot;</span>, max_leaf_nodes=<span class="hljs-number">16</span>),<br>    n_estimators=<span class="hljs-number">500</span>, n_jobs=-<span class="hljs-number">1</span>, max_samples=<span class="hljs-number">1.0</span>, bootstrap=<span class="hljs-literal">True</span><br>)<br>bag_clf.fit(X_train, y_train)<br><br>y_pred = bag_clf.predict(X_test)<br><br>score = accuracy_score(y_pred, y_test)<br><span class="hljs-built_in">print</span>(score)<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">0.86325
+</code></pre>
+<h2 id="3-1-极端随机树">3.1 极端随机树</h2>
+<p>前面我们提到，随机森林的树在生长过程中仅搜索随即特征子集中最好的特征。</p>
+<p>如果我们对每个特征使用随机阈值，而非最佳阈值， 这会使得生成的树更加随机。 这称为极端随机树。</p>
+<p>他的优点在于训练速度比较快。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.ensemble <span class="hljs-keyword">import</span> ExtraTreesClassifier<br><br>extra_tree_clf = ExtraTreesClassifier(n_estimators=<span class="hljs-number">500</span>, max_leaf_nodes=<span class="hljs-number">16</span>, n_jobs=-<span class="hljs-number">1</span>)<br>extra_tree_clf.fit(X_train, y_train)<br>y_pred = rnd_clf.predict(X_test)<br><br>score = accuracy_score(y_pred, y_test)<br><span class="hljs-built_in">print</span>(score)<br><br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">0.86025
+</code></pre>
+<h2 id="3-2-特征的重要性">3.2 特征的重要性</h2>
+<p>因为决策树在生成中，我们会根据选择特征减少的不纯度来作为特征的重要程度。 Scikit—Learn会在训练过程中自动计算这个分数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.datasets <span class="hljs-keyword">import</span> load_iris<br><br>iris = load_iris()<br>rnd_clf = RandomForestClassifier(n_estimators=<span class="hljs-number">500</span>, n_jobs=-<span class="hljs-number">1</span>)<br><br>rnd_clf.fit(iris.data, iris.target)<br><span class="hljs-keyword">for</span> name, score <span class="hljs-keyword">in</span> <span class="hljs-built_in">zip</span>(iris.feature_names, rnd_clf.feature_importances_):<br>    <span class="hljs-built_in">print</span>(name, score)<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">sepal length (cm) 0.1120508274488898
+sepal width (cm) 0.02723716394990809
+petal length (cm) 0.4383550535187236
+petal width (cm) 0.42235695508247856
+</code></pre>
+<p>可以看到, 在对鸢尾花进行分类的时候， 花蕊的宽度和长度重要性都有大于40%, 而花萼的重要性就没那么高了。</p>
+<h1>4. 提升法</h1>
+<p>提升法(boosting)是指将几个弱机器学习器结合成一个强学习器的任意集成方法。</p>
+<p>提升法的思路是循环训练预测器，每一次的训练都对前序预测其的修正。</p>
+<h2 id="4-1-AdaBoost">4.1 AdaBoost</h2>
+<p>AdaBoost的思路是，让每一次的训练都更关注前序模型欠拟合的实例。</p>
+<p>也就是说，每次前一个模型预测失败的实例，在下一次的训练中都会增加他的权重。</p>
+<p>而当所有模型训练完之后， 就类似Bagging的预测方法了， 所有分类器投票取最多票的类、或者虽有回归器预测取平均值。</p>
+<p>我们来看看AdaBoost具体的步骤:</p>
+<ol>
+<li>首先，将每个实例的权重平均分为1/m。</li>
+<li>开始对模型进行训练，然后计算模型在训练集上的错误率ϵ</li>
+<li>计算αj,j指第j个模型<p class="katex-block "><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>α</mi><mi>j</mi></msub><mo>=</mo><mi>η</mi><mfrac><mrow><mn>1</mn><mo>−</mo><msub><mi>ϵ</mi><mi>j</mi></msub></mrow><msub><mi>ϵ</mi><mi>j</mi></msub></mfrac></mrow><annotation encoding="application/x-tex">     \alpha_j = \eta\frac{1-\epsilon_j}{\epsilon_j}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7167em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0037em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.2935em;vertical-align:-0.9721em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">η</span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal">ϵ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord"><span class="mord mathnormal">ϵ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.9721em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></p>
+其中η是学习率</li>
+<li>更新训练集上每个实例的权重<p class="katex-block "><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msup><mi>w</mi><mi>i</mi></msup><mo>=</mo><mrow><mo fence="true">{</mo><mtable rowspacing="0.16em" columnalign="left left" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><msup><mi>w</mi><mi>i</mi></msup><mi>e</mi><mi>x</mi><mi>p</mi><mo stretchy="false">(</mo><mo>−</mo><msub><mi>α</mi><mi>j</mi></msub><mo stretchy="false">)</mo><mo separator="true">,</mo></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mtext>if </mtext><msubsup><mover accent="true"><mi>y</mi><mo>^</mo></mover><mi>j</mi><mi>i</mi></msubsup><mo>=</mo><mo>=</mo><msub><mi>y</mi><mi>i</mi></msub></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><msup><mi>w</mi><mi>i</mi></msup><mi>e</mi><mi>x</mi><mi>p</mi><mo stretchy="false">(</mo><msub><mi>α</mi><mi>j</mi></msub><mo stretchy="false">)</mo><mo separator="true">,</mo></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mtext>if </mtext><msubsup><mover accent="true"><mi>y</mi><mo>^</mo></mover><mi>j</mi><mi>i</mi></msubsup><mo stretchy="false">!</mo><mo>=</mo><msub><mi>y</mi><mi>i</mi></msub><mo>≥</mo><mn>0</mn></mrow></mstyle></mtd></mtr></mtable></mrow></mrow><annotation encoding="application/x-tex">     w^i = \left\{
+     \begin{array}{ll}
+       w^iexp(-\alpha_j), &amp; \text{if }  \hat{y}_j^i==y_i \\
+       w^iexp(\alpha_j), &amp; \text{if } \hat{y}_j^i != y_i \geq 0
+     \end{array}
+     \right. 
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8747em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8747em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.4695em;vertical-align:-0.9848em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size3">{</span></span><span class="mord"><span class="mtable"><span class="arraycolsep" style="width:0.5em;"></span><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.4848em;"><span style="top:-3.6448em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8247em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span></span></span></span></span><span class="mord mathnormal">e</span><span class="mord mathnormal">x</span><span class="mord mathnormal">p</span><span class="mopen">(</span><span class="mord">−</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0037em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mpunct">,</span></span></span><span style="top:-2.41em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8247em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span></span></span></span></span><span class="mord mathnormal">e</span><span class="mord mathnormal">x</span><span class="mord mathnormal">p</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0037em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mpunct">,</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.9848em;"><span></span></span></span></span></span><span class="arraycolsep" style="width:0.5em;"></span><span class="arraycolsep" style="width:0.5em;"></span><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.4848em;"><span style="top:-3.6448em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord text"><span class="mord">if </span></span><span class="mord"><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.6944em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1944em;"><span class="mord">^</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1944em;"><span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8247em;"><span style="top:-2.4413em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.3948em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">==</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-2.41em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord text"><span class="mord">if </span></span><span class="mord"><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.6944em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1944em;"><span class="mord">^</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1944em;"><span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8247em;"><span style="top:-2.4413em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.3948em;"><span></span></span></span></span></span></span><span class="mclose">!</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≥</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.9848em;"><span></span></span></span></span></span><span class="arraycolsep" style="width:0.5em;"></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></p>
+</li>
+<li>然后重复上234步骤， 对另一个模型继续训练</li>
+</ol>
+<p>当训练到所需数量的模型或得到完美的模型(即模型错误率为0)时, 停止算法。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.ensemble <span class="hljs-keyword">import</span> AdaBoostClassifier<br><br>ada_clf = AdaBoostClassifier(<br>    DecisionTreeClassifier(max_depth=<span class="hljs-number">1</span>), n_estimators=<span class="hljs-number">200</span>, algorithm=<span class="hljs-string">&quot;SAMME.R&quot;</span>, learning_rate=<span class="hljs-number">0.5</span><br>)<br>ada_clf.fit(X_train, y_train)<br>pred = ada_clf.predict(X_test)<br>score = accuracy_score(y_test, pred)<br><span class="hljs-built_in">print</span>(score)<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">/home/lukarzhang/anaconda3/envs/ml2/lib/python3.10/site-packages/sklearn/ensemble/_weight_boosting.py:519: FutureWarning: The SAMME.R algorithm (the default) is deprecated and will be removed in 1.6. Use the SAMME algorithm to circumvent this warning.
+  warnings.warn(
+
+
+0.861375
+</code></pre>
+<h2 id="4-2-梯度提升">4.2 梯度提升</h2>
+<p>另一种提升法是梯度提升， 他的思路是针对前序模型的残差进行拟合。</p>
+<p>我们用一个回归示例来说明。 首先训练一个回归树作为基础模型。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.tree <span class="hljs-keyword">import</span> DecisionTreeRegressor<br><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><br>np.random.seed(<span class="hljs-number">0</span>)<br>X = np.linspace(-<span class="hljs-number">5</span>, <span class="hljs-number">5</span>, <span class="hljs-number">100</span>)[:, np.newaxis]<br>y = <span class="hljs-number">2</span> * X**<span class="hljs-number">2</span> - <span class="hljs-number">3</span> * X + <span class="hljs-number">2</span> + np.random.normal(<span class="hljs-number">0</span>, <span class="hljs-number">5</span>, X.shape[<span class="hljs-number">0</span>])[:, np.newaxis]<br><span class="hljs-built_in">print</span>(y.shape)<br><br>tree1 = DecisionTreeRegressor(max_depth=<span class="hljs-number">2</span>)<br>tree1.fit(X, y)<br>y_pred1 = tree1.predict(X)<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">(100, 1)
+</code></pre>
+<p>接着我们训练第二个模型，X不变， y是来自tree1的残差， 就是预测值和实际值的差别。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs python">y2 = y - y_pred1[:, np.newaxis]<br><br>tree2 = DecisionTreeRegressor(max_depth=<span class="hljs-number">2</span>)<br>tree2.fit(X, y2)<br><br>y_pred2 = tree2.predict(X)<br><span class="hljs-built_in">print</span>(y2.shape)<br><span class="hljs-built_in">print</span>(y_pred2.shape)<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">(100, 1)
+(100,)
+</code></pre>
+<p>第三个模型同理</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs python">y3 = y2 - y_pred2[:, np.newaxis]<br><br>tree3 = DecisionTreeRegressor(max_depth=<span class="hljs-number">2</span>)<br>tree3.fit(X, y3)<br><br>y_pred3 = tree3.predict(X)<br><span class="hljs-built_in">print</span>(y3.shape)<br><span class="hljs-built_in">print</span>(y_pred3.shape)<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">(100, 1)
+(100,)
+</code></pre>
+<p>现在我们有3颗树了，可以进行预测了， 预测值是所有模型的预测值加起来</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python">X_new = [[<span class="hljs-number">2</span>]]<br>y_pred = <span class="hljs-built_in">sum</span>(tree.predict(X_new) <span class="hljs-keyword">for</span> tree <span class="hljs-keyword">in</span> (tree1, tree2, tree3))<br><span class="hljs-built_in">print</span>(y_pred)<br><span class="hljs-built_in">print</span>(<span class="hljs-number">2</span> * <span class="hljs-number">2</span>**<span class="hljs-number">2</span> - <span class="hljs-number">3</span> * <span class="hljs-number">2</span> + <span class="hljs-number">2</span>)<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">[-0.24522173]
+4
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">cum_pred_1_and_2 = y_pred1 + y_pred2<br>cum_pred_1_and_2_and_3 = y_pred1 + y_pred2 + y_pred3<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><code class="hljs python"><br><br><span class="hljs-comment"># 创建六个子图</span><br>fig, axes = plt.subplots(<span class="hljs-number">3</span>, <span class="hljs-number">2</span>, figsize=(<span class="hljs-number">14</span>, <span class="hljs-number">18</span>))<br><br><span class="hljs-comment"># 绘制原始数据和Tree 1的预测</span><br>axes[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>].scatter(X, y, color=<span class="hljs-string">&#x27;gray&#x27;</span>, label=<span class="hljs-string">&#x27;Actual data&#x27;</span>, alpha=<span class="hljs-number">0.6</span>)<br>axes[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>].plot(X, y_pred1, color=<span class="hljs-string">&#x27;blue&#x27;</span>, linestyle=<span class="hljs-string">&#x27;--&#x27;</span>)<br>axes[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>].set_title(<span class="hljs-string">&#x27;Tree 1 Prediction&#x27;</span>)<br>axes[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>].legend()<br><br><span class="hljs-comment"># 绘制原始数据和Tree 2的预测</span><br>axes[<span class="hljs-number">0</span>, <span class="hljs-number">1</span>].scatter(X, y, color=<span class="hljs-string">&#x27;gray&#x27;</span>, label=<span class="hljs-string">&#x27;Actual data&#x27;</span>, alpha=<span class="hljs-number">0.6</span>)<br>axes[<span class="hljs-number">0</span>, <span class="hljs-number">1</span>].plot(X, y_pred2, color=<span class="hljs-string">&#x27;red&#x27;</span>, linestyle=<span class="hljs-string">&#x27;--&#x27;</span>)<br>axes[<span class="hljs-number">0</span>, <span class="hljs-number">1</span>].set_title(<span class="hljs-string">&#x27;Tree 2 Prediction&#x27;</span>)<br>axes[<span class="hljs-number">0</span>, <span class="hljs-number">1</span>].legend()<br><br><span class="hljs-comment"># 绘制原始数据和Tree 3的预测</span><br>axes[<span class="hljs-number">1</span>, <span class="hljs-number">0</span>].scatter(X, y, color=<span class="hljs-string">&#x27;gray&#x27;</span>, label=<span class="hljs-string">&#x27;Actual data&#x27;</span>, alpha=<span class="hljs-number">0.6</span>)<br>axes[<span class="hljs-number">1</span>, <span class="hljs-number">0</span>].plot(X, y_pred3, color=<span class="hljs-string">&#x27;green&#x27;</span>, linestyle=<span class="hljs-string">&#x27;--&#x27;</span>)<br>axes[<span class="hljs-number">1</span>, <span class="hljs-number">0</span>].set_title(<span class="hljs-string">&#x27;Tree 3 Prediction&#x27;</span>)<br>axes[<span class="hljs-number">1</span>, <span class="hljs-number">0</span>].legend()<br><br><span class="hljs-comment"># 绘制原始数据和Tree 1 + Tree 2的累积预测</span><br>axes[<span class="hljs-number">1</span>, <span class="hljs-number">1</span>].scatter(X, y, color=<span class="hljs-string">&#x27;gray&#x27;</span>, label=<span class="hljs-string">&#x27;Actual data&#x27;</span>, alpha=<span class="hljs-number">0.6</span>)<br>axes[<span class="hljs-number">1</span>, <span class="hljs-number">1</span>].plot(X, cum_pred_1_and_2, color=<span class="hljs-string">&#x27;purple&#x27;</span>, linestyle=<span class="hljs-string">&#x27;-.&#x27;</span>)<br>axes[<span class="hljs-number">1</span>, <span class="hljs-number">1</span>].set_title(<span class="hljs-string">&#x27;Cumulative Prediction of Tree 1 and Tree 2&#x27;</span>)<br>axes[<span class="hljs-number">1</span>, <span class="hljs-number">1</span>].legend()<br><br><span class="hljs-comment"># 绘制原始数据和Tree 1 + Tree 2 + Tree 3的累积预测</span><br>axes[<span class="hljs-number">2</span>, <span class="hljs-number">0</span>].scatter(X, y, color=<span class="hljs-string">&#x27;gray&#x27;</span>, label=<span class="hljs-string">&#x27;Actual data&#x27;</span>, alpha=<span class="hljs-number">0.6</span>)<br>axes[<span class="hljs-number">2</span>, <span class="hljs-number">0</span>].plot(X, cum_pred_1_and_2_and_3, color=<span class="hljs-string">&#x27;orange&#x27;</span>, linestyle=<span class="hljs-string">&#x27;-&#x27;</span>)<br>axes[<span class="hljs-number">2</span>, <span class="hljs-number">0</span>].set_title(<span class="hljs-string">&#x27;Cumulative Prediction of Tree 1, Tree 2 and Tree 3&#x27;</span>)<br>axes[<span class="hljs-number">2</span>, <span class="hljs-number">0</span>].legend()<br><br><span class="hljs-comment"># 隐藏最后一个子图（空白）</span><br>axes[<span class="hljs-number">2</span>, <span class="hljs-number">1</span>].axis(<span class="hljs-string">&#x27;off&#x27;</span>)<br><br>plt.tight_layout()<br>plt.show()<br><br></code></pre></td></tr></table></figure>
+<p>​</p>
+
+<p>​</p>
+<p>我们刚刚对回归树进行了梯度提升， 这叫做梯度树提升或者是梯度提升回归树(GBRT)。</p>
+<p>在Scikit-learn里有现成的类 GradientBoostingRegressor</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.ensemble <span class="hljs-keyword">import</span> GradientBoostingRegressor<br><br>bgrt = GradientBoostingRegressor(max_depth=<span class="hljs-number">2</span>, n_estimators=<span class="hljs-number">10</span>, learning_rate=<span class="hljs-number">1.0</span>)  <span class="hljs-comment"># 修改n_estimator和learning_rate看看</span><br>bgrt.fit(X, y)<br><br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">/home/lukarzhang/anaconda3/envs/ml2/lib/python3.10/site-packages/sklearn/ensemble/_gb.py:668: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples, ), for example using ravel().
+  y = column_or_1d(y, warn=True)  # TODO: Is this still required?
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">plt.scatter(X, y, color=<span class="hljs-string">&#x27;gray&#x27;</span>, label=<span class="hljs-string">&#x27;Actual data&#x27;</span>, alpha=<span class="hljs-number">0.6</span>)<br>plt.plot(X, bgrt.predict(X), color=<span class="hljs-string">&#x27;blue&#x27;</span>, linestyle=<span class="hljs-string">&#x27;--&#x27;</span>)<br>plt.show()<br></code></pre></td></tr></table></figure>
+<p>​</p>
+
+<p>​</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">如果过拟合，可以降低回归树的数量或者学习率。如果欠拟合，则可以增大回归树的数量和学习率.<br><br>要找到最佳的回归树数量， 也可以用提前停止法。<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><span class="hljs-keyword">from</span> sklearn.model_selection <span class="hljs-keyword">import</span> train_test_split<br><span class="hljs-keyword">from</span> sklearn.metrics <span class="hljs-keyword">import</span> mean_squared_error<br><br>X_train, X_test, y_train, y_test = train_test_split(X, y)<br><br>gbrt = GradientBoostingRegressor(max_depth=<span class="hljs-number">2</span>, n_estimators=<span class="hljs-number">120</span>)<br>gbrt.fit(X_train, y_train)<br>errors = [mean_squared_error(y_test, y_pred) <span class="hljs-keyword">for</span> y_pred <span class="hljs-keyword">in</span> gbrt.staged_predict(X_test)]<br><br>best_n_estimator = np.argmin(errors) + <span class="hljs-number">1</span><br>gbrt_best = GradientBoostingRegressor(max_depth=<span class="hljs-number">2</span>, n_estimators=best_n_estimator)<br>gbrt_best.fit(X_train, y_train)<br><br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">/home/lukarzhang/anaconda3/envs/ml2/lib/python3.10/site-packages/sklearn/ensemble/_gb.py:668: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples, ), for example using ravel().
+  y = column_or_1d(y, warn=True)  # TODO: Is this still required?
+/home/lukarzhang/anaconda3/envs/ml2/lib/python3.10/site-packages/sklearn/ensemble/_gb.py:668: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples, ), for example using ravel().
+  y = column_or_1d(y, warn=True)  # TODO: Is this still required?
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-built_in">print</span>(best_n_estimator)<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">42
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">plt.scatter(X, y, color=<span class="hljs-string">&#x27;gray&#x27;</span>, label=<span class="hljs-string">&#x27;Actual data&#x27;</span>, alpha=<span class="hljs-number">0.6</span>)<br>plt.plot(X, gbrt_best.predict(X), color=<span class="hljs-string">&#x27;blue&#x27;</span>, linestyle=<span class="hljs-string">&#x27;--&#x27;</span>)<br>plt.show()<br></code></pre></td></tr></table></figure>
+<p>​</p>
+
+<p>​</p>
+<p>上面的代码中，我们是先把所有的数量都训练完，再找到了那个最好的数量。但实际上我们并不需要这么做。设置warm_start=True，在fit时会保留现有的树,从而允许增量训练。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs python">gbrt = GradientBoostingRegressor(max_depth=<span class="hljs-number">2</span>, warm_start=<span class="hljs-literal">True</span>)<br><br>min_val_error = <span class="hljs-built_in">float</span>(<span class="hljs-string">&quot;inf&quot;</span>)<br>error_going_up = <span class="hljs-number">0</span><br><span class="hljs-keyword">for</span> n_estimators <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, <span class="hljs-number">120</span>):<br>    gbrt.n_estimators = n_estimators<br>    gbrt.fit(X_train, y_train)<br>    y_pred = gbrt.predict(X_test)<br>    error = mean_squared_error(y_pred, y_test)<br>    <span class="hljs-keyword">if</span> error &lt; min_val_error:<br>        min_val_error = error<br>        error_going_up = <span class="hljs-number">0</span><br>    <span class="hljs-keyword">else</span>:<br>        error_going_up += <span class="hljs-number">1</span><br>        <span class="hljs-keyword">if</span> error_going_up == <span class="hljs-number">5</span>:<br>            <span class="hljs-keyword">break</span><br>best_n_estimators = gbrt.n_estimators<br><span class="hljs-built_in">print</span>(best_n_estimator)<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">42
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">plt.scatter(X, y, color=<span class="hljs-string">&#x27;gray&#x27;</span>, label=<span class="hljs-string">&#x27;Actual data&#x27;</span>, alpha=<span class="hljs-number">0.6</span>)<br>plt.plot(X, gbrt.predict(X), color=<span class="hljs-string">&#x27;blue&#x27;</span>, linestyle=<span class="hljs-string">&#x27;--&#x27;</span>)<br>plt.show()<br></code></pre></td></tr></table></figure>
+<p>​</p>
+
+<p>​</p>
+<p>还可以设置超参数subsample=0.25,  每个树会用25%的随机示例来训练。即用更高的偏差换取更低的方差，也能加速训练过程。</p>
+<h1>5.堆叠法</h1>
+<p>前面的集成方法，在最后几乎都是根据所有子模型的预测结果进行投票或取平均值。而堆叠法的思路，就是不手动进行这样的统计，而是直接训练一个模型来实现这样的统计。</p>
+<p>例如，我们现在有3个回归器。我们可以将三个回归器的预测 作为 一个新的回归器的输入，然后得到最终的预测结果。就像下面这样的。</p>
+
+<p>训练的常用的方法是使用留存集，我们看看是如何工作的。</p>
+<p>假设我们的堆叠法只有2层。我们将训练集分为两份， train1和train2。首先用train1对第一层的回归器进行训练， 然后用train2的数据在第一层的回归器上进行预测。</p>
+<p>然后我们将预测值作为第二层回归器的训练输入， train2的特征值作为训练输入来训练第二层的回归器。</p>
+<p>由于train2对于第一层的回归器是从未见过的， 所以在预测的时候是干净的，不担心会有偏差。</p>
+<p>不过ScikitLearn里没有现成的堆叠法的实现。</p>
+<h1>课后习题</h1>
+<h2 id="第八题">第八题</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.datasets <span class="hljs-keyword">import</span> fetch_openml<br><br>mnist = fetch_openml(<span class="hljs-string">&#x27;mnist_784&#x27;</span>, version=<span class="hljs-number">1</span>)<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">X, y = mnist.data, mnist.target<br>X_train, X_cv, X_test, y_train, y_cv, y_test = X[:<span class="hljs-number">50000</span>], X[<span class="hljs-number">50000</span>:<span class="hljs-number">60000</span>], X[<span class="hljs-number">60000</span>:], y[:<span class="hljs-number">50000</span>], y[<span class="hljs-number">50000</span>:<span class="hljs-number">60000</span>], y[<span class="hljs-number">60000</span>:]   <br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.ensemble <span class="hljs-keyword">import</span> RandomForestClassifier<br><br>rft_clf = RandomForestClassifier(n_estimators=<span class="hljs-number">500</span>, max_depth=<span class="hljs-number">8</span>, n_jobs=-<span class="hljs-number">1</span>)<br>rft_clf.fit(X_train, y_train)<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.model_selection <span class="hljs-keyword">import</span> cross_val_score<br><br>rnd_cv_accuracy = cross_val_score(rft_clf, X_cv, y_cv, cv=<span class="hljs-number">3</span>, scoring=<span class="hljs-string">&quot;accuracy&quot;</span>)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;random forest clf cv accuracy = &quot;</span>, rnd_cv_accuracy)<br>rnd_train_accuracy = cross_val_score(rft_clf, X_train, y_train, cv=<span class="hljs-number">3</span>, scoring=<span class="hljs-string">&quot;accuracy&quot;</span>)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;random forest clf test accuracy = &quot;</span>, rnd_cv_accuracy)<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">random forest clf cv accuracy =  [0.91091782 0.92229223 0.94239424]
+random forest clf test accuracy =  [0.91091782 0.92229223 0.94239424]
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.ensemble <span class="hljs-keyword">import</span> ExtraTreesClassifier<br><br>extra_tree_clf = ExtraTreesClassifier(n_estimators=<span class="hljs-number">500</span>, max_depth=<span class="hljs-number">10</span>, n_jobs=-<span class="hljs-number">1</span>)<br>extra_tree_clf.fit(X_train, y_train)<br><br>extra_tree_cv_accuracy = cross_val_score(extra_tree_clf, X_cv, y_cv, cv=<span class="hljs-number">3</span>, scoring=<span class="hljs-string">&quot;accuracy&quot;</span>)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;extra tree clf cv accuracy = &quot;</span>, extra_tree_cv_accuracy)<br><br>extra_tree_train_accuracy = cross_val_score(extra_tree_clf, X_train, y_train, cv=<span class="hljs-number">3</span>, scoring=<span class="hljs-string">&quot;accuracy&quot;</span>)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;extra tree clf train accuracy = &quot;</span>, extra_tree_train_accuracy)<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">extra tree clf cv accuracy =  [0.92291542 0.93129313 0.95409541]
+extra tree clf train accuracy =  [0.93670127 0.93418132 0.9375975 ]
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.svm <span class="hljs-keyword">import</span> SVC<br><br>svm_clf = SVC()<br>svm_clf.fit(X_train, y_train)<br><br>svm_accuracy = cross_val_score(svm_clf, X_cv, y_cv, cv=<span class="hljs-number">3</span>, scoring=<span class="hljs-string">&quot;accuracy&quot;</span>)<br><span class="hljs-built_in">print</span>(svm_accuracy)<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">[0.94691062 0.95049505 0.96849685]
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.linear_model <span class="hljs-keyword">import</span> SGDClassifier<br><br>sgd_clf = SGDClassifier()<br>sgd_clf.fit(X_train, y_train)<br><br>sgd_accuracy = cross_val_score(sgd_clf, X_cv, y_cv, cv=<span class="hljs-number">3</span>, scoring=<span class="hljs-string">&quot;accuracy&quot;</span>)<br><span class="hljs-built_in">print</span>(sgd_accuracy)<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">[0.87222555 0.87248725 0.9009901 ]
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.ensemble <span class="hljs-keyword">import</span> VotingClassifier<br><br>voting_clf = VotingClassifier(estimators=[(<span class="hljs-string">&quot;rft&quot;</span>, rft_clf), (<span class="hljs-string">&quot;extra&quot;</span>, extra_tree_clf), (<span class="hljs-string">&quot;sgd&quot;</span>, sgd_clf), (<span class="hljs-string">&quot;svm&quot;</span>, svm_clf)], voting=<span class="hljs-string">&#x27;hard&#x27;</span>)<br>voting_clf.fit(X_train, y_train)<br><br>voting_accuracy = cross_val_score(voting_clf, X_cv, y_cv, cv=<span class="hljs-number">3</span>, scoring=<span class="hljs-string">&quot;accuracy&quot;</span>)<br><span class="hljs-built_in">print</span>(voting_accuracy)<br><br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">[0.9325135  0.93639364 0.95469547]
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">voting_test_accuracy = cross_val_score(voting_clf, X_test, y_test, cv=<span class="hljs-number">3</span>, scoring=<span class="hljs-string">&quot;accuracy&quot;</span>)<br><span class="hljs-built_in">print</span>(voting_test_accuracy)<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">[0.91661668 0.93609361 0.95649565]
+</code></pre>
+<h2 id="第九题">第九题</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">rnd_pred = rft_clf.predict(X_train)<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">extra_pred = extra_tree_clf.predict(X_train)<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">svm_pred = svm_clf.predict(X_train)<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">sgd_pred = sgd_clf.predict(X_train)<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-built_in">print</span>(sgd_pred.shape)<br>new_input = np.vstack((rnd_pred, extra_pred, svm_pred, sgd_pred)).T<br><span class="hljs-built_in">print</span>(new_input.shape)<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">(50000,)
+(50000, 4)
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><br>packing_model = SVC()<br>packing_model.fit(new_input, y_train)<br><br>accuracy = cross_val_score(packing_model, new_input, y_train, cv=<span class="hljs-number">3</span>, scoring=<span class="hljs-string">&quot;accuracy&quot;</span>)<br><span class="hljs-built_in">print</span>(accuracy)<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">[0.98770025 0.98788024 0.98571943]
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python"><br></code></pre></td></tr></table></figure>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98-Scikit-Learn-Keras-TensorFlow/" class="category-chain-item">机器学习实战(Scikit-Learn, Keras,TensorFlow)</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>第七章-集成学习和随机森林</div>
+      <div>http://example.com/2024/05/12/机器学习实战-sklearn/RandomForest/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>lukazhang</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年5月12日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/05/15/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98-sklearn/reduceDimensionality/" title="第八章-降维">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">第八章-降维</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/05/06/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98-sklearn/SVM/" title="第五章-支持向量机SVM入门">
+                        <span class="hidden-mobile">第五章-支持向量机SVM入门</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

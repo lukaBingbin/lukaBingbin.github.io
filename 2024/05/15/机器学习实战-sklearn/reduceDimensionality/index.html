@@ -1,0 +1,1041 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="lukazhang">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="机器学习的问题可能会存在成百上千、甚至上万个特征。 这么多特征下，训练模型首先会速度变慢。并且如果我们想将数据可视化也无法做到。为了解决这些问题，就出现了降维的技术。 降维是值将多个特征值降低至较少的特征值。 例如，一辆汽车有长度和宽度两个特征。由于宽度受到政策的限制通常变化不大， 但是长度变化很大。 我们可以舍弃掉宽度特征，只保留长度特征，这样实现了从二维降低到一维。 再比如，一块地也有长度和宽">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第八章-降维">
+<meta property="og:url" content="http://example.com/2024/05/15/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98-sklearn/reduceDimensionality/index.html">
+<meta property="og:site_name" content="YOLO">
+<meta property="og:description" content="机器学习的问题可能会存在成百上千、甚至上万个特征。 这么多特征下，训练模型首先会速度变慢。并且如果我们想将数据可视化也无法做到。为了解决这些问题，就出现了降维的技术。 降维是值将多个特征值降低至较少的特征值。 例如，一辆汽车有长度和宽度两个特征。由于宽度受到政策的限制通常变化不大， 但是长度变化很大。 我们可以舍弃掉宽度特征，只保留长度特征，这样实现了从二维降低到一维。 再比如，一块地也有长度和宽">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-05-15T14:56:12.000Z">
+<meta property="article:modified_time" content="2024-05-15T15:19:19.967Z">
+<meta property="article:author" content="lukazhang">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>第八章-降维 - YOLO</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="第八章-降维"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-05-15 22:56" pubdate>
+          2024年5月15日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          34 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">第八章-降维</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>机器学习的问题可能会存在成百上千、甚至上万个特征。 这么多特征下，训练模型首先会速度变慢。并且如果我们想将数据可视化也无法做到。为了解决这些问题，就出现了降维的技术。</p>
+<p>降维是值将多个特征值降低至较少的特征值。</p>
+<p>例如，一辆汽车有长度和宽度两个特征。由于宽度受到政策的限制通常变化不大， 但是长度变化很大。 我们可以舍弃掉宽度特征，只保留长度特征，这样实现了从二维降低到一维。</p>
+<p>再比如，一块地也有长度和宽度两个特征，像下面这样的</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><span class="hljs-keyword">import</span> matplotlib.pyplot <span class="hljs-keyword">as</span> plt<br><br>X = np.linspace(<span class="hljs-number">0</span>, <span class="hljs-number">5</span>, <span class="hljs-number">100</span>)[:, np.newaxis]<br>y = X + np.random.normal(-<span class="hljs-number">0.1</span>, <span class="hljs-number">0.1</span>, X.shape[<span class="hljs-number">0</span>])[:, np.newaxis]<br><br>plt.scatter(X, y)<br>plt.xlabel(<span class="hljs-string">&quot;x1&quot;</span>)<br>plt.ylabel(<span class="hljs-string">&quot;x2&quot;</span>)<br>plt.show()<br></code></pre></td></tr></table></figure>
+<p>​</p>
+
+<p>​</p>
+<p>两个特征X1,X2 他们虽然在二维平面上，但是我们可以将数据映射到另一条轴上， 我们称为z轴。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python">plt.scatter(X, y)<br>plt.xlabel(<span class="hljs-string">&quot;x1&quot;</span>)<br>plt.ylabel(<span class="hljs-string">&quot;x2&quot;</span>)<br>plt.plot(X, X, color=<span class="hljs-string">&#x27;r&#x27;</span>, linestyle=<span class="hljs-string">&#x27;--&#x27;</span>, label=<span class="hljs-string">&#x27;Z&#x27;</span>)<br>plt.legend()<br>plt.show()<br></code></pre></td></tr></table></figure>
+<p>​</p>
+
+<p>​</p>
+<p>这样我们就把X1和X2两个特征降维到了z1一个特征。<br>
+降维注定会丢失一些信息， 但是他能够加速训练， 也能让我们将数据可视化。</p>
+<h1>1. 维度的诅咒</h1>
+<p>我们生活在三维世界中，我们能够看懂和想象出一维、二维、三维的图像， 但是却没办法想象出跟高纬度的图像。哪怕是四维，我们也无法想象出来。</p>
+<p>所以当特征很多时，我们想通过可视化来找到其中的规律是不现实的。</p>
+<h1>2. 降维的主要方法</h1>
+<h2 id="2-1-投影">2.1 投影</h2>
+<p>正如前面的将X1和X2特征投影到一条新的轴Z1上， 又或者是下面这个例子， 将一个三维的数据投影到一个二维的平面上从而达到降维的效果。这个方法我们称作投影。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> matplotlib.pyplot <span class="hljs-keyword">as</span> plt<br><span class="hljs-keyword">from</span> mpl_toolkits.mplot3d <span class="hljs-keyword">import</span> Axes3D<br><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><br><span class="hljs-comment"># 创建一个新的图像和三维坐标轴</span><br>fig = plt.figure()<br>ax = fig.add_subplot(<span class="hljs-number">111</span>, projection=<span class="hljs-string">&#x27;3d&#x27;</span>)<br><br><span class="hljs-comment"># 生成x和y的数据</span><br>x = np.random.uniform(-<span class="hljs-number">5</span>, <span class="hljs-number">5</span>, <span class="hljs-number">100</span>)<br>y = np.random.uniform(-<span class="hljs-number">5</span>, <span class="hljs-number">5</span>, <span class="hljs-number">100</span>)<br><br><span class="hljs-comment"># 定义平面z = x + y</span><br>z = x + y<br><br><span class="hljs-comment"># 在三维坐标轴上绘制散点图</span><br>ax.scatter(x, y, z, color=<span class="hljs-string">&#x27;r&#x27;</span>, label=<span class="hljs-string">&#x27;Scatter Points&#x27;</span>)<br><br><span class="hljs-comment"># 为平面生成网格数据</span><br>X = np.linspace(-<span class="hljs-number">5</span>, <span class="hljs-number">5</span>, <span class="hljs-number">100</span>)<br>Y = np.linspace(-<span class="hljs-number">5</span>, <span class="hljs-number">5</span>, <span class="hljs-number">100</span>)<br>X, Y = np.meshgrid(X, Y)<br>Z = X + Y<br><br><span class="hljs-comment"># 绘制平面</span><br>ax.plot_surface(X, Y, Z, alpha=<span class="hljs-number">0.5</span>, rstride=<span class="hljs-number">10</span>, cstride=<span class="hljs-number">10</span>, color=<span class="hljs-string">&#x27;b&#x27;</span>, label=<span class="hljs-string">&#x27;Plane z=x+y&#x27;</span>)<br><br><span class="hljs-comment"># 设置坐标轴标签</span><br>ax.set_xlabel(<span class="hljs-string">&#x27;X Coordinate&#x27;</span>)<br>ax.set_ylabel(<span class="hljs-string">&#x27;Y Coordinate&#x27;</span>)<br>ax.set_zlabel(<span class="hljs-string">&#x27;Z Coordinate&#x27;</span>)<br><br><span class="hljs-comment"># 添加图例</span><br>scatter_proxy = plt.Line2D([<span class="hljs-number">0</span>],[<span class="hljs-number">0</span>], linestyle=<span class="hljs-string">&quot;none&quot;</span>, c=<span class="hljs-string">&#x27;r&#x27;</span>, marker = <span class="hljs-string">&#x27;o&#x27;</span>)<br>plane_proxy = plt.Rectangle((<span class="hljs-number">0</span>, <span class="hljs-number">0</span>), <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, fc=<span class="hljs-string">&quot;b&quot;</span>, alpha=<span class="hljs-number">0.5</span>)<br>ax.legend([scatter_proxy, plane_proxy], [<span class="hljs-string">&#x27;Scatter Points&#x27;</span>, <span class="hljs-string">&#x27;Plane z=x+y&#x27;</span>], numpoints = <span class="hljs-number">1</span>)<br><br><span class="hljs-comment"># 显示图像</span><br>plt.show()<br><br></code></pre></td></tr></table></figure>
+<p>​</p>
+
+<p>​</p>
+<p>投影的思路就是数据在更低维度上， 例如二维平面投影后就在一维的直线上，三维空间投影后就在二维的平面上。</p>
+<p>不过投影不总是有用的。例如下面这个图像</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs python"><br><span class="hljs-comment"># 生成瑞士卷数据</span><br>t = <span class="hljs-number">1.5</span> * np.pi * (<span class="hljs-number">1</span> + <span class="hljs-number">2</span> * np.random.rand(<span class="hljs-number">1000</span>))  <span class="hljs-comment"># 参数t决定点沿螺旋的位置</span><br>x = t * np.cos(t)<br>y = t * np.sin(t)<br>z = <span class="hljs-number">21</span> * np.random.rand(<span class="hljs-number">1000</span>)  <span class="hljs-comment"># 高度值</span><br><br><span class="hljs-comment"># 创建图像和三维坐标轴</span><br>fig = plt.figure()<br>ax = fig.add_subplot(<span class="hljs-number">111</span>, projection=<span class="hljs-string">&#x27;3d&#x27;</span>)<br><br><span class="hljs-comment"># 绘制散点图</span><br>ax.scatter(x, y, z, c=t, cmap=<span class="hljs-string">&#x27;hsv&#x27;</span>)  <span class="hljs-comment"># 使用t值来映射颜色，提供视觉上的提示</span><br><br><span class="hljs-comment"># 设置坐标轴标签</span><br>ax.set_xlabel(<span class="hljs-string">&#x27;X Coordinate&#x27;</span>)<br>ax.set_ylabel(<span class="hljs-string">&#x27;Y Coordinate&#x27;</span>)<br>ax.set_zlabel(<span class="hljs-string">&#x27;Z Coordinate&#x27;</span>)<br><br><span class="hljs-comment"># 显示图像</span><br>plt.show()<br><br></code></pre></td></tr></table></figure>
+<p>​</p>
+
+<p>​</p>
+<p>这个三维图像是一个瑞士卷，所有的点不在一个平面上， 通过投影我们比较难得到想要的降维效果。这时候就可以用另一种方法叫做流形学习。</p>
+<h2 id="2-2-流形学习">2.2 流形学习</h2>
+<p>流行学习是假设在高维空间中，存在一个低维的曲面，使得所有数据都在该曲面上。</p>
+<p>就像上面的瑞士卷形状的数据一样， 他们其实也算是在同一平面， 只不过这个平面被弯曲了，成了一个曲面。而流形学习就是要找到这个曲面，然后将他平铺开作为一个平面展示。</p>
+<h1>3. PCA</h1>
+<p>主成成分分析(PCA)是最流行的一种降维算法， 他识别最靠近数据的超平面，然后将数据投影到该平面上。</p>
+<h2 id="3-1-保留差异性">3.1 保留差异性</h2>
+<p>PCA在投影前，要找到最靠近数据的超平面。 而这个超平面要尽量保证投影后数据的差异性，从而使得丢失的信息最少。</p>
+<p>例如下面我们将一组二维平面降维到一维直线中， 数据投影在不同直线后，有着不同的分布。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><span class="hljs-keyword">import</span> matplotlib.pyplot <span class="hljs-keyword">as</span> plt<br><br><span class="hljs-comment"># line: Ax+By+C=0</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">plot_projection</span>(<span class="hljs-params">X, y, line_A, line_B, line_C</span>):<br><br>    projection_x, projection_y = compute_projection(X, y, line_A, line_B, line_C)<br>    <br>    <span class="hljs-comment"># 绘制原始散点图</span><br>    plt.figure(figsize=(<span class="hljs-number">12</span>, <span class="hljs-number">6</span>))<br>    plt.subplot(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">1</span>)<br>    plt.scatter(X, y, alpha=<span class="hljs-number">0.6</span>)<br>    plt.xlim(<span class="hljs-number">0</span>,<span class="hljs-number">5</span>)<br>    plt.ylim(<span class="hljs-number">0</span>,<span class="hljs-number">5</span>)<br>    line_x = np.linspace(<span class="hljs-number">0</span>, <span class="hljs-number">5</span>, <span class="hljs-number">100</span>)<br>    line_y = (-line_A / line_B) * line_x - (line_C / line_B)<br>    plt.plot(line_x, line_y)<br>    plt.title(<span class="hljs-string">&quot;Original Scatter Plot and Line Direction&quot;</span>)<br>    plt.axis(<span class="hljs-string">&#x27;equal&#x27;</span>)<br>    <br>    <span class="hljs-comment"># 绘制投影点</span><br>    plt.subplot(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">2</span>)<br>    plt.scatter(projection_x,projection_y, color=<span class="hljs-string">&#x27;green&#x27;</span>)<br>    plt.plot(line_x, line_y)<br>    plt.title(<span class="hljs-string">&quot;Projection Points on Line&quot;</span>)<br>    plt.axis(<span class="hljs-string">&#x27;equal&#x27;</span>)<br>    <br>    plt.show()<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">compute_projection</span>(<span class="hljs-params">X, y, A, B, C</span>):<br>    projection_x = (B**<span class="hljs-number">2</span> * X - A*(B*y+C)) / (A**<span class="hljs-number">2</span> + B**<span class="hljs-number">2</span>)<br>    projection_y = (A**<span class="hljs-number">2</span> * y - B*(A*X+C)) / (A**<span class="hljs-number">2</span> + B**<span class="hljs-number">2</span>)<br>    <span class="hljs-keyword">return</span> projection_x, projection_y<br><br><span class="hljs-comment"># 示例使用</span><br>X = np.linspace(<span class="hljs-number">2</span>, <span class="hljs-number">4</span>, <span class="hljs-number">100</span>)[:, np.newaxis]<br>y = X + np.random.normal(-<span class="hljs-number">0.1</span>, <span class="hljs-number">0.1</span>, X.shape[<span class="hljs-number">0</span>])[:, np.newaxis]<br>line_A = <span class="hljs-number">1</span><br>line_B = -<span class="hljs-number">1</span><br>line_C = <span class="hljs-number">0</span><br>plot_projection(X, y, line_A, line_B, line_C)<br><br>line_A = <span class="hljs-number">1</span><br>line_B = <span class="hljs-number">1</span><br>line_C = -<span class="hljs-number">5</span><br>plot_projection(X, y, line_A, line_B, line_C)<br><br>line_A = <span class="hljs-number">0</span><br>line_B = <span class="hljs-number">1</span><br>line_C = -<span class="hljs-number">3</span><br>plot_projection(X, y, line_A, line_B, line_C)<br><br></code></pre></td></tr></table></figure>
+<p>​</p>
+
+<p>​</p>
+
+
+<p>其中 y=x这条线上保留了最大的差异性， 而其他直线的差异性比较小， 丢失的信息也比较多。</p>
+<p>差异性也可以通过计算投影点的方差， 方差越大差异性越大， 保留的信息也就越多， 降维的效果就越好。</p>
+<p>PCA的思想正是要保留最大的差异性。</p>
+<h2 id="3-2-主要成分">3.2 主要成分</h2>
+<p>有了目标，我们就要看哪条轴对差异性的贡献最大了。主成分分析就可以做到这一点。</p>
+<p>主成分就是我们找到的z轴，使得数据点在该轴的投影上方差最大。</p>
+<p>主要成分(PC)和数据的维度相同， 有多少维度的数据就有多少个PC。</p>
+<p>在上面的例子中，y=x是第一个主要成分C1, 而第二个主要成分是垂直于C1的轴， 也就是y=-x这条轴。</p>
+<p>找到主成分主要是通过 奇异值分解(SVD)的标准矩阵分解技术，他将训练集矩阵X分解为三个矩阵的乘法 U∑V^T, 其中V包含定义所有主要成分的单位向量。</p>
+<p class="katex-block "><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>V</mi><mo>=</mo><mrow><mo fence="true">[</mo><mtable rowspacing="0.16em" columnalign="center center center center" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi>c</mi><mn>1</mn></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi>c</mi><mn>2</mn></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi>c</mi><mi>n</mi></mrow></mstyle></mtd></mtr></mtable><mo fence="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">V = \begin{bmatrix}c1 &amp; c2 &amp; ... &amp; cn\end{bmatrix}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.2em;vertical-align:-0.35em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size1">[</span></span><span class="mord"><span class="mtable"><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.85em;"><span style="top:-3.01em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">c</span><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.35em;"><span></span></span></span></span></span><span class="arraycolsep" style="width:0.5em;"></span><span class="arraycolsep" style="width:0.5em;"></span><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.85em;"><span style="top:-3.01em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">c</span><span class="mord">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.35em;"><span></span></span></span></span></span><span class="arraycolsep" style="width:0.5em;"></span><span class="arraycolsep" style="width:0.5em;"></span><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.85em;"><span style="top:-3.01em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">...</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.35em;"><span></span></span></span></span></span><span class="arraycolsep" style="width:0.5em;"></span><span class="arraycolsep" style="width:0.5em;"></span><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.85em;"><span style="top:-3.01em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">c</span><span class="mord mathnormal">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.35em;"><span></span></span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size1">]</span></span></span></span></span></span></span></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python">points = np.hstack((X, y))<br>points_centered = points - points.mean(axis=<span class="hljs-number">0</span>)<br>U, s, Vt = np.linalg.svd(points_centered)<br>c1 = Vt.T[:, <span class="hljs-number">0</span>]<br>c2 = Vt.T[:, <span class="hljs-number">1</span>]<br><span class="hljs-built_in">print</span>(c1)<br><span class="hljs-built_in">print</span>(c2)<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">[0.69546749 0.71855757]
+[-0.71855757  0.69546749]
+</code></pre>
+<p>用numpy的svd, 可以计算出V矩阵, 也就可以得到主成分。其中第二行是因为， PCA假定数据集以原点为中心， 所以自己实现的时候需要先把数据进行中心化处理。</p>
+<h2 id="3-3-向下投影到d维度">3.3  向下投影到d维度</h2>
+<p>一旦确定了所有的主要成分， 就可以将数据投影到前d个主要成分的超平面上， 实现维度降低到d维。</p>
+<p>这个过程是将数据X和W_d矩阵相乘， W_d是包含V的前d列的矩阵</p>
+<p class="katex-block "><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>X</mi><mrow><mi>d</mi><mo>−</mo><mi>p</mi><mi>r</mi><mi>o</mi><mi>j</mi></mrow></msub><mo>=</mo><mi>X</mi><msub><mi>W</mi><mi>d</mi></msub></mrow><annotation encoding="application/x-tex">X_{d-proj} = X W_d
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">d</span><span class="mbin mtight">−</span><span class="mord mathnormal mtight">p</span><span class="mord mathnormal mtight">ro</span><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">d</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">w1 = Vt.T[:, :<span class="hljs-number">1</span>]<br>points1D = points_centered.dot(w1)<br><span class="hljs-built_in">print</span>(points1D)<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">[[-1.48326165]
+ [-1.41884047]
+ [-1.38313432]
+ [-1.45712723]
+ [-1.40401192]
+ [-1.31690063]
+ [-1.32555297]
+ [-1.33082815]
+ [-1.21042828]
+ [-1.01529451]
+ [-1.23760686]
+ [-1.10598242]
+ [-1.08532037]
+ [-0.8820063 ]
+ [-1.04816785]
+ [-0.96690692]
+ [-0.80414482]
+ [-0.94916383]
+ [-0.86917125]
+ [-0.85151552]
+ [-0.75856385]
+ [-0.76205093]
+ [-0.73892301]
+ [-0.77435131]
+ [-0.803812  ]
+ [-0.7561659 ]
+ [-0.71081666]
+ [-0.68497445]
+ [-0.51883083]
+ [-0.49341611]
+ [-0.59405268]
+ [-0.53957659]
+ [-0.56042956]
+ [-0.43894476]
+ [-0.51682686]
+ [-0.42034477]
+ [-0.32228645]
+ [-0.41688872]
+ [-0.20486901]
+ [-0.45918721]
+ [-0.23079472]
+ [-0.12772432]
+ [-0.25892757]
+ [-0.2853969 ]
+ [-0.18443896]
+ [-0.21453448]
+ [-0.06437869]
+ [-0.08930562]
+ [-0.0170033 ]
+ [ 0.07136031]
+ [ 0.04862305]
+ [-0.0469164 ]
+ [-0.03299674]
+ [ 0.09158094]
+ [ 0.12494988]
+ [ 0.21219802]
+ [ 0.10796682]
+ [ 0.26734595]
+ [ 0.27584612]
+ [ 0.32464418]
+ [ 0.258462  ]
+ [ 0.31901215]
+ [ 0.36757925]
+ [ 0.42903791]
+ [ 0.49360183]
+ [ 0.5293314 ]
+ [ 0.48094083]
+ [ 0.54810151]
+ [ 0.62313079]
+ [ 0.53860938]
+ [ 0.68159519]
+ [ 0.71588493]
+ [ 0.57501804]
+ [ 0.62464984]
+ [ 0.60977248]
+ [ 0.81179619]
+ [ 0.73417277]
+ [ 0.80355872]
+ [ 0.80504371]
+ [ 0.77063912]
+ [ 0.78367039]
+ [ 0.92419963]
+ [ 0.99955088]
+ [ 0.99524088]
+ [ 1.0813939 ]
+ [ 0.96354128]
+ [ 1.04739632]
+ [ 0.99414529]
+ [ 1.02157461]
+ [ 1.08323078]
+ [ 1.25639644]
+ [ 1.20506189]
+ [ 1.24694803]
+ [ 1.29098373]
+ [ 1.20134628]
+ [ 1.3011106 ]
+ [ 1.3390972 ]
+ [ 1.4625271 ]
+ [ 1.29845898]
+ [ 1.43276807]]
+</code></pre>
+<h2 id="使用Scikit-Learn">使用Scikit-Learn</h2>
+<p>Scikit-Learn中的PCA也是用SVD来对数据进行降维, 并且会自动处理中心化。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.decomposition <span class="hljs-keyword">import</span> PCA<br><br>pca = PCA(n_components=<span class="hljs-number">1</span>)<br>points1D = pca.fit_transform(points)<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-built_in">print</span>(points1D)<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">[[ 1.48326165]
+ [ 1.41884047]
+ [ 1.38313432]
+ [ 1.45712723]
+ [ 1.40401192]
+ [ 1.31690063]
+ [ 1.32555297]
+ [ 1.33082815]
+ [ 1.21042828]
+ [ 1.01529451]
+ [ 1.23760686]
+ [ 1.10598242]
+ [ 1.08532037]
+ [ 0.8820063 ]
+ [ 1.04816785]
+ [ 0.96690692]
+ [ 0.80414482]
+ [ 0.94916383]
+ [ 0.86917125]
+ [ 0.85151552]
+ [ 0.75856385]
+ [ 0.76205093]
+ [ 0.73892301]
+ [ 0.77435131]
+ [ 0.803812  ]
+ [ 0.7561659 ]
+ [ 0.71081666]
+ [ 0.68497445]
+ [ 0.51883083]
+ [ 0.49341611]
+ [ 0.59405268]
+ [ 0.53957659]
+ [ 0.56042956]
+ [ 0.43894476]
+ [ 0.51682686]
+ [ 0.42034477]
+ [ 0.32228645]
+ [ 0.41688872]
+ [ 0.20486901]
+ [ 0.45918721]
+ [ 0.23079472]
+ [ 0.12772432]
+ [ 0.25892757]
+ [ 0.2853969 ]
+ [ 0.18443896]
+ [ 0.21453448]
+ [ 0.06437869]
+ [ 0.08930562]
+ [ 0.0170033 ]
+ [-0.07136031]
+ [-0.04862305]
+ [ 0.0469164 ]
+ [ 0.03299674]
+ [-0.09158094]
+ [-0.12494988]
+ [-0.21219802]
+ [-0.10796682]
+ [-0.26734595]
+ [-0.27584612]
+ [-0.32464418]
+ [-0.258462  ]
+ [-0.31901215]
+ [-0.36757925]
+ [-0.42903791]
+ [-0.49360183]
+ [-0.5293314 ]
+ [-0.48094083]
+ [-0.54810151]
+ [-0.62313079]
+ [-0.53860938]
+ [-0.68159519]
+ [-0.71588493]
+ [-0.57501804]
+ [-0.62464984]
+ [-0.60977248]
+ [-0.81179619]
+ [-0.73417277]
+ [-0.80355872]
+ [-0.80504371]
+ [-0.77063912]
+ [-0.78367039]
+ [-0.92419963]
+ [-0.99955088]
+ [-0.99524088]
+ [-1.0813939 ]
+ [-0.96354128]
+ [-1.04739632]
+ [-0.99414529]
+ [-1.02157461]
+ [-1.08323078]
+ [-1.25639644]
+ [-1.20506189]
+ [-1.24694803]
+ [-1.29098373]
+ [-1.20134628]
+ [-1.3011106 ]
+ [-1.3390972 ]
+ [-1.4625271 ]
+ [-1.29845898]
+ [-1.43276807]]
+</code></pre>
+<h2 id="3-5-可解释方差比">3.5 可解释方差比</h2>
+<p>每个主成分都有一个可解释方差比，这个值表示沿每个成分的数据集方差的比率。即投影到成分上的方差和原数据的方差的比例。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">pca.explained_variance_ratio_<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">array([0.99365167])
+</code></pre>
+<h2 id="3-6-选择正确的维度">3.6 选择正确的维度</h2>
+<p>如果你降维的目的是为了加快训练， 而不是可视化数据，那么就没有必要非把数据降维到2维或3维。不如选择相加足够大的方差部分(例如95%)， 就是说前d维的方差比加起来以及能达到95%， 那么就降维到d维即可。<br>
+你可以先用PCA计算， 然后找到方差比相加大于1的维度， 取这个维度来重新降维</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python">pca = PCA()<br>pca.fit(X_train)    <span class="hljs-comment"># 假设这里的X_train是一个高维的数据</span><br>cumsum = np.cumsum(pca.explained_variance_ratio_)<br>d = np.argmax(cumsum &gt;= <span class="hljs-number">0.95</span>) + <span class="hljs-number">1</span><br>pca = PCA(n_components=d)<br></code></pre></td></tr></table></figure>
+<p>或者直接在定义PCA的时候，将n_components设置一个0-1的浮点数，表示要保留的方差率。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">pca = PCA(n_components=<span class="hljs-number">0.95</span>)<br>pca.fit_transform(X_train)<br></code></pre></td></tr></table></figure>
+<h2 id="3-7-PCA压缩">3.7 PCA压缩</h2>
+<p>如果将PCA应用于MNIST数据集，同时保留95%的方差，会发现降维后的数据集只有原始大小的20%不到。</p>
+<p>但是PCA因为丢失了一些信息， 想要从PCA逆变换回原来的数据是不可能的，因为过程有信息丢失， 只能给你接近原始数据。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.datasets <span class="hljs-keyword">import</span> fetch_openml<br><br>mnist = fetch_openml(<span class="hljs-string">&#x27;mnist_784&#x27;</span>, version=<span class="hljs-number">1</span>)<br>X = mnist[<span class="hljs-string">&#x27;data&#x27;</span>]<br>y = mnist[<span class="hljs-string">&#x27;target&#x27;</span>]<br><br>pca = PCA(n_components=<span class="hljs-number">154</span>)<br>X_reduced = pca.fit_transform(X)<br>X_recovered = pca.inverse_transform(X_reduced)<br><br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> matplotlib <span class="hljs-keyword">as</span> mpl<br><span class="hljs-keyword">import</span> matplotlib.pyplot <span class="hljs-keyword">as</span> plt<br><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><br>some_digit = X.iloc[<span class="hljs-number">0</span>].to_numpy()<br>some_digit_image = some_digit.reshape(<span class="hljs-number">28</span>, <span class="hljs-number">28</span>)<br><br>plt.imshow(some_digit_image, cmap=<span class="hljs-string">&quot;binary&quot;</span>)<br>plt.axis(<span class="hljs-string">&quot;off&quot;</span>)<br>plt.show()<br><br>some_digit_recovered = X_recovered[<span class="hljs-number">0</span>]<br>some_digit_recovered_image = some_digit_recovered.reshape(<span class="hljs-number">28</span>, <span class="hljs-number">28</span>)<br>plt.imshow(some_digit_recovered_image, cmap=<span class="hljs-string">&#x27;binary&#x27;</span>)<br>plt.axis(<span class="hljs-string">&quot;off&quot;</span>)<br>plt.show()<br></code></pre></td></tr></table></figure>
+<p>​</p>
+
+<p>​</p>
+
+<h2 id="3-8-随机PCA">3.8 随机PCA</h2>
+<p>如何pca的超参数svd_solver设置为randomized, 那么Scikit-Learn会使用一种randomized的PCA算法，用于快速找到前d个主成分的<strong>近似值</strong>。</p>
+<p>他的时间复杂度是O(m * d²) + O(d³)， 而完全PCA的时间复杂度是O(m * n²) + o(n³)</p>
+<p>当d远远小于n的时候， 随机PCA的速度会更快。</p>
+<p>PCA的svd_solver默认值是auto,  当m或n大于500 且 d小于m或n的80%的时候， 就会使用随机PCA。</p>
+<p>要强制使用完全PCA，则可以设置为&quot;full&quot;</p>
+<h2 id="3-9-增量PCA">3.9 增量PCA</h2>
+<p>前面的PCA需要把整个数据集放入内存中运行。但是又增量PCA算法，允许你将数据分批送进算法中。这对于大型训练集和在线训练集(可能有新的特征加入)时很有用。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.decomposition <span class="hljs-keyword">import</span> IncrementalPCA<br><br>n_batches = <span class="hljs-number">100</span><br>inc_pca = IncrementalPCA(n_components=<span class="hljs-number">154</span>)<br><span class="hljs-keyword">for</span> X_batch <span class="hljs-keyword">in</span> np.array_split(X, n_batches):<br>    inc_pca.partial_fit(X_batch)<br><br>X_reduced = inc_pca.transform(X)<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">/home/lukarzhang/anaconda3/envs/ml2/lib/python3.10/site-packages/numpy/core/fromnumeric.py:59: FutureWarning: 'DataFrame.swapaxes' is deprecated and will be removed in a future version. Please use 'DataFrame.transpose' instead.
+  return bound(*args, **kwds)
+</code></pre>
+<h1>4. 内核PCA</h1>
+<p>在支持向量机的时候，我们提到了内核函数。 他通过将数据集隐形的映射到一个高维空间(称为特征空间)，从而在高维空间中使数据可线性分离， 然后这条线对应于低维空间中复杂的决策边界。</p>
+<p>前面的PCA能够解决线性的数据， 对于想瑞士卷这样的流形数据，我们也可以使用内核PCA来进行降维。下面是用了三种不同的内核对瑞士卷进行降维后的结果。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.decomposition <span class="hljs-keyword">import</span> KernelPCA<br><br>t = <span class="hljs-number">1.5</span> * np.pi * (<span class="hljs-number">1</span> + <span class="hljs-number">2</span> * np.random.rand(<span class="hljs-number">1000</span>))  <span class="hljs-comment"># 参数t决定点沿螺旋的位置</span><br>x = t * np.cos(t)<br>y = t * np.sin(t)<br>z = <span class="hljs-number">21</span> * np.random.rand(<span class="hljs-number">1000</span>)  <span class="hljs-comment"># 高度值</span><br>swissRoll = np.column_stack((x, y, z))<br>rbf_pca = KernelPCA(n_components = <span class="hljs-number">2</span>, kernel=<span class="hljs-string">&#x27;rbf&#x27;</span>, gamma=<span class="hljs-number">0.4</span>)<br>z_rbf= rbf_pca.fit_transform(swissRoll)<br><br>plt.scatter(z_rbf[:,<span class="hljs-number">0</span>], z_rbf[:,<span class="hljs-number">1</span>])<br>plt.show()<br><br></code></pre></td></tr></table></figure>
+<p>​</p>
+
+<p>​</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python">linear_pca = KernelPCA(n_components=<span class="hljs-number">2</span>, kernel=<span class="hljs-string">&quot;linear&quot;</span>)<br>z_linear = linear_pca.fit_transform(swissRoll)<br>plt.scatter(z_linear[:,<span class="hljs-number">0</span>], z_linear[:,<span class="hljs-number">1</span>])<br>plt.show()<br></code></pre></td></tr></table></figure>
+<p>​</p>
+
+<p>​</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python">sigmoid_pca = KernelPCA(n_components=<span class="hljs-number">2</span>, kernel=<span class="hljs-string">&quot;sigmoid&quot;</span>, gamma=<span class="hljs-number">0.001</span>)<br>z_sigmoid = sigmoid_pca.fit_transform(swissRoll)<br>plt.scatter(z_sigmoid[:,<span class="hljs-number">0</span>], z_sigmoid[:,<span class="hljs-number">1</span>])<br>plt.show()<br></code></pre></td></tr></table></figure>
+<p>​</p>
+
+<p>​</p>
+<h2 id="4-1-选择合适的内核和超参数">4.1 选择合适的内核和超参数</h2>
+<p>由于内核PCA是一个无监督的算法，无法直接评估他的性能。不过PCA算法通常是用于监督性学习的数据准备，所以我们可以通过降维后监督型学习的表现来选择合适的内核。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs python"><br><span class="hljs-comment"># 生成数据</span><br>t = <span class="hljs-number">1.5</span> * np.pi * (<span class="hljs-number">1</span> + <span class="hljs-number">2</span> * np.random.rand(<span class="hljs-number">1000</span>))<br>x = t * np.cos(t)<br>y = t * np.sin(t)<br>z = <span class="hljs-number">21</span> * np.random.rand(<span class="hljs-number">1000</span>)<br>X = np.vstack((x, y, z)).T<br><br><span class="hljs-comment"># 创建类别标签</span><br>labels = np.digitize(t, bins=[np.pi, <span class="hljs-number">3</span> * np.pi, <span class="hljs-number">4.5</span> * np.pi])<br><br><span class="hljs-comment"># 可视化原始数据</span><br>fig = plt.figure()<br>ax = fig.add_subplot(<span class="hljs-number">111</span>, projection=<span class="hljs-string">&#x27;3d&#x27;</span>)<br>scatter = ax.scatter(x, y, z, c=labels, cmap=plt.cm.viridis)<br>legend1 = ax.legend(*scatter.legend_elements(), title=<span class="hljs-string">&quot;Classes&quot;</span>)<br>ax.add_artist(legend1)<br>plt.title(<span class="hljs-string">&quot;Swiss Roll with Class Labels&quot;</span>)<br>plt.show()<br></code></pre></td></tr></table></figure>
+<p>​</p>
+
+<p>​</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.model_selection <span class="hljs-keyword">import</span> GridSearchCV<br><span class="hljs-keyword">from</span> sklearn.linear_model <span class="hljs-keyword">import</span> LogisticRegression<br><span class="hljs-keyword">from</span> sklearn.pipeline <span class="hljs-keyword">import</span> Pipeline<br><br>clf = Pipeline([<br>    (<span class="hljs-string">&quot;pca&quot;</span>, KernelPCA(n_components=<span class="hljs-number">2</span>)),<br>    (<span class="hljs-string">&quot;log_reg&quot;</span>, LogisticRegression())<br>])<br><br>param_grid = [<br>    &#123;<br>        <span class="hljs-string">&quot;pca__gamma&quot;</span>: np.linspace(<span class="hljs-number">0.03</span>, <span class="hljs-number">0.05</span>, <span class="hljs-number">10</span>),<br>        <span class="hljs-string">&quot;pca__kernel&quot;</span>: [<span class="hljs-string">&quot;rbf&quot;</span>, <span class="hljs-string">&quot;sigmoid&quot;</span>]<br>    &#125;<br>]<br>grid_search = GridSearchCV(clf, param_grid, cv=<span class="hljs-number">3</span>)<br>grid_search.fit(X, labels)<br><br><span class="hljs-built_in">print</span>(grid_search.best_params_)<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">&#123;'pca__gamma': 0.05, 'pca__kernel': 'sigmoid'&#125;
+</code></pre>
+<p>另一种选择内核和超参数的方法是， 降维后尝试重建数据， 重建后的数据与原数据差别最小的， 就是最优的内核和超参数。</p>
+<p>注意要把fit_inverse_transform设置为True。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python">rbf_pca = KernelPCA(n_components=<span class="hljs-number">2</span>, kernel=<span class="hljs-string">&quot;rbf&quot;</span>, gamma=<span class="hljs-number">0.0433</span>, fit_inverse_transform=<span class="hljs-literal">True</span>)<br><br>X_reduced = rbf_pca.fit_transform(X)<br>X_preimage = rbf_pca.inverse_transform(X_reduced)<br><br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.metrics <span class="hljs-keyword">import</span> mean_squared_error<br>mean_squared_error(X, X_preimage)<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">31.57470939801337
+</code></pre>
+<p>现在就可以用网格搜索找到使整个误差最小的内核和超参数了。</p>
+<h1>课后习题</h1>
+<p>第九题</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.datasets <span class="hljs-keyword">import</span> fetch_openml<br><br>mnist = fetch_openml(<span class="hljs-string">&#x27;mnist_784&#x27;</span>, version=<span class="hljs-number">1</span>)<br>X = mnist[<span class="hljs-string">&#x27;data&#x27;</span>]<br>y = mnist[<span class="hljs-string">&#x27;target&#x27;</span>]<br><br>X_train, X_test, y_train, y_test = X[:<span class="hljs-number">60000</span>], X[<span class="hljs-number">60000</span>:], y[:<span class="hljs-number">60000</span>], y[<span class="hljs-number">60000</span>:]<br><br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.ensemble <span class="hljs-keyword">import</span> RandomForestClassifier<br><span class="hljs-keyword">import</span> time<br><br>rfc_clf = RandomForestClassifier()<br>start_time = time.time()<br>rfc_clf.fit(X_train,y_train)<br>end_time = time.time()<br>cost_time = (end_time - start_time) * <span class="hljs-number">1000</span><br><span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;cost time = <span class="hljs-subst">&#123;cost_time&#125;</span>ms&quot;</span>)<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">cost time = 39134.92226600647ms
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.model_selection <span class="hljs-keyword">import</span> cross_val_score<br><br>score = cross_val_score(rfc_clf, X_test, y_test, cv=<span class="hljs-number">3</span>)<br><span class="hljs-built_in">print</span>(score)<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">[0.9145171  0.93849385 0.95469547]
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.decomposition <span class="hljs-keyword">import</span> PCA<br><br>pca = PCA(n_components=<span class="hljs-number">0.95</span>)<br>rfc_clf_with_pca = RandomForestClassifier()<br>X_train_with_pca = pca.fit_transform(X_train)<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">cost time = 84141.62182807922ms
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python">start_time = time.time()<br>rfc_clf_with_pca.fit(X_train_with_pca, y_train)<br>end_time = time.time()<br>cost_time = (end_time - start_time) * <span class="hljs-number">1000</span><br><span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;cost time = <span class="hljs-subst">&#123;cost_time&#125;</span>ms&quot;</span>)<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">cost time = 86913.21682929993ms
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">X_test_with_pca = pca.fit_transform(X_test)<br>score = cross_val_score(rfc_clf_with_pca, X_test_with_pca, y_test, cv=<span class="hljs-number">3</span>)<br><span class="hljs-built_in">print</span>(score)<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">[0.87972406 0.90969097 0.92109211]
+</code></pre>
+<p>在使用随机森林来训练MNIST数据集的时候，PCA降维后反而增加了训练时间，并且准确度也有所降低。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-built_in">print</span>(<span class="hljs-built_in">len</span>(rfc_clf.estimators_))<br><span class="hljs-built_in">print</span>(<span class="hljs-built_in">len</span>(rfc_clf_with_pca.estimators_))<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">100
+100
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.linear_model <span class="hljs-keyword">import</span> SGDClassifier<br><br>sgd = SGDClassifier()<br>start_time = time.time()<br>sgd.fit(X_train,y_train)<br>end_time = time.time()<br>cost_time = (end_time - start_time) * <span class="hljs-number">1000</span><br><span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;cost time = <span class="hljs-subst">&#123;cost_time&#125;</span>ms&quot;</span>)<br>score = cross_val_score(sgd, X_test, y_test, cv=<span class="hljs-number">3</span>)<br><span class="hljs-built_in">print</span>(score)<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">cost time = 106730.38983345032ms
+[0.83413317 0.87008701 0.86528653]
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs python">sgd_with_pca = SGDClassifier()<br>start_time = time.time()<br>sgd.fit(X_train_with_pca,y_train)<br>end_time = time.time()<br>cost_time = (end_time - start_time) * <span class="hljs-number">1000</span><br><span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;cost time = <span class="hljs-subst">&#123;cost_time&#125;</span>ms&quot;</span>)<br>score = cross_val_score(sgd, X_test_with_pca, y_test, cv=<span class="hljs-number">3</span>)<br><span class="hljs-built_in">print</span>(score)<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">cost time = 28291.549682617188ms
+[0.63947211 0.7539754  0.72457246]
+</code></pre>
+<p>但是在梯度下降分类器上， 速度就快了很多， 准确率也有下降。因为在随机森林的时候， PCA降维可能反而增加了决策树选择决策边界的复杂度， 所以训练时间更长了。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98-Scikit-Learn-Keras-TensorFlow/" class="category-chain-item">机器学习实战(Scikit-Learn, Keras,TensorFlow)</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>第八章-降维</div>
+      <div>http://example.com/2024/05/15/机器学习实战-sklearn/reduceDimensionality/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>lukazhang</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年5月15日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/05/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98-sklearn/RandomForest/" title="第七章-集成学习和随机森林">
+                        <span class="hidden-mobile">第七章-集成学习和随机森林</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

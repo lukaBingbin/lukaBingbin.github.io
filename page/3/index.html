@@ -18,7 +18,7 @@
   
     <meta property="og:type" content="website">
 <meta property="og:title" content="YOLO">
-<meta property="og:url" content="http://example.com/index.html">
+<meta property="og:url" content="http://example.com/page/3/index.html">
 <meta property="og:site_name" content="YOLO">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:author" content="lukazhang">
@@ -216,15 +216,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/05/15/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98-sklearn/reduceDimensionality/" target="_self">
-          第八章-降维
+        <a href="/2024/03/03/MechineLearning/%E5%A4%9A%E5%85%83%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" target="_self">
+          多元线性回归
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2024/05/15/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98-sklearn/reduceDimensionality/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2024/03/03/MechineLearning/%E5%A4%9A%E5%85%83%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" target="_self">
         <div>
-          机器学习的问题可能会存在成百上千、甚至上万个特征。 这么多特征下，训练模型首先会速度变慢。并且如果我们想将数据可视化也无法做到。为了解决这些问题，就出现了降维的技术。 降维是值将多个特征值降低至较少的特征值。 例如，一辆汽车有长度和宽度两个特征。由于宽度受到政策的限制通常变化不大， 但是长度变化很大。 我们可以舍弃掉宽度特征，只保留长度特征，这样实现了从二维降低到一维。 再比如，一块地也有长度和宽
+          在上一文中,我们用一元线性回归模型引出了成本函数的概念,介绍了梯度下降算法. 本文我们将对线性回归展开更普遍地讨论, 讨论在有多个特征值时候的线性回归是什么样的.  一、 多元线性回归模型 在上文中我们讨论的房子总价问题, 在同一地区房子总价主要就受房子的大小影响。 但是在现实生活中，很多问题不只受一个因素影响。 比如我们要评估一个消费者的购买能力，消费能力受他的年收入、年龄、教育水平等多个维度
         </div>
       </a>
 
@@ -232,440 +232,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-05-15 22:56" pubdate>
-              2024-05-15
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98-Scikit-Learn-Keras-TensorFlow/" class="category-chain-item">机器学习实战(Scikit-Learn, Keras,TensorFlow)</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2024/05/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98-sklearn/RandomForest/" target="_self">
-          第七章-集成学习和随机森林
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2024/05/12/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98-sklearn/RandomForest/" target="_self">
-        <div>
-          1. 投票分类器 如果你以及训练好了几个分类器(SVC, 决策树， 逻辑回归分类器), 想要得到一个更好的分类器, 通常的做法是把这些分类器组合在一起, 然后让他们投票。 投票多的那个类就是投票分类器的预测结果。 这是因为大数定理: 如果有一个修改过的硬币, 抛一次有51%的概率是正面朝上，49%的概率是背面朝上。那么，你如果投1000次，大概会有510次正面和490次背面， 也就是大多数都是正面
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-05-12 22:56" pubdate>
-              2024-05-12
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98-Scikit-Learn-Keras-TensorFlow/" class="category-chain-item">机器学习实战(Scikit-Learn, Keras,TensorFlow)</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2024/05/06/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98-sklearn/SVM/" target="_self">
-          第五章-支持向量机SVM入门
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2024/05/06/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98-sklearn/SVM/" target="_self">
-        <div>
-          支持向量机(Support Vector Machine)是一种通用的机器学习算法，可以用于分类和回归预测。 在训练数据集较小的时候表现良好。 一、线性SVＭ分类 我们使用sklearn里的iris()鸢尾花的数据来举例。  根据花瓣的长度和宽度的不同， 鸢尾花可以被分为  山鸢尾 (Iris setosa) 变色鸢尾(Iris versicolor) 高山鸢尾(Iris virginica)
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-05-06 22:56" pubdate>
-              2024-05-06
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98-Scikit-Learn-Keras-TensorFlow/" class="category-chain-item">机器学习实战(Scikit-Learn, Keras,TensorFlow)</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2024/05/06/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98-sklearn/DecisionTree/" target="_self">
-          第六章-决策树
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2024/05/06/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98-sklearn/DecisionTree/" target="_self">
-        <div>
-          决策树 有关决策树的基础知识可以参考  决策树 1. 训练和可视化决策树 123456789from sklearn.datasets import load_irisfrom sklearn.tree import DecisionTreeClassifieriris = load_iris()X = iris.data[:, 2:]    # get petal length and widt
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-05-06 22:56" pubdate>
-              2024-05-06
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98-Scikit-Learn-Keras-TensorFlow/" class="category-chain-item">机器学习实战(Scikit-Learn, Keras,TensorFlow)</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2024/05/06/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98-sklearn/svm_code/" target="_self">
-          第五章-支持向量机代码部分
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2024/05/06/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98-sklearn/svm_code/" target="_self">
-        <div>
-          12345import numpy as npfrom sklearn import datasetsfrom sklearn.pipeline import Pipelinefrom sklearn.preprocessing import StandardScalerfrom sklearn.svm import LinearSVC 12iris = datasets.load_iris()p
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-05-06 22:56" pubdate>
-              2024-05-06
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98-Scikit-Learn-Keras-TensorFlow/" class="category-chain-item">机器学习实战(Scikit-Learn, Keras,TensorFlow)</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2024/04/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98-sklearn/train_model/" target="_self">
-          第四章-训练模型
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2024/04/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98-sklearn/train_model/" target="_self">
-        <div>
-          4.1 线性回归 y^=θ⋅x\hat{y} = \theta \cdot x  y^​=θ⋅x 其中\hat{y}是预测值 n是特征数量 X是特征值(X_0, X_1, X_2, …, X_n, 其中X_0始终为1) θ 是模型特征 θ_0是偏置项, 其余是特征权重 成本函数MSE MSE=12m∑i=1m(θ⋅xi−yi)2=12m(Xθ−y)T(Xθ−y)MSE = \frac{1}{2m}
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-04-30 22:56" pubdate>
-              2024-04-30
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98-Scikit-Learn-Keras-TensorFlow/" class="category-chain-item">机器学习实战(Scikit-Learn, Keras,TensorFlow)</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2024/04/25/PyTorch/PyTorch/" target="_self">
-          PyTorch快速入门
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2024/04/25/PyTorch/PyTorch/" target="_self">
-        <div>
-          PyTorch快速入门 一、 Tensor Tensor， 张量。是一种数据结构， 底层实现了利用硬件的并行计算(如CPU和GPU)来提高运算速度。类似于numpy里的矩阵。 1、创建 可以先创建一个数组， 然后传入tensor中。 1234567import torchdata = [[1,2], [3, 4]]# 得到一个2x2的张量，即一个矩阵x_data = torch.tensor(da
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-04-25 14:43" pubdate>
-              2024-04-25
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/PyTorch/" class="category-chain-item">PyTorch</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2024/04/24/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98-sklearn/Classify/" target="_self">
-          第三章-分类
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2024/04/24/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98-sklearn/Classify/" target="_self">
-        <div>
-          分类 3.1 MNIST 1234from sklearn.datasets import fetch_openmlmnist = fetch_openml(&quot;mnist_784&quot;, version=1)print(mnist.keys()) dict_keys(['data', 'target', 'frame', 'categories', 'feature_names',
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-04-24 22:56" pubdate>
-              2024-04-24
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98-Scikit-Learn-Keras-TensorFlow/" class="category-chain-item">机器学习实战(Scikit-Learn, Keras,TensorFlow)</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2024/04/08/MechineLearning/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/" target="_self">
-          强化学习
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2024/04/08/MechineLearning/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/" target="_self">
-        <div>
-          强化学习 一、什么是强化学习 强化学习是通过控制一个Agent进行一些行为(Action)从而改变状态(State)，然后在行动中获得回报(奖励或惩罚)，通过这些回报能学习出对未来的最优指导。 听起来有点抽象，我们举一个例子说明。 假设你正在玩一个类似大富翁的游戏。我们取出其中的6个格子。你的角色在其中的第四个格子。  这里你的角色在第几个格子，就代表了角色的状态(State)。比如此时s=4.
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-04-08 14:43" pubdate>
-              2024-04-08
+            <time datetime="2024-03-03 20:26" pubdate>
+              2024-03-03
             </time>
           </div>
         
@@ -702,15 +270,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/04/06/MechineLearning/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/" target="_self">
-          推荐系统
+        <a href="/2024/03/03/MechineLearning/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E4%BB%A5%E5%8F%8A%E7%AE%80%E5%8D%95%E7%9A%84%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" target="_self">
+          机器学习入门以及简单的线性回归模型
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2024/04/06/MechineLearning/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2024/03/03/MechineLearning/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E4%BB%A5%E5%8F%8A%E7%AE%80%E5%8D%95%E7%9A%84%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" target="_self">
         <div>
-          推荐系统是一个极具商业价值的功能，我们可以在各个App上看到：  视频App给你推荐你感兴趣的视频 购物App给你推荐你可能喜欢的物品 通过推荐系统向最可能下单的用户投放广告 …  本文我们就来学习两种推荐系统的算法。 一、协同过滤 假设你现在开发了一款像Netflix的视频网站， 加入了评分系统。现在收集到了部分用户对部分电影的打分情况。     Alice Bob Brown     泰坦尼克
+          一、机器学习入门 1. 什么是机器学习？ 机器学习是一门研究在没有明确编码下让计算机获得学习能力的领域。  Field of study that gives computers the ability to learn without being explicitly programmed  在接受一个输入(input)的时候，我们希望机器通过自己学习已有的数据，然后给出一个预测的输出(outp
         </div>
       </a>
 
@@ -718,8 +286,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-04-06 16:14" pubdate>
-              2024-04-06
+            <time datetime="2024-03-03 14:00" pubdate>
+              2024-03-03
             </time>
           </div>
         
@@ -735,6 +303,222 @@
       <span class="category-chain">
         
   <a href="/categories/Machine-Learning/" class="category-chain-item">Machine Learning</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2021/11/10/Android/RecyclerView%E4%BA%8B%E4%BB%B6%E5%A4%84%E7%90%86%E3%80%81%E6%8B%A6%E6%88%AA%E6%9C%BA%E5%88%B6%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" target="_self">
+          RecyclerView事件处理、拦截机制源码分析
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2021/11/10/Android/RecyclerView%E4%BA%8B%E4%BB%B6%E5%A4%84%E7%90%86%E3%80%81%E6%8B%A6%E6%88%AA%E6%9C%BA%E5%88%B6%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" target="_self">
+        <div>
+          RecyclerView事件处理、拦截机制源码分析 要分析事件处理和拦截，我们第一个要看的应该是onInterceptTouchEvent()去看，而不是onTouchEvent()去看。 onInterceptTouchEvent 一点一点的分析吧 12345if (mLayoutSuppressed) &#123;    // When layout is suppressed,  RV do
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-11-10 16:00" pubdate>
+              2021-11-10
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Android/" class="category-chain-item">Android</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2021/11/10/Android/GestureDetector%E4%BA%8B%E4%BB%B6%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" target="_self">
+          GestureDetector事件源码分析
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2021/11/10/Android/GestureDetector%E4%BA%8B%E4%BB%B6%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" target="_self">
+        <div>
+          GestureDetector事件源码分析 一、什么是GestureDetector？ Gesture ：手势 Detector ： 检测器。 对于MotionEvent里的手势，只有简单的up、down、move等手势。当手势复杂的时候，这些简单的动作显然满足不了我们，或者说我们自己实现会比较复杂。 GestureDetector是官方提供给我们用于检测手势的类，内部帮我们封装好了很多的手势事件
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-11-10 16:00" pubdate>
+              2021-11-10
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Android/" class="category-chain-item">Android</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2021/11/10/Android/RecyclerView%E5%88%B0%E5%BA%95%E6%AF%94ListView%E5%A5%BD%E5%9C%A8%E5%93%AA%E9%87%8C%EF%BC%9F/" target="_self">
+          RecyclerView到底比ListView好在哪里？
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2021/11/10/Android/RecyclerView%E5%88%B0%E5%BA%95%E6%AF%94ListView%E5%A5%BD%E5%9C%A8%E5%93%AA%E9%87%8C%EF%BC%9F/" target="_self">
+        <div>
+          RecyclerView到底比ListView好在哪里？ ListView的绘制流程 这里郭神有提到，所有的View其实都会执行两次onMeasure和onLayout。简单的View里，执行两次的逻辑几乎是一样的，但是在ListView里就不太一样了。 第一次Layout   ListView的onLayout的流程，是会先尝试从RecycleBin里去获取子View。但是第一次进行onLayo
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-11-10 16:00" pubdate>
+              2021-11-10
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Android/" class="category-chain-item">Android</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2021/11/10/Android/%5B%E5%85%A5%E9%97%A8%E5%90%91%5D%E5%85%B3%E4%BA%8ERecyclerView%E7%9A%84%E4%BA%8B%E4%BB%B6%E6%8B%A6%E6%88%AA%E6%9C%BA%E5%88%B6/" target="_self">
+          关于RecyclerView的事件拦截机制
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2021/11/10/Android/%5B%E5%85%A5%E9%97%A8%E5%90%91%5D%E5%85%B3%E4%BA%8ERecyclerView%E7%9A%84%E4%BA%8B%E4%BB%B6%E6%8B%A6%E6%88%AA%E6%9C%BA%E5%88%B6/" target="_self">
+        <div>
+          关于RecyclerView的事件拦截机制 一、发现问题 最近在利用RecyclerView做开发的时候，遇到了一点问题： 给RecyclerView的子项添加事件监听的时候，发现ACITON_DOWN能得到处理，ACITON_UP和ACTION_MOVE却得不到处理。 二、原因分析 在刚开始开发需求的时候我还不太了解事件分发的机制。所以我先去学习了一下事件分发，这里对事件分发做一个简单的总结。
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-11-10 16:00" pubdate>
+              2021-11-10
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Android/" class="category-chain-item">Android</a>
   
   
 
@@ -754,7 +538,7 @@
 
   <nav aria-label="navigation">
     <span class="pagination" id="pagination">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/#board">2</a><a class="page-number" href="/page/3/#board">3</a><a class="extend next" rel="next" href="/page/2/#board"><i class="iconfont icon-arrowright"></i></a>
+      <a class="extend prev" rel="prev" href="/page/2/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/#board">2</a><span class="page-number current">3</span>
     </span>
   </nav>
 
