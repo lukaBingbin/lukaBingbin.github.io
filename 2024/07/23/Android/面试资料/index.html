@@ -1,0 +1,853 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="lukazhang">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="面试资料 内存相关  什么是hprof文件？  Heap Profile文件， 用来记录Java虚拟机内存 堆中的对象信息。包含了所有对象的信息，包括了类、实例、数组和分配堆栈等、用来用来分析内存使用情况和识别内存泄露问题。  LeakCanary的原理是什么？   业务可以指定LeakCanary监听特定的对象（如Activity， Fragment等），LeakCanary会持有这些对象的一个">
+<meta property="og:type" content="article">
+<meta property="og:title" content="YOLO">
+<meta property="og:url" content="http://example.com/2024/07/23/Android/%E9%9D%A2%E8%AF%95%E8%B5%84%E6%96%99/index.html">
+<meta property="og:site_name" content="YOLO">
+<meta property="og:description" content="面试资料 内存相关  什么是hprof文件？  Heap Profile文件， 用来记录Java虚拟机内存 堆中的对象信息。包含了所有对象的信息，包括了类、实例、数组和分配堆栈等、用来用来分析内存使用情况和识别内存泄露问题。  LeakCanary的原理是什么？   业务可以指定LeakCanary监听特定的对象（如Activity， Fragment等），LeakCanary会持有这些对象的一个">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-07-23T15:05:53.504Z">
+<meta property="article:modified_time" content="2024-07-25T14:59:11.642Z">
+<meta property="article:author" content="lukazhang">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>YOLO</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text=""></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-07-23 23:05" pubdate>
+          2024年7月23日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          20 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header"></h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1>面试资料</h1>
+<h2 id="内存相关">内存相关</h2>
+<blockquote>
+<p>什么是hprof文件？</p>
+</blockquote>
+<p>Heap Profile文件， 用来记录Java虚拟机内存 <strong>堆</strong>中的对象信息。包含了所有对象的信息，包括了类、实例、数组和分配堆栈等、用来用来分析内存使用情况和识别内存泄露问题。</p>
+<blockquote>
+<p>LeakCanary的原理是什么？</p>
+</blockquote>
+<ol>
+<li>业务可以指定LeakCanary监听特定的对象（如Activity， Fragment等），LeakCanary会持有这些对象的一个弱引用。</li>
+<li>当检测对象被认为不再需要后（比如Activity执行了onDestroy）, LeakCanary会执行一次强制GC，尝试回收这些对象。</li>
+<li>GC过后会检查持有的弱引用，如果引用还在，说明这些对象没被GC掉，那就是泄露了。</li>
+<li>这时候leakCanary会dump下来一份内存快照.hprof文件，然后用shark模块检查内存泄露引用恋</li>
+<li>最后将引用链输出出来。</li>
+</ol>
+<blockquote>
+<p>Android中GC会对性能有影响吗？ 如何进行GC调优</p>
+</blockquote>
+<p>GC的时候会暂停所有线程，可能会导致短暂的无响应， 影响用户体验。</p>
+<p>Android中GC的算法采用的是标记-复制法， 将对象分为新生代和老年代，新生代采用复制法， 老年代采用标记法。</p>
+<p>GC调优，我们还是尽量减少内存的使用来降低GC的频率。</p>
+<blockquote>
+<p>什么是OOM， 如何避免和解决？</p>
+</blockquote>
+<p>OOM即Out Of Memory， 发生在新的对象申请内存时，没有足够的内存分配了。</p>
+<p>避免OOM</p>
+<ul>
+<li>首先肯定是减少内存的使用， 优化各种数据结构</li>
+<li>修复所有的内存泄露</li>
+<li>图片和媒体文件进行压缩和缓存管理</li>
+<li>监控内存的使用等等</li>
+</ul>
+<p>要解决已经发生的OOM，就需要保留hprof文件来进行具体分析</p>
+<blockquote>
+<p>bitmap的内存是如何分配的？</p>
+</blockquote>
+<p>在最开始的Android版本中， bitmap的内存是分配在native中的， 后来在Andoird3的时候，把像素数据放到了Android虚拟机中去了， 这样bitmap直接使用了Java堆内存， 容易引起OOM。 在Android7之后，bitmap的像素信息又放到了native中去。</p>
+<blockquote>
+<p>Android中如果最大堆内存是512M， 是一次性分配的吗？</p>
+</blockquote>
+<p>不是的。在Android中虚拟机一开始只会分配少量的堆内存，并在使用中动态调整。当已分配的内存不足，才会继续申请新的堆内存， 直到达到最大堆内存的限制。这个过程是由Android虚拟机执行的， 开发人员通常不需要介入。</p>
+<blockquote>
+<p>内存泄露是什么？ 常见的内存泄漏原因？</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_43478882/article/details/129228130?spm=1001.2014.3001.5501">https://blog.csdn.net/qq_43478882/article/details/129228130?spm=1001.2014.3001.5501</a></p>
+<blockquote>
+<p>什么是弱引用， 什么是软引用？有什么区别？</p>
+</blockquote>
+<p>弱引用是在发生GC的时候一定会被回收的引用。</p>
+<p>软引用是在堆内存不足的时候GC才会对软引用的对象进行回收。</p>
+<p>软引用的存在周期要比弱引用强。</p>
+<blockquote>
+<p>用过Glide吗？ 他是如何对bitmap进行缓存的？</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://lukabingbin.github.io/2023/01/31/Android/Glide/">https://lukabingbin.github.io/2023/01/31/Android/Glide/</a></p>
+<blockquote>
+<p>如何使用adb命令来查看当前内存使用情况呢？</p>
+</blockquote>
+<p>通过 adb dumpsys meminfo <pid> 就能输出当前应用的内存使用情况。</p>
+<p>包括了PSS RSS VSS等信息</p>
+<blockquote>
+<p>什么是PSS，RSS， VSS呢？</p>
+</blockquote>
+<p>PSS和RSS都是使用的实际物理内存大小，计算方式有所不同。</p>
+<p>例如一个进程A使用了500M， 然后他和进程B共享了一个100M的库， 这时候RSS  = 500 + 100 = 600M， 而PSS = 500 + 100/2 = 550M， 通常我们会用PSS来评估内存使用情况。</p>
+<p>而VSS是使用的虚拟内存大小。什么意思呢，就是C++中，调用了malloc就会申请一块内存，这一块其实是虚拟内存，没有真正的分配。 直到在访问的时候，发生了缺页才会进行物理分配。</p>
+<blockquote>
+<p>如何管控so使用内存的大小呢？</p>
+</blockquote>
+<p>目前市面上比较流行的方案是使用xHook来Hook掉malloc函数和free来监控， 并使用addr2line工具还原堆栈。但是确实了解的不深。</p>
+<h2 id="基础相关">基础相关</h2>
+<blockquote>
+<p>说说Activity的生命周期？</p>
+</blockquote>
+<ul>
+<li>onCreate  刚创建，不可见，用于初始化一些东西和绑定UI</li>
+<li>onStart  由不可见变为可见的时候调用</li>
+<li>onResume  准备好和用户交互的时候， 这时候的Activity一定处于栈顶</li>
+<li>onPause  当启动另一个Activity的时候， 释放资源</li>
+<li>onStop  当Activity变为不可见的时候</li>
+<li>onDestroy  当Activity移除返回栈的时候</li>
+<li>onRestart 从停止状态变为可见状态的时候</li>
+</ul>
+<blockquote>
+<p>那说说Activity的启动模式？</p>
+</blockquote>
+<p>一共四种</p>
+<ul>
+<li>standard  默认模式，启动的时候无论返回栈里有没有， 都会启动一个新的入栈</li>
+<li>singleTop  启动的时候会判断返回栈的栈顶是不是该Activity，如果是的话就不创建了，直接复用</li>
+<li>singleTast  从返回栈里判断有没有，有的话，把他前面的Activity全部出栈</li>
+<li>singleInstance  在另一个共享的返回栈里， 无论多少应用使用都是同一个Activity</li>
+</ul>
+<blockquote>
+<p>一个Activity A的启动方式是singleTop， 那么从A启动A会执行哪些生命周期</p>
+</blockquote>
+<ul>
+<li>A.onPause()</li>
+<li>A.onNewIntent()</li>
+<li>A.onResume()</li>
+</ul>
+<blockquote>
+<p>A到B到C，C退出想跟A通信，怎么设计启动模式,如果A被回收了呢(有涉及onNewIntent)</p>
+<p>会不会启动onResum？</p>
+</blockquote>
+<p>A设计为SingleTask， C退出的方式采用startActivity来启动A。因为栈里有A， 所以A上面的所有Activity都会出栈，所以B和C都会退出。 这时候就能实现C退出的时候和A通信了。</p>
+<p>这时候A会执行onNewIntent()</p>
+<blockquote>
+<p>如何知道Activity渲染完成？</p>
+</blockquote>
+<p>通过ViewTreeObserver中， onGlobalLayout()方法调用时就已经渲染完成了。</p>
+<p>或者直接用rootView post一个Runnable，Runnable里的代码会在渲染完成后执行。</p>
+<blockquote>
+<p>Activity外部启动是否运行到其他进程、Activity的崩溃是否会影响其他进程的崩溃</p>
+<p>怎么解决，如何设置只在自己的进程中运行</p>
+</blockquote>
+<p>Activity需要在AndroidManifest里指定额外的进程，就可以让Activity执行在独立的进程。在该进程中Activity的崩溃并不会导致其他进程的崩溃。</p>
+<blockquote>
+<p>Fragment的生命周期？</p>
+</blockquote>
+<p>Fragment的生命周期和Activity相似，但是要多几个</p>
+<ul>
+<li>onCreate</li>
+<li>onCreateView</li>
+<li>onViewCreated</li>
+<li>onViewStateRestored</li>
+<li>onStart</li>
+<li>onResume</li>
+<li>onPause</li>
+<li>onStop</li>
+<li>onSaveViewState</li>
+<li>onDestroyView</li>
+<li>onDestroy</li>
+</ul>
+<blockquote>
+<p>那说说广播吧？</p>
+</blockquote>
+<p>广播接收器是四大组件之一，用来接受来自应用和系统的广播。</p>
+<p>广播分为系统广播和应用广播</p>
+<p>广播注册器需要对特定的广播类型进行注册，才能收到。但注意不用的时候也要反注册。</p>
+<blockquote>
+<p>广播的分类</p>
+</blockquote>
+<ul>
+<li>标准广播，也是无序广播，这种广播的接收者几乎都是同时收到的。</li>
+<li>有序广播，这种广播是按照优先级来通知接收器的，并且高优先级的接收器可以阻断广播的传递。</li>
+<li>粘性广播，被弃用了</li>
+<li>本地广播，只能在自己应用内传递，不会被外部应用监听到</li>
+<li>系统广播，由Android系统本身发出来的广播</li>
+</ul>
+<blockquote>
+<p>四大组件哪些是运行在主线程的</p>
+</blockquote>
+<p>Activity涉及UI，在主线程</p>
+<p>Service也是在创建和运行的。</p>
+<p>BroadcastReceiver的onReceive方法也是在主线程执行的</p>
+<p>ContentProvider则是在调用线程执行的</p>
+<h2 id="IPC">IPC</h2>
+<blockquote>
+<p>Linux有哪些IPC的方式？</p>
+</blockquote>
+<ol>
+<li>pipe 管道， 通常用于父子进程通信</li>
+<li>信号量， 通过改变信号量来通知另一个进程</li>
+<li>共享内存， 通过mmap使得两个进程共享同一块内核内存。</li>
+<li>消息队列</li>
+<li>socket</li>
+</ol>
+<blockquote>
+<p>Android采用什么进行IPC呢？为什么采用这种方式</p>
+</blockquote>
+<p>在四大组件中，Android采用binder来进行进程之间的通信。</p>
+<ol>
+<li>Binder性能好， 因为只用拷贝一次数据。</li>
+<li>Binder稳定，采用CS架构，Server端和Client端都相对独立。</li>
+<li>Binder安全，因为Android有各种各样的App， Binder会在通信的时候带上进程号等信息，相比较于共享内存会更安全进行进程通信</li>
+</ol>
+<blockquote>
+<p>Binder的原理说一下</p>
+</blockquote>
+<p>Binder的原理主要还是mmap()。 然后通常有三个角色， Client、Server和Service Manger。本质上是Client向内核空间中的共享内存进行一次数据复制 copy_from_user()， 而Server对这块共享内存进行了映射可以直接获取到数据，同时也可以往里面写数据，在通过copy_to_user()复制给Client。</p>
+<p>Binder采用CS架构，Server需要先向Service Manger注册服务， 然后Client通过Service Manager获取对应的服务，Service Manager就相当于一个路由器。他们其实都是通过ioctl()来操作Binder驱动的，Client和Server需要开发人员自己定义， Service Manager是Android平台的。</p>
+<blockquote>
+<p>Binder通过什么形式传递数据的？</p>
+</blockquote>
+<p>通过AIDL。是一种客户端和服务端都认可的接口语言，通过AIDL生成了代码，最终是通过Parcel来传递数据的，Parcel提供了writeStrongBinder和readStrongBinder的方法</p>
+<blockquote>
+<p>Binder传输大小有限制吗？</p>
+</blockquote>
+<p>1M-8K. 这个值是在ProcessState.cpp里定义的。 但是也可以自定义打开Binder， 步骤主要是open()打开驱动和mmap内存映射， 我们可以自己定义这个传输大小， 但是在代码里我记得有最大4M的限制。</p>
+<p>如果是oneway的Binder， 也就是异步的Binder， 不需要等待结果， 那这时候可申请的内核空间最大是上限的一半。 所以oneway下这个值还要缩减一半。</p>
+<blockquote>
+<p>Binder是异步的吗？</p>
+</blockquote>
+<p>默认的Binder是同步的，是有返回结果的。但是oneway方式的Binder是异步的， 比如启动Activity。主要是waitForResponse这个值为null。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div></div>
+      <div>http://example.com/2024/07/23/Android/面试资料/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>lukazhang</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年7月23日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/08/12/reading%20notes/%E6%9C%89%E9%92%B1%E4%BA%BA%E5%92%8C%E4%BD%A0%E6%83%B3%E7%9A%84%E4%B8%8D%E4%B8%80%E6%A0%B7/" title="有钱人和你想的不一样">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">有钱人和你想的不一样</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/06/06/MechineLearning/%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD/" title="反向传播">
+                        <span class="hidden-mobile">反向传播</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
