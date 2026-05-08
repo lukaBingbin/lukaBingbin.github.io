@@ -1,0 +1,1329 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head><!-- hexo injector head_begin start --><link href="https://fastly.jsdelivr.net/npm/hexo-tag-common@0.2.0/css/index.css" rel="stylesheet"/><!-- hexo injector head_begin end -->
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="lukazhang">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="欢迎各位家长、同学、老师使用「星耀明途志愿助手」！ 本工具由前腾讯工程师团队研发，专为贵州考生打造，致力于为高考志愿填报提供更科学、更高效、更个性化的辅助支持。 使用本工具，你可以快速查询院校、专业、历年录取数据、招生计划等信息，也可以根据个人成绩、个性化定制需求快速匹配适合自己的志愿，帮助大家在复杂的志愿填报过程中少走弯路、降低信息差。 本文档将为大家详细介绍各项功能的使用方法，帮助你快速上手，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="星耀明途志愿助手使用说明文档">
+<meta property="og:url" content="http://example.com/2025/05/07/operation_doc/index.html">
+<meta property="og:site_name" content="YOLO">
+<meta property="og:description" content="欢迎各位家长、同学、老师使用「星耀明途志愿助手」！ 本工具由前腾讯工程师团队研发，专为贵州考生打造，致力于为高考志愿填报提供更科学、更高效、更个性化的辅助支持。 使用本工具，你可以快速查询院校、专业、历年录取数据、招生计划等信息，也可以根据个人成绩、个性化定制需求快速匹配适合自己的志愿，帮助大家在复杂的志愿填报过程中少走弯路、降低信息差。 本文档将为大家详细介绍各项功能的使用方法，帮助你快速上手，">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/Screenshot_2026-05-07-21-24-31-380_com.tencent.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/gh_251c21492ee7_344.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E5%88%9A%E8%BF%9B%E5%85%A5%E9%A6%96%E9%A1%B5.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E6%88%91%E7%9A%84%E9%A1%B5%E9%9D%A2-%E6%9C%AA%E7%99%BB%E9%99%86.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E7%99%BB%E5%BD%95%E9%A1%B5%E9%9D%A2.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E7%9F%AD%E4%BF%A1%E9%AA%8C%E8%AF%81%E7%A0%81%E7%99%BB%E5%BD%95%E9%A1%B5%E9%9D%A2.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E4%BF%AE%E6%94%B9%E4%BF%A1%E6%81%AF.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/Screenshot_2026-05-07-21-45-29-064_com.tencent.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E9%A6%96%E9%A1%B5.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E5%B7%A5%E5%85%B7%E7%AE%B1.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E8%B5%84%E8%AE%AF.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E6%88%91%E7%9A%84.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E6%9F%A5%E5%A4%A7%E5%AD%A6%E5%88%97%E8%A1%A8.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E6%90%9C%E7%B4%A2%E5%AD%A6%E6%A0%A1.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E9%99%A2%E6%A0%A1%E7%AD%9B%E9%80%89%E5%9C%B0%E5%8C%BA.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E9%99%A2%E6%A0%A1%E7%AD%9B%E9%80%89%E7%B1%BB%E5%9E%8B.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E5%AD%A6%E6%A0%A1%E8%AF%A6%E6%83%85%E9%A1%B5.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E5%AD%A6%E6%A0%A1%E7%AE%80%E4%BB%8B%E6%9B%B4%E5%A4%9A.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E5%AD%A6%E7%A7%91%E8%AF%84%E4%BC%B0.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E9%99%A2%E6%A0%A1%E6%8E%92%E5%90%8D%E3%80%81%E5%8F%8C%E4%B8%80%E6%B5%81%E5%AD%A6%E7%A7%91.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E9%99%A2%E7%B3%BB%E8%AE%BE%E7%BD%AE%E3%80%81%E5%AD%A6%E6%A0%A1%E8%AF%84%E5%88%86.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E6%8B%9B%E7%94%9F%E7%AE%80%E7%AB%A0tab.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E6%8B%9B%E7%94%9F%E7%AE%80%E7%AB%A0%E8%AF%A6%E6%83%85.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E6%8B%9B%E7%94%9F%E8%AE%A1%E5%88%92tab.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E4%B8%8D%E5%90%8C%E6%8B%9B%E7%94%9F%E7%B1%BB%E5%9E%8B%E6%8B%9B%E7%94%9F%E8%AE%A1%E5%88%92.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E6%8B%9B%E7%94%9F%E8%AE%A1%E5%88%92%E9%80%89%E6%8B%A9%E6%89%B9%E6%AC%A1.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E6%8B%9B%E5%BD%95tab.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E5%B0%B1%E4%B8%9Atab.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/AI%E8%A7%A3%E8%AF%BB%E5%B0%B1%E4%B8%9A%E6%8A%A5%E5%91%8A.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E8%B5%84%E8%AE%AFtab.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E9%99%A2%E6%A0%A1pk%E9%80%89%E6%8B%A9.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E9%99%A2%E6%A0%A1pk%E8%AF%A6%E6%83%85.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E6%9F%A5%E4%B8%93%E4%B8%9A%E5%88%97%E8%A1%A8.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E4%B8%93%E4%B8%9A%E6%A6%82%E5%86%B51.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E4%B8%93%E4%B8%9A%E6%A6%82%E5%86%B52.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E4%B8%93%E4%B8%9A%E5%BC%80%E8%AE%BE%E9%99%A2%E6%A0%A1.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E4%B8%93%E4%B8%9A%E5%B0%B1%E4%B8%9A%E5%89%8D%E6%99%AF.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E4%B8%93%E4%B8%9Apk.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E5%A1%AB%E5%BF%97%E6%84%BF-%E4%B8%93%E4%B8%9A%E4%BC%98%E5%85%88.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E5%A1%AB%E5%BF%97%E6%84%BF-%E9%99%A2%E6%A0%A1%E4%BC%98%E5%85%88.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E5%A1%AB%E5%BF%97%E6%84%BF-%E8%B0%83%E6%95%B4%E5%88%86%E6%95%B0%E5%8C%BA%E9%97%B4.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E4%BF%AE%E6%94%B9%E5%BF%97%E6%84%BF%E7%AD%96%E7%95%A5-%E9%99%A2%E6%A0%A1.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E4%BF%AE%E6%94%B9%E5%BF%97%E6%84%BF%E7%AD%96%E7%95%A5-%E4%B8%93%E4%B8%9A.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E4%B8%93%E4%B8%9A%E5%BF%97%E6%84%BF%E8%AF%A6%E6%83%85%E9%A1%B5.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E9%99%A2%E6%A0%A1%E5%BF%97%E6%84%BF%E8%AF%A6%E6%83%85%E9%A1%B5.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E5%BF%97%E6%84%BF%E8%A1%A8.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E5%BF%97%E6%84%BF%E8%A1%A8%E4%B8%80%E9%94%AE%E6%8E%92%E5%BA%8F.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E5%BF%97%E6%84%BF%E8%A1%A8%E6%8B%96%E5%8A%A8%E6%8E%92%E5%BA%8F.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E5%BC%BA%E5%9F%BA%E8%AE%A1%E5%88%92%E5%88%97%E8%A1%A8.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E5%BC%BA%E5%9F%BA%E8%AE%A1%E5%88%92%E8%A7%84%E5%88%99.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E5%BC%BA%E5%9F%BA%E8%AE%A1%E5%88%92%E6%8B%9B%E7%94%9F%E8%AE%A1%E5%88%92.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E5%BC%BA%E5%9F%BA%E8%AE%A1%E5%88%92%E6%8B%9B%E5%BD%95%E6%83%85%E5%86%B5.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E5%8F%96%E6%8E%92%E8%A1%8C%E6%A6%9C.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E5%85%AC%E5%8A%A1%E5%91%98%E5%B2%97%E4%BD%8D%E5%88%87%E6%8D%A2.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/mbti-start.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/holland-start.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/mbti-result1.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/holland-result1.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/my-test.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E4%BC%9A%E5%91%98%E5%BC%80%E9%80%9A.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E4%BC%9A%E5%91%98%E5%8D%A1%E5%85%91%E6%8D%A2.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E6%9F%A5%E7%9C%8B%E8%AE%A2%E5%8D%95.mm.jpg">
+<meta property="og:image" content="http://example.com/2025/05/07/operation_doc/%E9%97%AE%E9%A2%98%E5%8F%8D%E9%A6%88.mm.jpg">
+<meta property="article:published_time" content="2025-05-07T12:00:00.000Z">
+<meta property="article:modified_time" content="2026-05-08T04:33:27.762Z">
+<meta property="article:author" content="lukazhang">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/2025/05/07/operation_doc/Screenshot_2026-05-07-21-24-31-380_com.tencent.mm.jpg">
+  
+  
+  
+  <title>星耀明途志愿助手使用说明文档 - YOLO</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="星耀明途志愿助手使用说明文档"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-05-07 20:00" pubdate>
+          2025年5月7日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          8.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          69 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">星耀明途志愿助手使用说明文档</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p class="doc-lead">欢迎各位家长、同学、老师使用「星耀明途志愿助手」！</p>
+<p>本工具由前腾讯工程师团队研发，专为贵州考生打造，致力于为高考志愿填报提供更科学、更高效、更个性化的辅助支持。</p>
+<p>使用本工具，你可以快速查询院校、专业、历年录取数据、招生计划等信息，也可以根据个人成绩、个性化定制需求快速匹配适合自己的志愿，帮助大家在复杂的志愿填报过程中少走弯路、降低信息差。</p>
+<p>本文档将为大家详细介绍各项功能的使用方法，帮助你快速上手，更高效地使用「星耀明途志愿助手」。</p>
+<h2 id="一、快速上手">一、快速上手</h2>
+<h3 id="1-1-如何进入小程序">1.1 如何进入小程序</h3>
+<p>您可以通过以下两种方式进入「星耀明途志愿助手」小程序：</p>
+<p><strong>方法一：微信搜索进入</strong></p>
+<p>打开微信，在顶部搜索框中搜索：</p>
+<blockquote>
+<p><strong>搜索关键词：</strong> <span class="doc-kbd">星耀明途志愿助手</span></p>
+</blockquote>
+<p>即可找到并进入小程序。</p>
+<img src="/2025/05/07/operation_doc/Screenshot_2026-05-07-21-24-31-380_com.tencent.mm.jpg" srcset="/img/loading.gif" lazyload class="" title="img">
+<p><strong>方法二：扫码进入</strong></p>
+<p>使用微信扫描下方二维码，即可快速进入小程序。</p>
+<img src="/2025/05/07/operation_doc/gh_251c21492ee7_344.jpg" srcset="/img/loading.gif" lazyload class="" title="img">
+<h3 id="1-2-登录">1.2 登录</h3>
+<p>为了保障功能的完整使用，建议首次进入小程序后优先完成登录。</p>
+<p>您可以通过以下任意方式进入登录页面：</p>
+<ul>
+<li>在首页点击任意功能入口</li>
+<li>在「我的」页面点击「点击登录」</li>
+</ul>
+<div class="miniapp-img-row">
+  <style>.bnusimsiuwfp{}</style><img src="/2025/05/07/operation_doc/%E5%88%9A%E8%BF%9B%E5%85%A5%E9%A6%96%E9%A1%B5.mm.jpg" srcset="/img/loading.gif" lazyload class="bnusimsiuwfp" alt="刚进入小程序首页">
+  <style>.grlgrtdickkb{}</style><img src="/2025/05/07/operation_doc/%E6%88%91%E7%9A%84%E9%A1%B5%E9%9D%A2-%E6%9C%AA%E7%99%BB%E9%99%86.mm.jpg" srcset="/img/loading.gif" lazyload class="grlgrtdickkb" alt="我的页面未登录">
+</div>
+<p>进入登录页面后，请先阅读《用户协议》与《隐私协议》，并勾选「我已阅读并同意」后继续登录。</p>
+<p>目前支持以下两种登录方式：</p>
+<h4 id="①-本机号码一键登录（推荐）">① 本机号码一键登录（推荐）</h4>
+<p>系统将通过微信当前绑定手机号进行快捷登录，操作更方便、更快速。</p>
+<h4 id="②-短信验证码登录">② 短信验证码登录</h4>
+<p>输入手机号后获取短信验证码，填写验证码即可完成登录。</p>
+<div class="miniapp-img-row">
+  <style>.jxhirrgeqqeu{}</style><img src="/2025/05/07/operation_doc/%E7%99%BB%E5%BD%95%E9%A1%B5%E9%9D%A2.mm.jpg" srcset="/img/loading.gif" lazyload class="jxhirrgeqqeu" alt="登录页面">
+  <style>.yjocfycydfhn{}</style><img src="/2025/05/07/operation_doc/%E7%9F%AD%E4%BF%A1%E9%AA%8C%E8%AF%81%E7%A0%81%E7%99%BB%E5%BD%95%E9%A1%B5%E9%9D%A2.mm.jpg" srcset="/img/loading.gif" lazyload class="yjocfycydfhn" alt="短信验证码登录页面">
+</div>
+<div class="doc-callout doc-callout-note">
+<strong>隐私与账号</strong>：首次登录时，系统会自动为您创建账号。我们将严格按照隐私政策保护您的个人信息，手机号仅用于账号登录与身份验证，不会用于其他用途，请放心使用。
+</div>
+<h3 id="1-3-设置信息">1.3 设置信息</h3>
+<p>首次登录成功后，需要完善基础信息，用于后续志愿推荐与数据匹配。</p>
+<p>需要填写的信息包括：</p>
+<ul>
+<li>高考年份</li>
+<li>选科情况</li>
+<li>高考分数</li>
+<li>高考排名（位次）</li>
+</ul>
+<p>其中：</p>
+<ul>
+<li>「高考年份」与「选科情况」设置后暂不支持修改，请认真确认后填写。</li>
+<li>「高考分数」与「高考排名」后续支持修改。</li>
+</ul>
+<img src="/2025/05/07/operation_doc/%E4%BF%AE%E6%94%B9%E4%BF%A1%E6%81%AF.mm.jpg" srcset="/img/loading.gif" lazyload class="" title="img">
+<p>在正式高考成绩公布前，您也可以先填写：</p>
+<ul>
+<li>预估分数</li>
+<li>最近一次模考成绩</li>
+<li>当前参考排名</li>
+</ul>
+<p>系统会根据当前数据进行志愿分析与推荐，方便提前规划。</p>
+<p>如果后续需要更新成绩与排名，可以点击首页中的「修改成绩」按钮重新填写。</p>
+<img src="/2025/05/07/operation_doc/Screenshot_2026-05-07-21-45-29-064_com.tencent.mm.jpg" srcset="/img/loading.gif" lazyload class="" title="img">
+<p>完成以上设置后，即可开始正常使用「星耀明途志愿助手」。</p>
+<h2 id="二、TAB功能介绍">二、TAB功能介绍</h2>
+<p>完成登录和信息设置后，即可进入小程序主页。底部导航共有四个 <strong>Tab</strong>：<strong>首页</strong>、<strong>工具箱</strong>、<strong>资讯</strong>、<strong>我的</strong>。</p>
+<h3 id="2-1-首页">2.1 首页</h3>
+<p>首页主要展示考生当前的基础信息和志愿推荐入口。</p>
+<p>在首页顶部，可以看到当前设置的科类、分数和全省排名。系统会根据用户填写的成绩信息，展示对应的推荐结果，包括：</p>
+<ul>
+<li><strong>可冲击</strong>院校数量</li>
+<li><strong>较稳妥</strong>院校数量</li>
+<li><strong>可保底</strong>院校数量</li>
+</ul>
+<p>首页中部提供常用功能入口。</p>
+<p>首页下方还会展示最新资讯内容，方便用户及时了解高考政策、招生动态和院校信息。</p>
+<img src="/2025/05/07/operation_doc/%E9%A6%96%E9%A1%B5.jpg" srcset="/img/loading.gif" lazyload class="" title="img">
+<h3 id="2-2-工具箱">2.2 工具箱</h3>
+<p>工具箱页面汇总了小程序中的各类核心功能，方便用户快速进入对应模块。</p>
+<p>页面按照功能类型进行了分类，包括：</p>
+<h4 id="基础功能">基础功能</h4>
+<p>基础功能主要用于高考志愿填报过程中的核心查询与分析。</p>
+<h4 id="特色功能">特色功能</h4>
+<p>特色功能主要提供更细分、更具针对性的辅助服务。</p>
+<h4 id="测评工具">测评工具</h4>
+<p>测评工具帮助考生更好地认识自己，为专业选择提供参考。</p>
+<img src="/2025/05/07/operation_doc/%E5%B7%A5%E5%85%B7%E7%AE%B1.jpg" srcset="/img/loading.gif" lazyload class="" title="img">
+<h3 id="2-3-资讯">2.3 资讯</h3>
+<p>资讯页面用于查看最新高考相关内容和院校动态。</p>
+<p>页面主要分为：</p>
+<ul>
+<li>「官方资讯」</li>
+<li>「院校资讯」</li>
+</ul>
+<h4 id="官方资讯">官方资讯</h4>
+<p>主要发布：</p>
+<ul>
+<li>贵州省招生考试相关通知</li>
+<li>志愿填报时间安排</li>
+<li>软科等官方机构资讯</li>
+<li>星耀明途的高考志愿干货</li>
+</ul>
+<h4 id="院校资讯">院校资讯</h4>
+<p>实时同步热门院校的官方资讯。</p>
+<p>点击资讯卡片即可进入原文查看完整内容。</p>
+<img src="/2025/05/07/operation_doc/%E8%B5%84%E8%AE%AF.jpg" srcset="/img/loading.gif" lazyload class="" title="img">
+<h3 id="2-4-我的">2.4 我的</h3>
+<p>「我的」页面主要用于管理个人信息和使用记录。</p>
+<p>页面顶部会显示：</p>
+<ul>
+<li>用户昵称</li>
+<li>当前分数与排名信息</li>
+<li>VIP 状态</li>
+</ul>
+<p>中部提供常用功能入口，包括：</p>
+<ul>
+<li>「我的订单」：查看订单记录</li>
+<li>「我的收藏」：查看已收藏的院校和专业</li>
+<li>「会员卡兑换」：兑换会员卡</li>
+<li>「问题反馈」：提交使用问题或建议</li>
+<li>「邀请好友」：邀请好友使用小程序</li>
+</ul>
+<p>下方主要包含：</p>
+<p>志愿表和测评结果。</p>
+<img src="/2025/05/07/operation_doc/%E6%88%91%E7%9A%84.jpg" srcset="/img/loading.gif" lazyload class="" title="img">
+<h2 id="三、查大学功能">三、查大学功能</h2>
+<p>「星耀明途志愿助手」收集整理了全国 2800+ 所大学的信息，包括大学基础信息、招生简章文件、近年在贵州省招生计划、近年在贵州省招录情况、学校就业报告解读、院校资讯等内容。</p>
+<h3 id="3-1-查大学列表">3.1 查大学列表</h3>
+<p>在首页或工具箱点击「查大学」即可进入查大学列表页面。</p>
+<img src="/2025/05/07/operation_doc/%E6%9F%A5%E5%A4%A7%E5%AD%A6%E5%88%97%E8%A1%A8.mm.jpg" srcset="/img/loading.gif" lazyload class="" title="img">
+<p>查大学列表页面支持快速搜索和筛选大学。</p>
+<p>页面顶部搜索框可以点击输入大学名称进行搜索。</p>
+<img src="/2025/05/07/operation_doc/%E6%90%9C%E7%B4%A2%E5%AD%A6%E6%A0%A1.mm.jpg" srcset="/img/loading.gif" lazyload class="" title="img">
+<p>页面中会展示院校的基础信息，包括:</p>
+<ul>
+<li>
+<p>学校名称</p>
+</li>
+<li>
+<p>学校所在地</p>
+</li>
+<li>
+<p>院校类型</p>
+</li>
+<li>
+<p>办学性质</p>
+</li>
+<li>
+<p>学校标签（985、211、双一流、强基计划等）</p>
+</li>
+<li>
+<p>在贵州最新录取最低分</p>
+</li>
+</ul>
+<p>页面还支持通过条件筛选院校：</p>
+<ul>
+<li>
+<p>根据院校所在地区筛选</p>
+<img src="/2025/05/07/operation_doc/%E9%99%A2%E6%A0%A1%E7%AD%9B%E9%80%89%E5%9C%B0%E5%8C%BA.mm.jpg" srcset="/img/loading.gif" lazyload class="" title="img">
+</li>
+<li>
+<p>根据院校类型筛选</p>
+<img src="/2025/05/07/operation_doc/%E9%99%A2%E6%A0%A1%E7%AD%9B%E9%80%89%E7%B1%BB%E5%9E%8B.mm.jpg" srcset="/img/loading.gif" lazyload class="" title="img">
+</li>
+<li>
+<p>只看收藏的院校</p>
+</li>
+<li>
+<p>仅展示成绩附近的院校</p>
+</li>
+</ul>
+<p>其中，「仅展示成绩附近院校」会根据当前用户设置的分数和位次，优先展示适合当前成绩段的学校，方便快速缩小筛选范围。</p>
+<p>用户可以通过列表快速了解学校的大致情况，并点击对应院校进入详情页查看更多内容。</p>
+<p>页面顶部还会保留最近浏览记录，方便快速返回之前查看过的学校。</p>
+<h3 id="3-2-学校详情页">3.2 学校详情页</h3>
+<p>在“查大学”列表点击院校卡片，即可进入该校的深度详情页。详情页整合了官方权威数据与 AI 智能分析，通过以下 <strong>6 大功能板块</strong>帮助考生全方位了解目标院校。</p>
+<h4 id="3-2-1-简介">3.2.1 简介</h4>
+<p>汇总院校的基础属性、综合实力及在校评价。</p>
+<img src="/2025/05/07/operation_doc/%E5%AD%A6%E6%A0%A1%E8%AF%A6%E6%83%85%E9%A1%B5.mm.jpg" srcset="/img/loading.gif" lazyload class="" title="img">
+<p><strong>基础信息：</strong> 展示学校校名、所在地、办学性质及院校类型。点击“更多”可查看学校详细介绍、奖助学金设置及校园基础设施情况。</p>
+<img src="/2025/05/07/operation_doc/%E5%AD%A6%E6%A0%A1%E7%AE%80%E4%BB%8B%E6%9B%B4%E5%A4%9A.mm.jpg" srcset="/img/loading.gif" lazyload class="" title="img">
+<p><strong>学科评估：</strong> 整理并展示该校在教育部学科评估中的等级结果，帮助用户了解学校的优势学科分布。</p>
+<img src="/2025/05/07/operation_doc/%E5%AD%A6%E7%A7%91%E8%AF%84%E4%BC%B0.mm.jpg" srcset="/img/loading.gif" lazyload class="" title="img">
+<p><strong>院校排名：</strong> 汇总了软科、校友会、QS、泰晤士等主流榜单的排名数据，提供多维度的综合实力参考。目前收录了四个主流权威榜单：</p>
+<ul>
+<li>软科排名</li>
+<li>校友会排名</li>
+<li>QS 世界大学排名</li>
+<li>泰晤士世界大学排名</li>
+</ul>
+<p>用户可以从不同维度了解学校的综合实力与国际影响力。</p>
+<p><strong>双一流学科</strong>：对于双一流高校，页面还会展示学校的「双一流学科」，方便了解学校重点建设方向。</p>
+<img src="/2025/05/07/operation_doc/%E9%99%A2%E6%A0%A1%E6%8E%92%E5%90%8D%E3%80%81%E5%8F%8C%E4%B8%80%E6%B5%81%E5%AD%A6%E7%A7%91.mm.jpg" srcset="/img/loading.gif" lazyload class="" title="img">
+<ul>
+<li><strong>院系与评分：</strong> 罗列学校下设的二级学院名单，并展示基于在校生反馈的环境、教学及就业满意度评分。</li>
+</ul>
+<p>用户可以查看学校下设学院情况，以及学生对学校环境、教学、就业等方面的评价情况，帮助更全面地进行择校参考。</p>
+<img src="/2025/05/07/operation_doc/%E9%99%A2%E7%B3%BB%E8%AE%BE%E7%BD%AE%E3%80%81%E5%AD%A6%E6%A0%A1%E8%AF%84%E5%88%86.mm.jpg" srcset="/img/loading.gif" lazyload class="" title="img">
+<h4 id="3-2-2-简章">3.2.2 简章</h4>
+<p>收录该校发布的年度招生章程全文。用户可在此查阅官方录取的详细规则，包括专业分配原则、身体条件限制、退档政策等核心条款。</p>
+<div class="miniapp-img-row">
+  <style>.ikomvfkuewwf{}</style><img src="/2025/05/07/operation_doc/%E6%8B%9B%E7%94%9F%E7%AE%80%E7%AB%A0tab.mm.jpg" srcset="/img/loading.gif" lazyload class="ikomvfkuewwf" alt="招生简章 tab">
+  <style>.zxptgmghqfxx{}</style><img src="/2025/05/07/operation_doc/%E6%8B%9B%E7%94%9F%E7%AE%80%E7%AB%A0%E8%AF%A6%E6%83%85.mm.jpg" srcset="/img/loading.gif" lazyload class="zxptgmghqfxx" alt="招生简章详情">
+</div>
+<h4 id="3-2-3-计划">3.2.3 计划</h4>
+<ul>
+<li>展示该院校往年及最新在贵州省的招生计划分布。
+<ul>
+<li><strong>查询维度：</strong> 支持按招生批次（如本科批、提前批）、招生类型（如普通类、专项计划）及选科要求进行筛选。</li>
+<li><strong>详细数据：</strong> 明确展示各专业的招生人数、学制、学费及具体的选科限制要求。</li>
+</ul>
+</li>
+</ul>
+<div class="miniapp-img-row">
+  <style>.gujorvzftfxo{}</style><img src="/2025/05/07/operation_doc/%E6%8B%9B%E7%94%9F%E8%AE%A1%E5%88%92tab.mm.jpg" srcset="/img/loading.gif" lazyload class="gujorvzftfxo" alt="招生计划 tab">
+  <style>.edxprkmmpdms{}</style><img src="/2025/05/07/operation_doc/%E4%B8%8D%E5%90%8C%E6%8B%9B%E7%94%9F%E7%B1%BB%E5%9E%8B%E6%8B%9B%E7%94%9F%E8%AE%A1%E5%88%92.mm.jpg" srcset="/img/loading.gif" lazyload class="edxprkmmpdms" alt="不同招生类型招生计划">
+</div>
+<p>页面会按照不同招生类型和批次进行分类展示，例如：</p>
+<ul>
+<li>国家专项计划</li>
+<li>地方专项计划</li>
+<li>普通类招生等</li>
+</ul>
+<p>同时还支持切换不同批次与选科要求，包括提前批。</p>
+<img src="/2025/05/07/operation_doc/%E6%8B%9B%E7%94%9F%E8%AE%A1%E5%88%92%E9%80%89%E6%8B%A9%E6%89%B9%E6%AC%A1.mm.jpg" srcset="/img/loading.gif" lazyload class="" title="img">
+<h4 id="3-2-4-招录">3.2.4 招录</h4>
+<p>提供该院校往年在贵州省录取的历史统计数据。</p>
+<ul>
+<li><strong>核心指标：</strong> 展示各专业录取的最低分、最低位次及实际招录人数。</li>
+<li><strong>参考价值：</strong> 用户可根据自身位次，对比历史录取数据，评估报考风险。</li>
+</ul>
+<img src="/2025/05/07/operation_doc/%E6%8B%9B%E5%BD%95tab.mm.jpg" srcset="/img/loading.gif" lazyload class="" title="img">
+<p>和「计划」Tab 一样，页面同样支持切换：</p>
+<ul>
+<li>不同批次</li>
+<li>不同选科</li>
+<li>不同招生类型</li>
+</ul>
+<p>方便用户更精准地查看对应录取数据。</p>
+<h4 id="3-2-5-就业">3.2.5 就业</h4>
+<p>展示院校官方发布的毕业生就业质量数据，并通过 AI 进行了解读和总结，以更加直观的方式展示学校就业情况。</p>
+<div class="miniapp-img-row">
+  <style>.fkjbffquemfs{}</style><img src="/2025/05/07/operation_doc/%E5%B0%B1%E4%B8%9Atab.mm.jpg" srcset="/img/loading.gif" lazyload class="fkjbffquemfs" alt="就业 tab">
+  <style>.qscxmooigjml{}</style><img src="/2025/05/07/operation_doc/AI%E8%A7%A3%E8%AF%BB%E5%B0%B1%E4%B8%9A%E6%8A%A5%E5%91%8A.mm.jpg" srcset="/img/loading.gif" lazyload class="qscxmooigjml" alt="AI 解读就业报告">
+</div>
+<p>用户也可以点击查看原文，阅读完整就业报告。</p>
+<h4 id="3-2-6-资讯">3.2.6 资讯</h4>
+<p>实时同步学校官方发布的最新动态。涵盖招生政策变动、校园公告及院校新闻，确保用户获取的信息具有时效性。</p>
+<img src="/2025/05/07/operation_doc/%E8%B5%84%E8%AE%AFtab.mm.jpg" srcset="/img/loading.gif" lazyload class="" title="img">
+<h4 id="3-2-7-院校pk">3.2.7 院校pk</h4>
+<p>院校 PK 功能支持对多所院校进行横向对比分析，帮助考生更高效地做出选择。</p>
+<p>用户最多可以选择 5 所院校进行对比，系统会将关键信息进行统一展示，方便直观查看差异。</p>
+<div class="miniapp-img-row">
+  <style>.sexygsfvrjni{}</style><img src="/2025/05/07/operation_doc/%E9%99%A2%E6%A0%A1pk%E9%80%89%E6%8B%A9.mm.jpg" srcset="/img/loading.gif" lazyload class="sexygsfvrjni" alt="院校 PK 选择">
+  <style>.yjisrgtgzxrk{}</style><img src="/2025/05/07/operation_doc/%E9%99%A2%E6%A0%A1pk%E8%AF%A6%E6%83%85.mm.jpg" srcset="/img/loading.gif" lazyload class="yjisrgtgzxrk" alt="院校 PK 详情">
+</div>
+<p>通过院校 PK，用户可以在同一视角下快速比较不同学校，避免在多页面之间反复切换，大幅提升决策效率。</p>
+<h2 id="四、查专业功能">四、查专业功能</h2>
+<p>「星耀明途志愿助手」涵盖了教育部最新的本科及专科专业目录，提供详尽的专业解析、就业前景分析以及跨专业横向对比，帮助考生从“热爱”出发，科学规划职业蓝图。</p>
+<h3 id="4-1-查专业列表">4.1 查专业列表</h3>
+<img src="/2025/05/07/operation_doc/%E6%9F%A5%E4%B8%93%E4%B8%9A%E5%88%97%E8%A1%A8.mm.jpg" srcset="/img/loading.gif" lazyload class="" title="img">
+<p>在首页或工具箱点击「查专业」即可进入专业库。</p>
+<p>页面通过「学科大类 → 专业类 → 具体专业」三级架构清晰展示：</p>
+<ul>
+<li><strong>智能搜索：</strong> 支持输入专业名称关键字，快速定位目标专业。</li>
+<li><strong>多维分类：</strong> 顶部可切换「本科 / 专科」，并按理学、工学、经济学、法学等十二大学门类进行筛选。</li>
+<li><strong>层级导航：</strong> 左侧为专业类导航（如数学类、物理学类），右侧直观展示该类下的所有具体专业名称及修业年限。</li>
+</ul>
+<h3 id="4-2-专业详情页">4.2 专业详情页</h3>
+<p>点击具体专业即可进入深度解析页面。详情页由「专业概况」、「开设院校」、「就业前景」三大核心板块组成。</p>
+<h4 id="4-2-1-专业概况">4.2.1 专业概况</h4>
+<p>本板块提供该专业的“百科全书”式介绍，解决“这个专业学什么”的问题。</p>
+<ul>
+<li><strong>基本信息：</strong> 包含授予学位、修业年限、<strong>平均薪资</strong>以及学历层次。</li>
+<li><strong>专业解析：</strong> 详细描述专业培养目标、教育要求以及主干课程，让考生提前了解学习难度与方向。</li>
+<li><strong>专业满意度：</strong> 基于真实就读体验的评分（办学条件、教学质量、就业满意度），极具参考价值。</li>
+<li><strong>研究方向：</strong> 列出该专业考研的主要对口方向，为有深造意向的同学提供指引。</li>
+</ul>
+<div class="miniapp-img-row">
+  <style>.kauymjppvawi{}</style><img src="/2025/05/07/operation_doc/%E4%B8%93%E4%B8%9A%E6%A6%82%E5%86%B51.mm.jpg" srcset="/img/loading.gif" lazyload class="kauymjppvawi" alt="专业概况 1">
+  <style>.bimxcvjwujgo{}</style><img src="/2025/05/07/operation_doc/%E4%B8%93%E4%B8%9A%E6%A6%82%E5%86%B52.mm.jpg" srcset="/img/loading.gif" lazyload class="bimxcvjwujgo" alt="专业概况 2">
+</div>
+<h4 id="4-2-2-开设院校">4.2.2 开设院校</h4>
+<p>一键查询全国范围内开设此专业的院校名单。</p>
+<ul>
+<li><strong>标签化展示：</strong> 院校卡片上清晰标注了 985、211、双一流、101计划、C9联盟等重量级标签。</li>
+<li><strong>地域与性质：</strong> 标明学校所在地、院校类型及公办/民办属性，方便快速初步筛选。</li>
+</ul>
+<img src="/2025/05/07/operation_doc/%E4%B8%93%E4%B8%9A%E5%BC%80%E8%AE%BE%E9%99%A2%E6%A0%A1.mm.jpg" srcset="/img/loading.gif" lazyload class="" title="img">
+<h4 id="4-2-3-就业前景">4.2.3 就业前景</h4>
+<p>通过大数据分析，为考生揭秘专业未来的“钱景”与去向。</p>
+<ul>
+<li><strong>就业去向占比：</strong> 直观展示该专业毕业生的主流职业分布。</li>
+<li><strong>学历要求比例：</strong> 展示行业对本科、硕士及以上学历的需求占比，辅助决定是否考研。</li>
+<li><strong>城市平均薪资：</strong> 展示该专业在不同城市的薪酬水平对比，助力未来的城市选择。</li>
+</ul>
+<img src="/2025/05/07/operation_doc/%E4%B8%93%E4%B8%9A%E5%B0%B1%E4%B8%9A%E5%89%8D%E6%99%AF.mm.jpg" srcset="/img/loading.gif" lazyload class="" title="img">
+<h3 id="4-3-专业-PK">4.3 专业 PK</h3>
+<p>用户可选择最多 3 个专业进行横向测评。系统将从以下维度进行深度对比：</p>
+<ul>
+<li><strong>基本面：</strong> 所属大类、授予学位、研究生主要方向。</li>
+<li><strong>就业竞争力：</strong> <strong>平均薪资对比</strong>（高薪项会以绿色标出）、主流就业岗位。</li>
+<li><strong>市场需求：</strong> 全国招聘需求量数据，通过<strong>数据量化</strong>专业的市场火热程度。</li>
+</ul>
+<p>通过多维度的参数碰撞，让原本抽象的专业选择变得清晰客观。</p>
+<img src="/2025/05/07/operation_doc/%E4%B8%93%E4%B8%9Apk.mm.jpg" srcset="/img/loading.gif" lazyload class="" title="img">
+<h2 id="五、填志愿功能">五、填志愿功能</h2>
+<p>「星耀明途志愿助手」基于考生的成绩与位次，结合历年录取大数据，提供科学的志愿推荐。该功能旨在帮助考生在“冲、稳、保”之间取得平衡，提升志愿填报的成功率。</p>
+<h3 id="5-1-志愿推荐列表">5.1 志愿推荐列表</h3>
+<p>在首页点击「填志愿」即可进入推荐列表。系统提供两种核心推荐模式：</p>
+<ul>
+<li>
+<p><strong>专业优先模式：</strong> 系统将以「院校 + 专业」的形式，推荐符合考生意向专业的具体志愿方案。每一条推荐都会精确到具体专业，可直接添加到志愿表中，方便快速完成志愿规划。</p>
+<img src="/2025/05/07/operation_doc/%E5%A1%AB%E5%BF%97%E6%84%BF-%E4%B8%93%E4%B8%9A%E4%BC%98%E5%85%88.mm.jpg" srcset="/img/loading.gif" lazyload class="" title="img">
+</li>
+<li>
+<p><strong>院校优先模式：</strong> 适合更看重学校层次与院校平台的考生。系统将以「院校」为单位进行推荐，页面展示的录取概率，为该院校当前招生专业中录取概率最高专业的概率参考。若需要加入志愿表，还需进入院校详情后选择具体专业。</p>
+<img src="/2025/05/07/operation_doc/%E5%A1%AB%E5%BF%97%E6%84%BF-%E9%99%A2%E6%A0%A1%E4%BC%98%E5%85%88.mm.jpg" srcset="/img/loading.gif" lazyload class="" title="img">
+</li>
+</ul>
+<h3 id="5-2-核心分析指标">5.2 核心分析指标</h3>
+<p>在推荐列表中，每一项志愿方案都包含以下关键数据：</p>
+<ul>
+<li><strong>风险评估：</strong> 系统根据位次匹配度，标注“冲（红）”、“稳（绿）”、“保（蓝）”等级，并给出具体的<strong>预测录取概率</strong>。</li>
+<li><strong>数据对标：</strong> 详细展示目标计划近三年(如果有)的招生人数、最低录取分及最低位次。</li>
+<li><strong>比我等效位次：</strong> 直观展示考生的当前位次与历史录取位次的差距，正数表示领先，负数表示差距，辅助用户判断风险。</li>
+</ul>
+<h3 id="5-3-调整分数区间">5.3 调整分数区间</h3>
+<p>用户可手动微调搜索的分数跨度，系统将重新计算该区间内的录取机会。</p>
+<img src="/2025/05/07/operation_doc/%E5%A1%AB%E5%BF%97%E6%84%BF-%E8%B0%83%E6%95%B4%E5%88%86%E6%95%B0%E5%8C%BA%E9%97%B4.mm.jpg" srcset="/img/loading.gif" lazyload class="" title="img">
+<h3 id="5-4-个性化定制志愿策略">5.4 个性化定制志愿策略</h3>
+<p>支持用户根据自己的意愿个性化定制志愿推荐的策略。</p>
+<ul>
+<li><strong>大学意向：</strong> 可按地域偏好（如贵州省内、北上广深）、院校类型（理工、综合、医学等）、办学性质进行过滤。</li>
+<li><strong>专业意向：</strong> 用户可添加具体的意向专业或专业方向，也可以筛选招生类型，系统将精准筛选相关志愿。</li>
+</ul>
+<div class="miniapp-img-row">
+  <style>.fpwvkgecokbi{}</style><img src="/2025/05/07/operation_doc/%E4%BF%AE%E6%94%B9%E5%BF%97%E6%84%BF%E7%AD%96%E7%95%A5-%E9%99%A2%E6%A0%A1.mm.jpg" srcset="/img/loading.gif" lazyload class="fpwvkgecokbi" alt="修改志愿策略-院校">
+  <style>.yrankbgbdgvn{}</style><img src="/2025/05/07/operation_doc/%E4%BF%AE%E6%94%B9%E5%BF%97%E6%84%BF%E7%AD%96%E7%95%A5-%E4%B8%93%E4%B8%9A.mm.jpg" srcset="/img/loading.gif" lazyload class="yrankbgbdgvn" alt="修改志愿策略-专业">
+</div>
+<h3 id="5-5-志愿详情分析">5.5 志愿详情分析</h3>
+<p>点击具体志愿项可进入深度分析页面，查看更精细的录取概率解读。</p>
+<ul>
+<li><strong>位次趋势图：</strong> 通过直观的数轴展示考生当前位次在目标院校/专业近三年录取范围内的具体位置（“你在这”）。</li>
+<li><strong>录取情况说明：</strong> 系统将自动生成一段简要的录取预测分析，包括历年平均录取位次匹配度、风险等级及报考建议（如：谨慎考虑、建议报考等）。</li>
+<li><strong>一键加入：</strong> 确认意向后，可点击「加入志愿表」进行预保存，方便后续在“我的志愿表”中统一排序和优化。</li>
+</ul>
+<div class="miniapp-img-row">
+  <style>.iugwdpabydoj{}</style><img src="/2025/05/07/operation_doc/%E4%B8%93%E4%B8%9A%E5%BF%97%E6%84%BF%E8%AF%A6%E6%83%85%E9%A1%B5.mm.jpg" srcset="/img/loading.gif" lazyload class="iugwdpabydoj" alt="专业志愿详情页">
+  <style>.hxpcwdpghqpg{}</style><img src="/2025/05/07/operation_doc/%E9%99%A2%E6%A0%A1%E5%BF%97%E6%84%BF%E8%AF%A6%E6%83%85%E9%A1%B5.mm.jpg" srcset="/img/loading.gif" lazyload class="hxpcwdpghqpg" alt="院校志愿详情页">
+</div>
+<h2 id="六、志愿表">六、志愿表</h2>
+<p>「星耀明途志愿助手」提供严谨的志愿管理工具。为了确保志愿方案的有效性，系统采用“一分一表”的管理逻辑，即所有志愿表均与当前的成绩信息强绑定，确保考生的每一份方案都具备真实的参考价值。</p>
+<h3 id="6-1-志愿表管理逻辑">6.1 志愿表管理逻辑</h3>
+<ul>
+<li><strong>分数绑定：</strong> 系统中的志愿表是基于用户当前设置的分数和位次生成的。<strong>同一分数下可创建多份备选方案</strong>，方便进行不同侧重的模拟。</li>
+<li><strong>锁定机制：</strong> 若用户在「设置信息」中修改了高考分数或位次，原分数下的志愿表将进入<strong>只读模式</strong>（不可修改），以防数据混乱。如需在新分数下调整，可重新创建或基于当前成绩生成新表。</li>
+</ul>
+<h3 id="6-2-志愿健康度监测">6.2 志愿健康度监测</h3>
+<p>进入志愿表后，系统将针对当前分段实时监测志愿组合的科学性：</p>
+<ul>
+<li><strong>实时状态分析：</strong> 自动核算当前分段下的“冲、稳、保”比例。</li>
+<li><strong>填报风险提醒：</strong> 若当前志愿梯度跨度过大或填报数量不足，系统会弹出提醒，建议继续添加专业组以降低滑档风险。</li>
+</ul>
+<img src="/2025/05/07/operation_doc/%E5%BF%97%E6%84%BF%E8%A1%A8.mm.jpg" srcset="/img/loading.gif" lazyload class="" title="img">
+<h3 id="6-3-智能排序工具">6.3 智能排序工具</h3>
+<p>针对平行志愿“位次优先”的规则，系统提供两种优化方式：</p>
+<ul>
+<li><strong>一键排序：</strong> 系统将严格按照<strong>录取概率从低到高</strong>（由难到易）自动重排志愿顺序。这是确保“冲、稳、保”梯度合理、避免浪费位次的最优操作。</li>
+<li><strong>手动微调：</strong> 用户可通过「拖动排序」界面长按并上下移动志愿项，或利用列表页的箭头进行位置调整。</li>
+</ul>
+<div class="miniapp-img-row">
+  <style>.vczlnnzjspco{}</style><img src="/2025/05/07/operation_doc/%E5%BF%97%E6%84%BF%E8%A1%A8%E4%B8%80%E9%94%AE%E6%8E%92%E5%BA%8F.mm.jpg" srcset="/img/loading.gif" lazyload class="vczlnnzjspco" alt="志愿表一键排序">
+  <style>.ijtadqzdfxnx{}</style><img src="/2025/05/07/operation_doc/%E5%BF%97%E6%84%BF%E8%A1%A8%E6%8B%96%E5%8A%A8%E6%8E%92%E5%BA%8F.mm.jpg" srcset="/img/loading.gif" lazyload class="ijtadqzdfxnx" alt="志愿表拖动排序">
+</div>
+<h3 id="6-4-核心参数核对">6.4 核心参数核对</h3>
+<ul>
+<li><strong>标准代码复核：</strong> 清晰展示院校及专业的标准代码（如 1164/508），方便考生对照招办下发的纸质计划书。</li>
+<li><strong>数据透视：</strong> 包含选科要求、学费、历年录取位次及<strong>比我等效位次</strong>，确保考生对每一个填报项的风险了然于胸。</li>
+</ul>
+<h2 id="七、强基计划">七、强基计划</h2>
+<p>「星耀明途志愿助手」整理了全国试点高校的强基计划在贵州的招生信息。用户可以通过该功能一站式了解强基计划的招收政策、入围规则及往年录取情况。</p>
+<h3 id="7-1-强基计划高校列表">7.1 强基计划高校列表</h3>
+<p>从首页或工具箱进入「强基计划」，系统将自动汇总当年在贵州省有强基计划招生名额的高校。</p>
+<ul>
+<li><strong>实时数据：</strong> 页面顶部会显示当年在贵州省开展强基计划招生的大学总数。</li>
+<li><strong>院校名片：</strong> 列表清晰展示院校的 Logo、地域及核心标签（985、211、C9联盟、101计划等），方便用户快速定位高水平大学。</li>
+<li><strong>支持搜索</strong>：用户可以在当前页面快速搜索目标院校。</li>
+</ul>
+<img src="/2025/05/07/operation_doc/%E5%BC%BA%E5%9F%BA%E8%AE%A1%E5%88%92%E5%88%97%E8%A1%A8.mm.jpg" srcset="/img/loading.gif" lazyload class="" title="img">
+<h3 id="7-2-强基计划详情页">7.2 强基计划详情页</h3>
+<p>点击具体院校后，系统通过以下 <strong>3 个功能板块</strong>深度解析该校的强基政策：</p>
+<h4 id="7-2-1-规则详情板块">7.2.1 规则详情板块</h4>
+<p>本板块旨在帮助考生评估报考条件及录取机会。</p>
+<ul>
+<li><strong>核心参数：</strong> 展示当年的入围倍数（如 6 倍）及考核方式（如面试+笔试）。</li>
+<li><strong>成绩构成：</strong> 详细说明综合成绩的计算公式。系统明确标注了高考成绩、学科基础素质考核、综合素质考核在总分中的占比（如高考成绩占比 85%）。</li>
+<li><strong>破格录取政策：</strong> 整理了针对五大学科竞赛获得全国决赛二等奖（含）以上考生的破格入围条件。</li>
+<li><strong>重要时间节点：</strong> 梳理了从报名、审核到考核的关键日期。</li>
+<li><strong>报名网站</strong>：收集了当年强基计划的报名网站，可以复制后快速访问。</li>
+</ul>
+<img src="/2025/05/07/operation_doc/%E5%BC%BA%E5%9F%BA%E8%AE%A1%E5%88%92%E8%A7%84%E5%88%99.mm.jpg" srcset="/img/loading.gif" lazyload class="" title="img">
+<h4 id="7-2-2-招生计划板块">7.2.2 招生计划板块</h4>
+<p>展示该校强基计划在贵州省投放的具体专业及选科要求。</p>
+<ul>
+<li><strong>专业分类：</strong> 详细罗列强基计划招生的学科门类，如哲学类、数学类、物理学类等。</li>
+<li><strong>选科限制：</strong> 清晰标注各专业组的选科要求（如：物理、物理+化学），确保考生的选科符合报考条件。</li>
+</ul>
+<img src="/2025/05/07/operation_doc/%E5%BC%BA%E5%9F%BA%E8%AE%A1%E5%88%92%E6%8B%9B%E7%94%9F%E8%AE%A1%E5%88%92.mm.jpg" srcset="/img/loading.gif" lazyload class="" title="img">
+<h4 id="7-2-3-录取分数板块">7.2.3 录取分数板块</h4>
+<p>汇总该院校强基计划在往年的招录统计数据。</p>
+<ul>
+<li><strong>多维度分数：</strong> 尽可能展示各专业的<strong>入围分数</strong>及最终<strong>录取综合分数</strong>（数据来源于高校官方公示）。</li>
+<li><strong>年度切换：</strong> 支持切换查看不同年份的历史数据，辅助考生判断报考难度和位次趋势。</li>
+</ul>
+<div class="doc-callout doc-callout-warn">
+<strong>数据说明</strong>：鉴于教育行政部门及高校对「强基计划」录取数据并无公示的硬性要求，部分院校未对外公开其具体的录取分值。若页面显示该项数据缺失，系因校方未官方发布所致，非系统数据遗漏，请各位用户知悉。
+</div>
+<img src="/2025/05/07/operation_doc/%E5%BC%BA%E5%9F%BA%E8%AE%A1%E5%88%92%E6%8B%9B%E5%BD%95%E6%83%85%E5%86%B5.mm.jpg" srcset="/img/loading.gif" lazyload class="" title="img">
+<h2 id="八、公务员-事业单位录取大学排行">八、公务员/事业单位录取大学排行</h2>
+<p>「星耀明途志愿助手」深度挖掘并整理了贵州省内公职人员招录的数据，独家推出“公务员录取大学排行榜”。该功能旨在为有志于进入体制内发展的考生提供极具本地化特色的择校参考依据。</p>
+<h3 id="8-1-功能定位与价值">8.1 功能定位与价值</h3>
+<p>本榜单基于相关单位对外公开发布的录取公示信息进行严谨的整理与统计。通过查看不同单位录取的毕业生院校分布，考生可以直观了解：</p>
+<ul>
+<li>目标院校在贵州体制内用人单位的<strong>认可度</strong>。</li>
+<li>哪些院校在特定的公职系统（如税务、银行等）具有<strong>更强的就业竞争力</strong>。</li>
+</ul>
+<img src="/2025/05/07/operation_doc/%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E5%8F%96%E6%8E%92%E8%A1%8C%E6%A6%9C.mm.jpg" srcset="/img/loading.gif" lazyload class="" title="img">
+<h3 id="8-2-排行榜核心板块">8.2 排行榜核心板块</h3>
+<p>页面通过以下 <strong>3 个板块</strong>对招录数据进行分类展示：</p>
+<ul>
+<li><strong>国考排行：</strong> 展示国家公务员考试中，各单位录取的毕业生院校排名。</li>
+<li><strong>省考排行：</strong> 聚焦贵州省公务员考试的录用情况，极具本地参考价值。</li>
+<li><strong>事业单位排行：</strong> 汇总全省各类事业单位招录的院校分布数据。</li>
+</ul>
+<h3 id="8-3-多维筛选与数据维度">8.3 多维筛选与数据维度</h3>
+<img src="/2025/05/07/operation_doc/%E5%85%AC%E5%8A%A1%E5%91%98%E5%B2%97%E4%BD%8D%E5%88%87%E6%8D%A2.mm.jpg" srcset="/img/loading.gif" lazyload class="" title="img">
+<p>用户可以根据个人职业规划，通过以下方式进行精准查询：</p>
+<ul>
+<li><strong>工作单位切换：</strong> 支持按行业或具体单位（如税务局、中国人民银行、地震局等）进行筛选，查看不同系统的用人偏好。</li>
+<li><strong>年份切换：</strong> 支持查看不同年份的统计数据，观察院校招录的稳定性。</li>
+<li><strong>核心统计指标：</strong>
+<ul>
+<li><strong>录取占比：</strong> 展示该校毕业生占该单位总招录人数的比例。</li>
+<li><strong>录取数量：</strong> 展示该校被该单位录取的具体人数。</li>
+</ul>
+</li>
+</ul>
+<div class="doc-callout doc-callout-warn">
+<strong>数据说明</strong>：本榜单数据均来源于各级招录单位公开的录用公示名单。统计结果旨在为用户提供一个拓展视角的参考数据，不代表各院校的综合学术水平。由于部分单位公示信息有限，榜单内容可能未涵盖所有招录岗位，请结合实际情况综合参考。
+</div>
+<h2 id="九、大学排行榜">九、大学排行榜</h2>
+<p>为了帮助考生更客观地评估院校实力并规避填报风险，「星耀明途志愿助手」提供了权威的大学排行榜查询。</p>
+
+<ul>
+<li>
+<p><strong>多榜单切换：</strong> 系统收录了软科（BCUR）、校友会（CUAA）、QS 世界大学排名、泰晤士（THE）四大权威榜单。用户可根据关注点（如国内声望、科研产出或国际影响力）自主切换。</p>
+
+</li>
+<li>
+<p><strong>院校速览：</strong> 榜单清晰展示院校排名、校名、所在地、办学性质（公办/民办）以及院校核心标签。</p>
+</li>
+<li>
+<p><strong>年度对比：</strong> 支持查看不同年份的历史排名数据，方便用户观察院校实力的发展趋势。</p>
+</li>
+</ul>
+<h2 id="十、野鸡大学">十、野鸡大学</h2>
+<p>为保障考生的合法权益，系统专门设立了虚假大学名单查询板块，帮助家长和同学识别非法的“学历工厂”。</p>
+<ul>
+<li><strong>官方数据来源：</strong> 名单基于教育部及相关部门公示的虚假院校信息整理，具有极高的权威性。</li>
+<li><strong>按地区分类：</strong> 系统将虚假大学按照所属省市进行分类排布（如北京、上海等），用户可快速自查。</li>
+<li><strong>风险特征提示：</strong> 页面顶部详细解读了“野鸡大学”的常见套路，如：
+<ul>
+<li>采用与知名院校极易混淆的名称。</li>
+<li>以“走捷径”、“不用填志愿”、“低分上名校”等虚假宣传诱导学生。</li>
+<li>不具备合法的招生资格，所发文凭国家不予认可。</li>
+</ul>
+</li>
+</ul>
+
+<h2 id="十一、测评工具">十一、测评工具</h2>
+<p>「星耀明途志愿助手」引入了国际通用的职业规划测评体系，通过 <strong>MBTI</strong> 性格测试与 <strong>RIASEC</strong>（霍兰德）职业兴趣测试，帮助考生探索个人性格特质与职业兴趣，为选择大学专业提供科学的辅助参考。</p>
+<div class="miniapp-img-row">
+  <style>.xdnnnubtuxeo{}</style><img src="/2025/05/07/operation_doc/mbti-start.mm.jpg" srcset="/img/loading.gif" lazyload class="xdnnnubtuxeo" alt="MBTI 测评入口">
+  <style>.ltwgfketioiu{}</style><img src="/2025/05/07/operation_doc/holland-start.mm.jpg" srcset="/img/loading.gif" lazyload class="ltwgfketioiu" alt="霍兰德职业兴趣测评入口">
+</div>
+<h3 id="11-1-MBTI-职业性格测试">11.1 MBTI 职业性格测试</h3>
+<p>MBTI 通过四个维度考察个人的感知与决策偏好，帮助考生了解自己适合的工作环境和沟通方式。</p>
+<ul>
+<li><strong>测试流程：</strong> 进入测评后，请根据真实的第一反应回答题目（共 93 题，预计耗时 10-15 分钟）。</li>
+<li><strong>结果分析：</strong>
+<ul>
+<li><strong>性格类型解读：</strong> 生成专属的性格类型代码（如 INTJ、ENFP 等），并详细描述该类型的核心特质。</li>
+<li><strong>性格盲点提示：</strong> 客观分析性格中可能存在的局限性，帮助考生进行自我完善。</li>
+<li><strong>专业/职业倾向：</strong> 系统会基于性格特质，推荐匹配的专业领域和职业方向。</li>
+</ul>
+</li>
+</ul>
+<img src="/2025/05/07/operation_doc/mbti-result1.mm.jpg" srcset="/img/loading.gif" lazyload class="" title="img">
+<h3 id="11-2-霍兰德职业兴趣测试">11.2 霍兰德职业兴趣测试</h3>
+<p>霍兰德测试旨在揭示个人职业兴趣与工作环境的匹配度，将职业兴趣归纳为六种类型：现实型®、研究型(I)、艺术型(A)、社会型(S)、企业型(E)和常规型©。</p>
+<ul>
+<li><strong>测试目的：</strong> 发现考生最感兴趣的活动领域，降低因专业不符导致的学业倦怠风险。</li>
+<li><strong>结果分析：</strong>
+<ul>
+<li><strong>兴趣雷达图：</strong> 通过六角模型直观展示考生的兴趣分布，得分最高的前三项构成考生的“职业兴趣代码”。</li>
+<li><strong>类型深度解析：</strong> 详细说明考生的兴趣倾向，例如研究型（I）倾向于逻辑分析，社会型（S）倾向于助人交流。</li>
+<li><strong>推荐专业列表：</strong> 根据考生的兴趣代码，精准匹配对应的大学专业建议，帮助考生在填报志愿时缩小选择范围。</li>
+</ul>
+</li>
+</ul>
+<img src="/2025/05/07/operation_doc/holland-result1.mm.jpg" srcset="/img/loading.gif" lazyload class="" title="img">
+<h3 id="11-3-测评结果管理">11.3 测评结果管理</h3>
+<p><strong>查看路径：</strong> 考生完成测试后，测评报告将永久保存于「我的」-「测评结果」板块中。</p>
+<img src="/2025/05/07/operation_doc/my-test.mm.jpg" srcset="/img/loading.gif" lazyload class="" title="img">
+<h2 id="十二、会员服务与订单查询">十二、会员服务与订单查询</h2>
+<p>为了保障「星耀明途志愿助手」能够持续提供高质量、高准确度的招录数据服务，同时也为了覆盖高额的服务器运算与研发运营成本，我们采取了“基础功能免费 + 高级功能会员制”的服务模式。</p>
+<p>我们坚持将基础的院校查询、专业库浏览等功能免费开放给广大考生使用，以降低信息获取门槛；而涉及大规模数据计算和 AI 深度分析的高级功能，则需要通过开通会员来解锁。</p>
+<h3 id="12-1-会员开通与权限说明">12.1 会员开通与权限说明</h3>
+<p>通过开通会员，您可以获得更具决策参考价值的高阶服务。</p>
+<ul>
+<li>
+<p><strong>开通路径：</strong></p>
+<ol>
+<li>在「我的」页面点击「会员中心」或顶部「立即开通」按钮。</li>
+<li>当您尝试使用受限的高级功能时，系统会自动引导进入开通页面。</li>
+</ol>
+<img src="/2025/05/07/operation_doc/%E4%BC%9A%E5%91%98%E5%BC%80%E9%80%9A.mm.jpg" srcset="/img/loading.gif" lazyload class="" title="img">
+</li>
+<li>
+<p><strong>会员专属高级功能：</strong></p>
+<ul>
+<li><strong>智能志愿推荐：</strong> 基于大数据算法为您进行「冲、稳、保」全量匹配。</li>
+<li><strong>录取概率预测：</strong> 结合考生成绩与历年位次，给出科学的入围概率。</li>
+<li><strong>AI 就业报告解读：</strong> 通过人工智能深度提炼各校毕业生的起薪与去向。</li>
+<li><strong>特色数据榜单：</strong> 解锁如「公务员录取大学排行」等深度本地化特色数据。</li>
+</ul>
+</li>
+</ul>
+<h3 id="12-2-会员卡兑换">12.2 会员卡兑换</h3>
+<p>如果您拥有线下领取的会员卡或参与活动获得的兑换码，可以通过此功能激活会员权益。</p>
+<ul>
+<li><strong>操作路径：</strong> 进入「我的」页面 - 点击「会员卡兑换」。</li>
+<li><strong>激活流程：</strong> 正确输入卡号及对应密码，点击「立即兑换」后，您的账号将自动升级为“志愿 VIP”。</li>
+</ul>
+<img src="/2025/05/07/operation_doc/%E4%BC%9A%E5%91%98%E5%8D%A1%E5%85%91%E6%8D%A2.mm.jpg" srcset="/img/loading.gif" lazyload class="" title="img">
+<h3 id="12-3-订单查询">12.3 订单查询</h3>
+<p>用户在小程序内的所有消费行为均受到严格保护，您可以随时核对您的账单信息。</p>
+<ul>
+<li>
+<p><strong>查询路径：</strong> 进入「我的」页面，点击「我的订单」即可查看。</p>
+</li>
+<li>
+<p><strong>记录详情：</strong> 您可以查阅每一笔订单的购买项目、支付时间、支付金额以及唯一的订单编号。</p>
+</li>
+<li>
+<p><strong>消费凭证：</strong> 若在开通会员后遇到网络波动导致的权益延迟到账，请及时截图订单页面，联系客服进行快速处理。</p>
+<img src="/2025/05/07/operation_doc/%E6%9F%A5%E7%9C%8B%E8%AE%A2%E5%8D%95.mm.jpg" srcset="/img/loading.gif" lazyload class="" title="img">
+</li>
+</ul>
+<h2 id="十三、问题反馈">十三、问题反馈</h2>
+<p>在使用「星耀明途志愿助手」的过程中，如果您遇到任何技术问题，或对我们的数据展示、功能设计有任何改进建议，欢迎通过「问题反馈」功能与我们联系。</p>
+<img src="/2025/05/07/operation_doc/%E9%97%AE%E9%A2%98%E5%8F%8D%E9%A6%88.mm.jpg" srcset="/img/loading.gif" lazyload class="" title="img">
+<ul>
+<li><strong>反馈入口：</strong> 进入「我的」页面，点击「问题反馈」即可进入提交页面。</li>
+<li><strong>填写说明：</strong>
+<ul>
+<li><strong>问题描述：</strong> 请详细描述您遇到的具体问题或您的宝贵建议，以便我们的工程师精准定位并优化。</li>
+<li><strong>联系方式：</strong> 请留下您的微信号或手机号，方便我们在处理完成后第一时间向您反馈进度。</li>
+<li><strong>图片说明（选填）：</strong> 如果是界面显示异常或数据疑问，建议上传相关截图，这将极大提升我们的处理效率。</li>
+</ul>
+</li>
+<li><strong>处理机制：</strong> 收到反馈后，我们的运营与技术团队会定期进行复盘与修复，您的每一个意见都将成为我们产品迭代的重要参考。</li>
+</ul>
+<hr class="doc-hr" />
+<h2 id="十四、结语与免责声明">十四、结语与免责声明</h2>
+<p>感谢您信任并使用「星耀明途志愿助手」。</p>
+<p>高考志愿填报是人生中的重大决策，本工具的研发初衷是利用大数据与 AI 技术，为广大考生和家长<strong>消除信息差、降低数据获取门槛，并提供一个科学、高效的辅助参考维度</strong>。</p>
+<div class="doc-callout doc-callout-important">
+<strong>使用须知</strong>：高考录取受到当年招生政策变动、考生填报偏好、高校计划调整等多种动态因素的影响。在使用本工具时，请务必知悉：
+<ol>
+<li><strong>参考而非代替：</strong> 本工具输出的所有推荐结果、预测概率及排名分析仅供参考。</li>
+<li><strong>决策自主权：</strong> 所有的志愿填报操作、排序及最终提交，均应由考生本人及家长在综合考虑各方因素后自主决策。</li>
+<li><strong>审慎决策：</strong> 所有的志愿选择与排序均关乎考生的未来。请家长与同学们在充分沟通、综合权衡后，根据自身实际情况做出最适合的填报决策。</li>
+</ol>
+</div>
+<p>在正式填报前，我们强烈建议您：</p>
+<ul>
+<li>仔细研读贵州省教育考试院下发的正式招生计划文件。</li>
+<li>结合本助手提供的各项数据进行多方核实。</li>
+<li>如遇特殊政策或疑虑，请以官方发布的最新信息为准。</li>
+</ul>
+<p>祝愿每一位贵州学子都能金榜题名，迈入理想的大学殿堂！</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%98%9F%E8%80%80%E6%98%8E%E9%80%94%E6%96%87%E6%A1%A3/" class="category-chain-item">星耀明途文档</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>星耀明途志愿助手使用说明文档</div>
+      <div>http://example.com/2025/05/07/operation_doc/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>lukazhang</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年5月7日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+<!-- hexo injector body_end start --><script src="https://fastly.jsdelivr.net/npm/hexo-tag-common@0.2.0/js/index.js"></script><!-- hexo injector body_end end --></body>
+</html>

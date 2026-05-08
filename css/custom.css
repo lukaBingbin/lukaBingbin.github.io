@@ -1,0 +1,173 @@
+/* 文章内普通图片：防止小程序截图撑满屏幕 */
+.markdown-body img,
+.post-content img,
+.article-content img {
+  display: block;
+  max-width: 360px;
+  width: auto;
+  max-height: 680px;
+  margin: 18px auto;
+  border-radius: 14px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* 横向截图或首页类截图可适当放大 */
+.markdown-body img[src$="首页.jpg"],
+.markdown-body img[src$="工具箱.jpg"],
+.markdown-body img[src$="资讯.jpg"],
+.markdown-body img[src$="我的.jpg"],
+.post-content img[src$="首页.jpg"],
+.post-content img[src$="工具箱.jpg"],
+.post-content img[src$="资讯.jpg"],
+.post-content img[src$="我的.jpg"],
+.article-content img[src$="首页.jpg"],
+.article-content img[src$="工具箱.jpg"],
+.article-content img[src$="资讯.jpg"],
+.article-content img[src$="我的.jpg"] {
+  max-width: 360px;
+}
+
+/* ---------- 使用说明文档：排版与高亮 ---------- */
+.doc-lead {
+  font-size: 1.08em;
+  line-height: 1.75;
+  color: var(--post-text-color, #2c3e50);
+  margin: 0 0 1rem;
+  padding: 1rem 1.25rem;
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(3, 102, 214, 0.06) 0%, rgba(48, 169, 222, 0.08) 100%);
+  border-left: 4px solid #0366d6;
+}
+
+html[data-user-color-scheme="dark"] .doc-lead {
+  color: var(--post-text-color, #c4c6c9);
+  background: linear-gradient(135deg, rgba(21, 137, 233, 0.12) 0%, rgba(48, 169, 222, 0.1) 100%);
+  border-left-color: #1589e9;
+}
+
+.doc-callout {
+  margin: 1.25rem 0;
+  padding: 0.9rem 1.15rem;
+  border-radius: 10px;
+  line-height: 1.7;
+  font-size: 0.96em;
+}
+
+.doc-callout strong:first-child {
+  display: inline-block;
+  margin-right: 0.35em;
+}
+
+.doc-callout-note {
+  background: rgba(3, 102, 214, 0.07);
+  border: 1px solid rgba(3, 102, 214, 0.2);
+  border-left: 4px solid #0366d6;
+}
+
+.doc-callout-warn {
+  background: rgba(255, 193, 7, 0.12);
+  border: 1px solid rgba(255, 152, 0, 0.35);
+  border-left: 4px solid #e65100;
+}
+
+.doc-callout-important {
+  background: rgba(220, 53, 69, 0.08);
+  border: 1px solid rgba(220, 53, 69, 0.25);
+  border-left: 4px solid #c62828;
+}
+
+html[data-user-color-scheme="dark"] .doc-callout-note {
+  background: rgba(21, 137, 233, 0.12);
+  border-color: rgba(21, 137, 233, 0.35);
+  border-left-color: #1589e9;
+}
+
+html[data-user-color-scheme="dark"] .doc-callout-warn {
+  background: rgba(255, 193, 7, 0.1);
+  border-color: rgba(255, 193, 7, 0.3);
+}
+
+html[data-user-color-scheme="dark"] .doc-callout-important {
+  background: rgba(220, 53, 69, 0.12);
+  border-color: rgba(220, 53, 69, 0.35);
+}
+
+.doc-kbd {
+  display: inline-block;
+  padding: 0.12em 0.45em;
+  margin: 0 0.15em;
+  font-size: 0.88em;
+  font-family: ui-monospace, monospace;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
+}
+
+html[data-user-color-scheme="dark"] .doc-kbd {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.doc-hr {
+  margin: 2.5rem 0;
+  border: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(3, 102, 214, 0.35), transparent);
+}
+
+html[data-user-color-scheme="dark"] .doc-hr {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+}
+
+/* 列表内截图与正文节奏 */
+.markdown-body li > img,
+.post-content li > img {
+  margin: 12px auto;
+}
+
+.doc-callout ol,
+.doc-callout ul {
+  margin: 0.65rem 0 0;
+  padding-left: 1.35rem;
+}
+
+.doc-callout li + li {
+  margin-top: 0.35em;
+}
+
+/* 双图并排容器 */
+.miniapp-img-row {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin: 22px 0;
+}
+
+.miniapp-img-row img {
+  max-width: 280px;
+  width: 42%;
+  height: auto;
+  margin: 0;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .markdown-body img,
+  .post-content img,
+  .article-content img {
+    max-width: 82%;
+    max-height: 620px;
+  }
+
+  .miniapp-img-row {
+    gap: 12px;
+  }
+
+  .miniapp-img-row img {
+    width: 46%;
+    max-width: 220px;
+  }
+}
